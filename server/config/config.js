@@ -1,16 +1,18 @@
+import 'dotenv/config'
+
 // Puerto del servidor
-export const PORT = 3000
+export const PORT = process.env.PORT || 3000
 
 // Key para el JSON Web Token
-export const JWT_SECRET = 'secretkey'
+export const JWT_SECRET = process.env.JWT_SECRET || 'secretkey'
 
 // Configuración de la base de datos
 export const DATABASE = {
-  database: 'agenda_muni',
-  host: 'localhost',
-  password: '',
-  user: 'root',
-  port: 3306
+  name: process.env.DB_NAME || 'agenda_muni',
+  host: process.env.DB_HOST || 'localhost',
+  password: process.env.DB_PASS || '',
+  user: process.env.DB_USER || 'root',
+  port: process.env.DB_PORT || 3306
 }
 
 // Códigos de estado HTTP
