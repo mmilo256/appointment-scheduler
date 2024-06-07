@@ -16,6 +16,10 @@ const User = sequelize.define('users', {
     type: DataTypes.STRING,
     allowNull: false
   }
+},
+{
+  // Opción para que no cree los atributos createdAt y updatedAt
+  timestamps: false
 })
 
 export default User

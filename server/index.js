@@ -12,8 +12,8 @@ app.disable('x-powered-by')
 app.use(e.json())
 
 // Rutas
-app.use('/api/users', verifyToken, userRouter)
 app.use('/api/auth', authRouter)
+app.use('/api/users', verifyToken, userRouter)
 
 // Arrancar el servidor
 app.listen(PORT, () => {
