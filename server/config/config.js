@@ -1,7 +1,10 @@
+// Puerto del servidor
 export const PORT = 3000
 
+// Key para el JSON Web Token
 export const JWT_SECRET = 'secretkey'
 
+// Configuración de la base de datos
 export const DATABASE = {
   database: 'agenda_muni',
   host: 'localhost',
@@ -10,6 +13,7 @@ export const DATABASE = {
   port: 3306
 }
 
+// Códigos de estado HTTP
 export const HTTP_STATUS = {
   OK: 200,
   CREATED: 201,

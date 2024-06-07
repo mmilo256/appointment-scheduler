@@ -1,20 +1,20 @@
 import e from 'express'
 import { PORT } from './config/config.js'
-import { sequelize } from './config/db.js'
+import userRouter from './modules/users/userRoutes.js'
+import authRouter from './auth/authRoutes.js'
 const app = e()
 
+// Quita la marca de express del header
+app.disable('x-powered-by')
+
+// Muestra como JSON las peticiones POST con el Content Type = application/json
 app.use(e.json())
 
-app.get('/', async (req, res) => {
-  try {
-    await sequelize.authenticate()
-    console.log('Conexión exitosa.')
-    res.send('Inicio')
-  } catch (error) {
-    console.log('Error al conectar a la base de datos')
-  }
-})
+// Rutas
+app.use('/api', userRouter)
+app.use('/api/auth', authRouter)
 
+// Arrancar el servidor
 app.listen(PORT, () => {
   console.log(`listening to http://localhost:${PORT}`)
 })
