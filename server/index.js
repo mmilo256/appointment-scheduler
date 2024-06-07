@@ -2,6 +2,7 @@ import e from 'express'
 import { PORT } from './config/config.js'
 import userRouter from './modules/users/userRoutes.js'
 import authRouter from './auth/authRoutes.js'
+import { verifyToken } from './auth/authMiddleware.js'
 const app = e()
 
 // Quita la marca de express del header
@@ -11,7 +12,7 @@ app.disable('x-powered-by')
 app.use(e.json())
 
 // Rutas
-app.use('/api', userRouter)
+app.use('/api/users', verifyToken, userRouter)
 app.use('/api/auth', authRouter)
 
 // Arrancar el servidor
