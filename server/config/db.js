@@ -1,18 +1,7 @@
-import mysql from 'mysql2/promise'
-import { DATABASE, ERROR_MESSAGES } from './config.js'
+import { DATABASE } from './config.js'
+import { Sequelize } from 'sequelize'
 
-let connection
-
-const connectDB = async () => {
-  if (!connection) {
-    try {
-      connection = await mysql.createConnection(DATABASE)
-      console.log('Conexión realizada con éxito.')
-    } catch (error) {
-      console.log(ERROR_MESSAGES.DATABASE_ERROR)
-    }
-  }
-  return connection
-}
-
-export default connectDB
+export const sequelize = new Sequelize(DATABASE.database, DATABASE.user, DATABASE.password, {
+  host: DATABASE.host,
+  dialect: 'mysql'
+})

@@ -1,15 +1,18 @@
 import e from 'express'
 import { PORT } from './config/config.js'
-import connectDB from './config/db.js'
+import { sequelize } from './config/db.js'
 const app = e()
 
 app.use(e.json())
 
 app.get('/', async (req, res) => {
-  const db = await connectDB()
-  const query = 'SELECT * FROM appointments;'
-  const [results] = await db.query(query)
-  res.json(results)
+  try {
+    await sequelize.authenticate()
+    console.log('Conexión exitosa.')
+    res.send('Inicio')
+  } catch (error) {
+    console.log('Error al conectar a la base de datos')
+  }
 })
 
 app.listen(PORT, () => {
