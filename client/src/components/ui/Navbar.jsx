@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import Container from "./Container";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 
 const navigation = [
   { label: "Inicio", href: "/" },
@@ -30,8 +30,8 @@ function Navbar() {
           ))}
         </ul>
         <div className="flex items-center gap-2">
+          <div className="h-8 w-8 rounded-full bg-blue-400"></div>
           <button onClick={logout}>Cerrar sesión</button>
-          <div className="h-10 w-10 rounded-full bg-blue-400"></div>
         </div>
       </Container>
     </nav>

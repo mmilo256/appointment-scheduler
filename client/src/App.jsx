@@ -7,6 +7,7 @@ import Citizens from "./layouts/Citizens";
 import Users from "./layouts/Users";
 import RootLayout from "./layouts/RootLayout";
 import PrivateRoute from "./layouts/PrivateRoute";
+import CreateAppointment from "./layouts/CreateAppointment";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/" element={<RootLayout />}>
           <Route index element={<Home />} />
           <Route path="/appointments" element={<Appointments />} />
+          <Route path="/appointments/create" element={<CreateAppointment />} />
           <Route path="/departments" element={<Departments />} />
           <Route path="/Citizens" element={<Citizens />} />
           <Route path="/Users" element={<Users />} />

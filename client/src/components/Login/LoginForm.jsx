@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
-import Button from "./Button";
+import Button from "../ui/Button";
 import { useForm } from "react-hook-form";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 
 const inputStyles = "border rounded-md p-2 w-full"; // Define los estilos comunes para los inputs
 
 function LoginForm() {
-  const { login, user } = useContext(AuthContext); // Usa useContext para obtener login y user del contexto de autenticación
+  const { login, user, isLoading } = useContext(AuthContext); // Usa useContext para obtener login y user del contexto de autenticación
   const {
     register, // Función para registrar los inputs en el formulario
     handleSubmit, // Función para manejar el envío del formulario
@@ -57,7 +57,9 @@ function LoginForm() {
           </span>
         )}
       </div>
-      <Button className="mt-5">Entrar</Button>{" "}
+      <Button isLoading={isLoading} className="mt-5">
+        Entrar
+      </Button>{" "}
       {/* Renderiza el botón de entrada */}
     </form>
   );

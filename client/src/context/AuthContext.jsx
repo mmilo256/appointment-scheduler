@@ -13,6 +13,7 @@ export const AuthProvider = ({ children }) => {
       ? jwtDecode(localStorage.getItem("jwt")) // Decodifica el token JWT para obtener la información del usuario
       : null;
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (token) {
@@ -21,6 +22,7 @@ export const AuthProvider = ({ children }) => {
   }, [token]);
 
   const login = async (username, password) => {
+    setIsLoading(true);
     try {
       const token = await authService.login(username, password); // Intenta iniciar sesión y obtener un token
       if (token) {
@@ -29,6 +31,8 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       console.log("Error al obtener token"); // Muestra un mensaje de error si falla el inicio de sesión
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -39,7 +43,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ token, login, logout, user }}>
+    <AuthContext.Provider value={{ token, login, logout, user, isLoading }}>
       {children}
     </AuthContext.Provider>
   );
