@@ -1,6 +1,6 @@
 import { HTTP_STATUS } from '../config/config.js'
 import User from '../modules/users/userModel.js'
-import { comparePasswords, encryptPassword } from '../utils/helpers.js'
+import { comparePasswords, encryptPassword, generateToken } from '../utils/helpers.js'
 
 export const login = async (req, res) => {
   const { username, password } = req.body
@@ -20,5 +20,7 @@ export const login = async (req, res) => {
     res.status(HTTP_STATUS.UNAUTHORIZED).json({ message: 'Las contraseñas no coinciden.' })
     return
   }
-  res.json({ message: 'Has iniciado sesión' })
+  // Si el usuario y la contraseña coinciden, generar token
+  const token = generateToken(user.username)
+  res.json({ message: 'Has iniciado sesión', token })
 }
