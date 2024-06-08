@@ -19,7 +19,7 @@ app.use('/api/auth', authRouter)
 app.use('/api/users', verifyToken, userRouter)
 app.use('/api/departments', verifyToken, departmentRouter)
 app.use('/api/citizens', verifyToken, citizenRouter)
-app.use('/api/appointments', appointmentRouter)
+app.use('/api/appointments', verifyToken, appointmentRouter)
 
 // Arrancar el servidor
 app.listen(PORT, () => {
