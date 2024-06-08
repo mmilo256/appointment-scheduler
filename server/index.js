@@ -1,4 +1,5 @@
 import e from 'express'
+import cors from 'cors'
 import { PORT } from './config/config.js'
 import userRouter from './modules/users/userRoutes.js'
 import departmentRouter from './modules/departments/departmentRoutes.js'
@@ -7,6 +8,9 @@ import citizenRouter from './modules/citizens/citizenRoutes.js'
 import appointmentRouter from './modules/appointments/appointmentRoutes.js'
 import { verifyToken } from './auth/authMiddleware.js'
 const app = e()
+
+// Habilitar CORS
+app.use(cors())
 
 // Quita la marca de express del header
 app.disable('x-powered-by')

@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import Container from "./Container";
+import { AuthContext } from "../context/AuthContext";
 
 const navigation = [
   { label: "Inicio", href: "/" },
@@ -11,6 +12,8 @@ const navigation = [
 ];
 
 function Navbar() {
+  const { logout } = useContext(AuthContext);
+
   return (
     <nav className="bg-slate-800 text-white">
       <Container className="flex justify-between items-center">
@@ -27,7 +30,7 @@ function Navbar() {
           ))}
         </ul>
         <div className="flex items-center gap-2">
-          <p>Usuario</p>
+          <button onClick={logout}>Cerrar sesión</button>
           <div className="h-10 w-10 rounded-full bg-blue-400"></div>
         </div>
       </Container>
