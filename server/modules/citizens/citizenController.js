@@ -5,7 +5,7 @@ import { citizenSchema } from './citizenSchema.js'
 // Petición para obtener a todos los ciudadanos
 export const getAllCitizens = async (req, res) => {
   try {
-    const citizens = await Citizen.findAll({ attributes: ['rut', 'first_name', 'last_name', 'address', 'email', 'phone', 'phone_2'] })
+    const citizens = await Citizen.findAll()
     res.json(citizens)
   } catch (error) {
     console.log('Error al realizar la consulta.', error)
@@ -16,7 +16,7 @@ export const getAllCitizens = async (req, res) => {
 export const getCitizenById = async (req, res) => {
   try {
     const { id } = req.params
-    const citizen = await Citizen.findOne({ attributes: ['rut', 'first_name', 'last_name', 'address', 'email', 'phone', 'phone_2'], where: { id } })
+    const citizen = await Citizen.findOne({ where: { id } })
     res.json(citizen)
   } catch (error) {
     console.log('Error al obtener ciudadano.', error)

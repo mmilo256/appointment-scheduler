@@ -6,20 +6,23 @@ import DepartmentRowActions from "./DepartmentRowActions";
 function DepartmentTable() {
   // Estado local para almacenar la lista de departamentos
   const [departments, setDepartments] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Efecto de lado para obtener la lista de departamentos al cargar el componente
   useEffect(() => {
     // Función asincrónica para obtener los departamentos
     const getDepartments = async () => {
+      setIsLoading(true);
       try {
         // Llamada a la función getAllDepartments del servicio para obtener los departamentos
         const data = await getAllDepartments();
         // Actualización del estado con la lista de departamentos obtenida
         setDepartments(data);
-        console.log("Direcciones cargadas");
       } catch (error) {
         // Manejo de errores en caso de fallo al obtener los departamentos
         console.log("Error al obtener las direcciones.", error);
+      } finally {
+        setIsLoading(false);
       }
     };
     // Llamada a la función para obtener los departamentos al montar el componente
@@ -34,7 +37,7 @@ function DepartmentTable() {
         id: department.id,
         name: department.dep_name,
         description:
-          "En esta columna va una descripción breve y concisa de las responsabilidades de este departamento municipal.",
+          "Descripción breve y concisa de las responsabilidades de este departamento municipal.",
         actions: <DepartmentRowActions />, // Componente de acciones por fila
       };
       return departmentData;
@@ -44,12 +47,17 @@ function DepartmentTable() {
 
   // Configuración de la tabla con columnas y datos formateados
   const table = {
-    columns: ["N°", "NOMBRE DE LA DIRECCIÓN", "DESCRIPCIÓN", "ACCIONES"],
+    columns: [
+      { label: "N°", styles: "w-16" },
+      { label: "NOMBRE DE LA DIRECCIÓN", styles: "w-32" },
+      { label: "DESCRIPCIÓN", styles: "w-96" },
+      { label: "ACCIONES", styles: "w-40" },
+    ],
     data: formatData(), // Datos formateados de los departamentos
   };
 
   // Renderizado de la tabla con los datos configurados
-  return <BaseTable table={table} />;
+  return <BaseTable isLoading={isLoading} table={table} />;
 }
 
 export default DepartmentTable;

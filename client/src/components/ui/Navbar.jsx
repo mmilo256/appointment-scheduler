@@ -8,11 +8,11 @@ const navigation = [
   { label: "Audiencias", href: "appointments" },
   { label: "Ciudadanos", href: "citizens" },
   { label: "Direcciones", href: "departments" },
-  { label: "Empleados", href: "users" },
+  { label: "Usuarios", href: "users" },
 ];
 
 function Navbar() {
-  const { logout } = useContext(AuthContext);
+  const { logout, user } = useContext(AuthContext);
 
   return (
     <nav className="bg-primary-500 text-white">
@@ -29,9 +29,11 @@ function Navbar() {
             </li>
           ))}
         </ul>
-        <div className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-full bg-secondary-500"></div>
-          <button onClick={logout}>Cerrar sesión</button>
+        <div className="flex items-center gap-4">
+          <p className="font-light italic">@{user.username}</p>
+          <button className="font-semibold" onClick={logout}>
+            Cerrar sesión
+          </button>
         </div>
       </Container>
     </nav>

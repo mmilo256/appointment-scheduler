@@ -25,7 +25,7 @@ function HomePannel({ children, className, href, color }) {
 
   return (
     <Link
-      className={`${colorStyles} flex hover:scale-105 transition-transform justify-center items-center rounded text-white font-bold text-3xl ${className}`}
+      className={`${colorStyles} flex shadow-sm hover:shadow-md hover:scale-105 transition-all justify-center items-center rounded text-white font-bold text-3xl ${className}`}
       to={href}
     >
       {children}

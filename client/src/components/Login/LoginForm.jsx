@@ -57,7 +57,7 @@ function LoginForm() {
           </span>
         )}
       </div>
-      <Button isLoading={isLoading} className="mt-5">
+      <Button type="submit" isLoading={isLoading} className="mt-5">
         Entrar
       </Button>{" "}
       {/* Renderiza el botón de entrada */}

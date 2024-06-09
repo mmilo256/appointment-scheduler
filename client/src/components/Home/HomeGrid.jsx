@@ -12,7 +12,7 @@ const navigation = [
     href: "appointments",
     color: "lime",
   },
-  { label: "Empleados", href: "users", color: "purple" },
+  { label: "Usuarios", href: "users", color: "purple" },
   { label: "Direcciones", href: "departments", color: "orange" },
   { label: "Ciudadanos", href: "citizens", color: "blue" },
 ];
