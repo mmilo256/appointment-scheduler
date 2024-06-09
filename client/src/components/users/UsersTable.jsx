@@ -63,10 +63,10 @@ function UserTable() {
   // Configuración de la tabla con columnas y datos formateados
   const table = {
     columns: [
-      { label: "N°", styles: "w-44" },
-      { label: "USUARIO", styles: "w-44" },
-      { label: "CONTRASEÑA", styles: "w-44" },
-      { label: "ACCIONES", styles: "w-44" },
+      { label: "N°", styles: "w-content" },
+      { label: "USUARIO", styles: "w-content" },
+      { label: "CONTRASEÑA", styles: "w-content" },
+      { label: "ACCIONES", styles: "w-content" },
     ],
     data: formatData(), // Datos formateados de los usuarios
   };

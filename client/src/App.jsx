@@ -8,6 +8,7 @@ import Users from "./layouts/Users";
 import RootLayout from "./layouts/RootLayout";
 import PrivateRoute from "./layouts/PrivateRoute";
 import CreateAppointment from "./layouts/CreateAppointment";
+import EditAppointment from "./layouts/EditAppointment";
 import CreateUser from "./layouts/CreateUser";
 import EditUser from "./layouts/EditUser";
 import CreateCitizen from "./layouts/CreateCitizen";
@@ -29,11 +30,11 @@ function App() {
             <Route index element={<Home />} />
             {/* Ruta para gestionar citas */}
             <Route path="/appointments" element={<Appointments />} />
-            {/* Ruta para crear una nueva cita */}
             <Route
               path="/appointments/create"
               element={<CreateAppointment />}
             />
+            <Route path="/appointments/edit" element={<EditAppointment />} />
             {/* Ruta para gestionar departamentos */}
             <Route path="/departments" element={<Departments />} />
             {/* Rutas para gestionar ciudadanos */}
