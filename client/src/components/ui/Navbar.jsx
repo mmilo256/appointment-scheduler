@@ -15,13 +15,13 @@ function Navbar() {
   const { logout } = useContext(AuthContext);
 
   return (
-    <nav className="bg-slate-800 text-white">
+    <nav className="bg-primary-500 text-white">
       <Container className="flex justify-between items-center">
         <ul className="flex h-14">
           {navigation.map((item) => (
             <li key={item.label}>
               <NavLink
-                className="hover:bg-red-700 px-4 block h-full content-center"
+                className="hover:bg-secondary-500 transition-colors px-4 block h-full content-center"
                 to={item.href}
               >
                 {item.label}
@@ -30,7 +30,7 @@ function Navbar() {
           ))}
         </ul>
         <div className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-full bg-blue-400"></div>
+          <div className="h-8 w-8 rounded-full bg-secondary-500"></div>
           <button onClick={logout}>Cerrar sesión</button>
         </div>
       </Container>

@@ -10,7 +10,7 @@ function Login() {
   }
 
   return (
-    <div className="bg-slate-800 h-dvh flex items-center justify-center">
+    <div className="bg-primary-500 h-dvh flex items-center justify-center">
       <LoginForm />
     </div>
   );

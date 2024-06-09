@@ -1,7 +1,14 @@
-import React from "react";
+import Heading from "../components/ui/Heading";
+import Container from "../components/ui/Container";
+import DepartmentTable from "../components/departments/DepartmentTable";
 
 function Departments() {
-  return <div>Departments</div>;
+  return (
+    <Container>
+      <Heading>Listado de direcciones</Heading>
+      <DepartmentTable />
+    </Container>
+  );
 }
 
 export default Departments;
