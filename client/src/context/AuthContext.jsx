@@ -36,7 +36,10 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
+  const logout = (reason) => {
+    if (reason === "expired") {
+      alert("La sesión ha expirado");
+    }
     localStorage.removeItem("jwt"); // Elimina el token del localStorage
     setToken(null); // Resetea el estado del token
     setUser(null); // Resetea el estado del usuario

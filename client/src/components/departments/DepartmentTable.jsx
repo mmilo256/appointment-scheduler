@@ -1,23 +1,31 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import BaseTable from "../ui/BaseTable";
 import { getAllDepartments } from "../../services/departmentService";
 import DepartmentRowActions from "./DepartmentRowActions";
+import { checkToken } from "../../utils/helpers";
+import { AuthContext } from "../../context/AuthContext";
 
 function DepartmentTable() {
   // Estado local para almacenar la lista de departamentos
   const [departments, setDepartments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const { logout } = useContext(AuthContext);
 
   // Efecto de lado para obtener la lista de departamentos al cargar el componente
   useEffect(() => {
     // Función asincrónica para obtener los departamentos
     const getDepartments = async () => {
       setIsLoading(true);
+      const isTokenExpired = checkToken(localStorage.getItem("jwt"));
       try {
-        // Llamada a la función getAllDepartments del servicio para obtener los departamentos
-        const data = await getAllDepartments();
-        // Actualización del estado con la lista de departamentos obtenida
-        setDepartments(data);
+        if (!isTokenExpired) {
+          // Llamada a la función getAllDepartments del servicio para obtener los departamentos
+          const data = await getAllDepartments();
+          // Actualización del estado con la lista de departamentos obtenida
+          setDepartments(data);
+        } else {
+          logout("expired");
+        }
       } catch (error) {
         // Manejo de errores en caso de fallo al obtener los departamentos
         console.log("Error al obtener las direcciones.", error);
@@ -27,7 +35,7 @@ function DepartmentTable() {
     };
     // Llamada a la función para obtener los departamentos al montar el componente
     getDepartments();
-  }, []);
+  }, [logout]);
 
   // Función para dar formato a los datos de los departamentos
   const formatData = () => {

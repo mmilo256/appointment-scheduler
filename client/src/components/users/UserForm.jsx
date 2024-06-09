@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import BaseForm from "../ui/BaseForm";
 import {
   createUser,
@@ -7,12 +7,15 @@ import {
 } from "../../services/userService";
 import Button from "../ui/Button";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
+import { checkToken } from "../../utils/helpers";
 
 function UserForm({ edit, userId }) {
   // Estado para almacenar los datos del usuario
   const [userData, setUserData] = useState({});
   // Hook para la navegación
   const navigate = useNavigate();
+  const { logout } = useContext(AuthContext);
 
   // Datos por defecto para los inputs del formulario
   const defaultData = {
@@ -25,11 +28,16 @@ function UserForm({ edit, userId }) {
     if (edit) {
       // Función asincrónica para obtener al usuario
       const getUsers = async () => {
+        const isTokenExpired = checkToken(localStorage.getItem("jwt"));
         try {
-          // Llamada al servicio para obtener al usuario por su ID
-          const data = await getUserById(userId);
-          // Actualización del estado con los datos del usuario obtenidos
-          setUserData(data);
+          if (!isTokenExpired) {
+            // Llamada al servicio para obtener al usuario por su ID
+            const data = await getUserById(userId);
+            // Actualización del estado con los datos del usuario obtenidos
+            setUserData(data);
+          } else {
+            logout("expired");
+          }
         } catch (error) {
           // Manejo de errores en caso de fallo al obtener al usuario
           console.log("Error al obtener al usuario.", error);
@@ -38,7 +46,7 @@ function UserForm({ edit, userId }) {
       // Llamada a la función para obtener al usuario al montar el componente
       getUsers();
     }
-  }, [userId, edit]); // Dependencias del efecto: se ejecuta cuando cambian userId o edit
+  }, [userId, edit, logout]); // Dependencias del efecto: se ejecuta cuando cambian userId o edit
 
   // Definición de los inputs del formulario
   const inputs = [
@@ -59,9 +67,15 @@ function UserForm({ edit, userId }) {
   // Función para manejar la creación de un nuevo usuario
   const onCreateUser = async (data) => {
     console.log("Data:", data);
+    const isTokenExpired = checkToken(localStorage.getItem("jwt"));
     try {
-      // Llamada al servicio para crear un nuevo usuario
-      await createUser(data);
+      if (!isTokenExpired) {
+        // Llamada al servicio para crear un nuevo usuario
+        await createUser(data);
+        navigate("/users");
+      } else {
+        logout("expired");
+      }
     } catch (error) {
       // Manejo de errores en caso de fallo al crear al usuario
       console.log("No se pudo crear el usuario");
@@ -81,14 +95,19 @@ function UserForm({ edit, userId }) {
     if (newData && Object.keys(newData).length > 0) {
       // Verificar si el nombre de usuario ha cambiado antes de actualizar
       if (newData.username !== userData.username) {
+        const isTokenExpired = checkToken(localStorage.getItem("jwt"));
         try {
-          // Llamada al servicio para actualizar al usuario
-          await updateUser(userId, newData);
-          // Limpiar los datos por defecto después de la actualización
-          defaultData.username = "";
-          defaultData.password = "";
-          // Navegar de vuelta a la lista de usuarios
-          navigate("/users");
+          if (!isTokenExpired) {
+            // Llamada al servicio para actualizar al usuario
+            await updateUser(userId, newData);
+            // Limpiar los datos por defecto después de la actualización
+            defaultData.username = "";
+            defaultData.password = "";
+            // Navegar de vuelta a la lista de usuarios
+            navigate("/users");
+          } else {
+            logout("expired");
+          }
         } catch (error) {
           // Manejo de errores en caso de fallo al actualizar al usuario
           console.log("No se pudo editar el usuario");

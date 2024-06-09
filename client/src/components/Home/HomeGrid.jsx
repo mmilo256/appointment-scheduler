@@ -12,9 +12,9 @@ const navigation = [
     href: "appointments",
     color: "lime",
   },
-  { label: "Usuarios", href: "users", color: "purple" },
-  { label: "Direcciones", href: "departments", color: "orange" },
   { label: "Ciudadanos", href: "citizens", color: "blue" },
+  { label: "Direcciones", href: "departments", color: "orange" },
+  { label: "Usuarios", href: "users", color: "purple" },
 ];
 
 function HomeGrid() {
