@@ -53,6 +53,7 @@ function UserForm({ edit, userId }) {
     {
       label: "Nombre de usuario",
       id: "username",
+      styles: "col-span-2",
       type: "text",
       defaultValue: defaultData.username,
     },
@@ -60,6 +61,7 @@ function UserForm({ edit, userId }) {
       label: "Contraseña",
       id: "password",
       type: "password",
+      styles: "col-span-2",
       defaultValue: defaultData.password,
     },
   ];

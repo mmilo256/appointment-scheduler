@@ -5,7 +5,7 @@ import UserForm from "../components/users/UserForm";
 function CreateUser() {
   return (
     <Container>
-      <Heading>Crear usuario</Heading>
+      <Heading className="text-center">Crear usuario</Heading>
       <UserForm />
     </Container>
   );

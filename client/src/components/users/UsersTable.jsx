@@ -1,11 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import BaseTable from "../ui/BaseTable";
 import ActionsRow from "../ui/ActionsRow";
-import {
-  deleteUser,
-  getAllUsers,
-  updateUser,
-} from "../../services/userService";
+import { deleteUser, getAllUsers } from "../../services/userService";
 import { checkToken } from "../../utils/helpers";
 import { AuthContext } from "../../context/AuthContext";
 
@@ -57,7 +53,7 @@ function UserTable() {
         id: user.id,
         name: user.username,
         password: user.password,
-        actions: <ActionsRow id={user.id} onDelete={onDelete} />,
+        actions: <ActionsRow module="users" id={user.id} onDelete={onDelete} />,
       };
       return userData;
     });

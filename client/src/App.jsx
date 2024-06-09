@@ -10,6 +10,8 @@ import PrivateRoute from "./layouts/PrivateRoute";
 import CreateAppointment from "./layouts/CreateAppointment";
 import CreateUser from "./layouts/CreateUser";
 import EditUser from "./layouts/EditUser";
+import CreateCitizen from "./layouts/CreateCitizen";
+import EditCitizen from "./layouts/EditCitizen";
 
 function App() {
   // Componente principal de la aplicación que define las rutas de navegación
@@ -34,13 +36,13 @@ function App() {
             />
             {/* Ruta para gestionar departamentos */}
             <Route path="/departments" element={<Departments />} />
-            {/* Ruta para gestionar ciudadanos */}
+            {/* Rutas para gestionar ciudadanos */}
             <Route path="/citizens" element={<Citizens />} />
-            {/* Ruta para gestionar usuarios */}
+            <Route path="/citizens/create" element={<CreateCitizen />} />
+            <Route path="/citizens/edit" element={<EditCitizen />} />
+            {/* Rutas para gestionar usuarios */}
             <Route path="/users" element={<Users />} />
-            {/* Ruta para crear un nuevo usuario */}
             <Route path="/users/create" element={<CreateUser />} />
-            {/* Ruta para editar usuario */}
             <Route path="/users/edit" element={<EditUser />} />
           </Route>
         </Route>

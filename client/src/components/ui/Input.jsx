@@ -1,12 +1,12 @@
 import React from "react";
 
-function Input({ label, register, type, defaultValue }) {
+function Input({ label, register, type, defaultValue, className }) {
   return (
-    <label className="block mb-10">
-      <span className="font-semibold">{label}</span>
+    <label className={`block mb-5 ${className}`}>
+      <p className="font-semibold mb-2">{label}</p>
       <input
         {...register}
-        className="border-b border-primary-500 p-2 w-full"
+        className="p-2 w-full rounded border border-primary-100"
         type={type}
         defaultValue={defaultValue}
       />
