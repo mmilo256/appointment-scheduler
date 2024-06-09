@@ -25,16 +25,14 @@ const Citizen = sequelize.define('citizens', {
     allowNull: false
   },
   email: {
-    type: DataTypes.STRING,
-    allowNull: false
+    type: DataTypes.STRING
   },
   phone: {
     type: DataTypes.STRING,
     allowNull: false
   },
   phone_2: {
-    type: DataTypes.STRING,
-    allowNull: false
+    type: DataTypes.STRING
   }
 },
 {

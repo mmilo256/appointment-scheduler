@@ -6,7 +6,7 @@ import { userSchema } from './userSchema.js'
 // Petición para obtener a todos los usuarios
 export const getAllUsers = async (req, res) => {
   try {
-    const users = await User.findAll({ attributes: ['username', 'password'] })
+    const users = await User.findAll()
     res.json(users)
   } catch (error) {
     console.log('Error al realizar la consulta.', error)
@@ -17,7 +17,7 @@ export const getAllUsers = async (req, res) => {
 export const getUserById = async (req, res) => {
   try {
     const { id } = req.params
-    const user = await User.findOne({ attributes: ['username', 'password'], where: { id } })
+    const user = await User.findOne({ where: { id } })
     res.json(user)
   } catch (error) {
     console.log('Error al obtener usuario.', error)
