@@ -1,40 +1,40 @@
 import React, { useContext, useEffect, useState } from "react";
 import BaseForm from "../ui/BaseForm";
 import {
-  createUser,
-  getUserById,
-  updateUser,
-} from "../../services/userService";
+  createAppointment,
+  getAppointmentById,
+  updateAppointment,
+} from "../../services/appointmentService";
 import Button from "../ui/Button";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { checkToken } from "../../utils/helpers";
 
-function UserForm({ edit, userId }) {
+function AppointmentForm({ edit, appointmentId }) {
   // Estado para almacenar los datos del usuario
-  const [userData, setUserData] = useState({});
+  const [appointmentData, setAppointmentData] = useState({});
   // Hook para la navegación
   const navigate = useNavigate();
   const { logout } = useContext(AuthContext);
 
   // Datos por defecto para los inputs del formulario
   const defaultData = {
-    username: userData?.username,
-    password: userData?.password,
+    appointmentname: appointmentData?.appointmentname,
+    password: appointmentData?.password,
   };
 
   // Efecto de lado para obtener un usuario por su ID cuando se está editando
   useEffect(() => {
     if (edit) {
       // Función asincrónica para obtener al usuario
-      const getUsers = async () => {
+      const getAppointments = async () => {
         const isTokenExpired = checkToken(localStorage.getItem("jwt"));
         try {
           if (!isTokenExpired) {
             // Llamada al servicio para obtener al usuario por su ID
-            const data = await getUserById(userId);
+            const data = await getAppointmentById(appointmentId);
             // Actualización del estado con los datos del usuario obtenidos
-            setUserData(data);
+            setAppointmentData(data);
           } else {
             logout("expired");
           }
@@ -44,37 +44,44 @@ function UserForm({ edit, userId }) {
         }
       };
       // Llamada a la función para obtener al usuario al montar el componente
-      getUsers();
+      getAppointments();
     }
-  }, [userId, edit, logout]); // Dependencias del efecto: se ejecuta cuando cambian userId o edit
+  }, [appointmentId, edit, logout]); // Dependencias del efecto: se ejecuta cuando cambian appointmentId o edit
 
   // Definición de los inputs del formulario
   const inputs = [
     {
-      label: "Nombre de usuario",
-      id: "username",
+      label: "Materia",
+      id: "appointmentname",
       styles: "col-span-2",
       type: "text",
-      defaultValue: defaultData.username,
+      defaultValue: defaultData.appointmentname,
     },
     {
-      label: "Contraseña",
-      id: "password",
-      type: "password",
+      label: "Derivación",
+      id: "appointmentname",
       styles: "col-span-2",
-      defaultValue: defaultData.password,
+      type: "text",
+      defaultValue: defaultData.appointmentname,
+    },
+    {
+      label: "Fecha",
+      id: "appointmentname",
+      styles: "col-span-2",
+      type: "text",
+      defaultValue: defaultData.appointmentname,
     },
   ];
 
   // Función para manejar la creación de un nuevo usuario
-  const onCreateUser = async (data) => {
+  const onCreateAppointment = async (data) => {
     console.log("Data:", data);
     const isTokenExpired = checkToken(localStorage.getItem("jwt"));
     try {
       if (!isTokenExpired) {
         // Llamada al servicio para crear un nuevo usuario
-        await createUser(data);
-        navigate("/users");
+        await createAppointment(data);
+        navigate("/appointments");
       } else {
         logout("expired");
       }
@@ -86,27 +93,27 @@ function UserForm({ edit, userId }) {
   };
 
   // Función para manejar la edición de un usuario existente
-  const onEditUser = async (data) => {
+  const onEditAppointment = async (data) => {
     // Preparar un objeto con los nuevos datos del usuario
     const newData = {};
-    if (data.username) newData.username = data.username;
+    if (data.appointmentname) newData.appointmentname = data.appointmentname;
     if (data.password) newData.password = data.password;
 
     console.log("newData:", newData);
     // Comprobar que newData no está vacío antes de intentar actualizar el usuario
     if (newData && Object.keys(newData).length > 0) {
       // Verificar si el nombre de usuario ha cambiado antes de actualizar
-      if (newData.username !== userData.username) {
+      if (newData.appointmentname !== appointmentData.appointmentname) {
         const isTokenExpired = checkToken(localStorage.getItem("jwt"));
         try {
           if (!isTokenExpired) {
             // Llamada al servicio para actualizar al usuario
-            await updateUser(userId, newData);
+            await updateAppointment(appointmentId, newData);
             // Limpiar los datos por defecto después de la actualización
-            defaultData.username = "";
+            defaultData.appointmentname = "";
             defaultData.password = "";
             // Navegar de vuelta a la lista de usuarios
-            navigate("/users");
+            navigate("/appointments");
           } else {
             logout("expired");
           }
@@ -124,18 +131,14 @@ function UserForm({ edit, userId }) {
     <BaseForm
       footer={
         <div className="flex gap-2 max-w-80 ml-auto">
-          <Button href="/users">Volver</Button>
-          {
-            <Button type="submit">
-              {edit ? "Editar usuario" : "Crear usuario"}
-            </Button>
-          }
+          <Button href="/appointments">Volver</Button>
+          {<Button type="submit">Crear audiencia</Button>}
         </div>
       }
-      onSubmit={edit ? onEditUser : onCreateUser}
+      onSubmit={edit ? onEditAppointment : onCreateAppointment}
       inputs={inputs}
     />
   );
 }
 
-export default UserForm;
+export default AppointmentForm;

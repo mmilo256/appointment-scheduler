@@ -11,19 +11,19 @@ function BaseForm({ inputs, onSubmit, footer }) {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmitHandler)}
-      className="bg-white py-10 px-32  rounded shadow-md"
-    >
-      {inputs.map((input) => (
-        <Input
-          key={input.label}
-          label={input.label}
-          defaultValue={input.defaultValue}
-          type={input.type}
-          register={{ ...register(input.id) }}
-        />
-      ))}
+    <form onSubmit={handleSubmit(onSubmitHandler)} className=" py-10">
+      <div className="grid grid-cols-2 gap-x-10 mb-10">
+        {inputs.map((input) => (
+          <Input
+            className={input.styles}
+            key={input.label}
+            label={input.label}
+            defaultValue={input.defaultValue}
+            type={input.type}
+            register={{ ...register(input.id) }}
+          />
+        ))}
+      </div>
 
       {footer}
     </form>

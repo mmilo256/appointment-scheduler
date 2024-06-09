@@ -1,17 +1,17 @@
 import { useSearchParams } from "react-router-dom";
 import Container from "../components/ui/Container";
 import Heading from "../components/ui/Heading";
-import UserForm from "../components/users/UserForm";
+import CitizenForm from "../components/citizens/CitizenForm";
 
-function EditUser() {
+function EditCitizen() {
   const [queryParameters] = useSearchParams();
   const id = queryParameters.get("id");
   return (
     <Container>
-      <Heading className="text-center">Editar usuario</Heading>
-      <UserForm edit userId={id} />
+      <Heading className="text-center">Editar ciudadano</Heading>
+      <CitizenForm edit citizenId={id} />
     </Container>
   );
 }
 
-export default EditUser;
+export default EditCitizen;

@@ -23,6 +23,18 @@ export const getCitizenById = async (req, res) => {
   }
 }
 
+// Obtener ciudadano por su RUT
+export const getCitizenByRUT = async (req, res) => {
+  try {
+    const { rut } = req.params
+    console.log(rut)
+    const citizen = await Citizen.findOne({ where: { rut } })
+    res.json(citizen)
+  } catch (error) {
+    console.log('Error al obtener ciudadano.', error)
+  }
+}
+
 // Agregar un ciudadano a la bd
 export const createCitizen = async (req, res) => {
   try {
