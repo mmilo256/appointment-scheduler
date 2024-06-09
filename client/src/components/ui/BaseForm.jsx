@@ -11,7 +11,7 @@ function BaseForm({ inputs, onSubmit, footer }) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmitHandler)} className=" py-10 px-64">
+    <form onSubmit={handleSubmit(onSubmitHandler)} className=" py-10">
       <div className="grid grid-cols-2 gap-x-10 mb-10">
         {inputs.map((input) => (
           <Input

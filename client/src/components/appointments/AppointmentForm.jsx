@@ -51,18 +51,25 @@ function AppointmentForm({ edit, appointmentId }) {
   // Definición de los inputs del formulario
   const inputs = [
     {
-      label: "Nombre de usuario",
+      label: "Materia",
       id: "appointmentname",
       styles: "col-span-2",
       type: "text",
       defaultValue: defaultData.appointmentname,
     },
     {
-      label: "Contraseña",
-      id: "password",
-      type: "password",
+      label: "Derivación",
+      id: "appointmentname",
       styles: "col-span-2",
-      defaultValue: defaultData.password,
+      type: "text",
+      defaultValue: defaultData.appointmentname,
+    },
+    {
+      label: "Fecha",
+      id: "appointmentname",
+      styles: "col-span-2",
+      type: "text",
+      defaultValue: defaultData.appointmentname,
     },
   ];
 
@@ -125,11 +132,7 @@ function AppointmentForm({ edit, appointmentId }) {
       footer={
         <div className="flex gap-2 max-w-80 ml-auto">
           <Button href="/appointments">Volver</Button>
-          {
-            <Button type="submit">
-              {edit ? "Editar usuario" : "Crear usuario"}
-            </Button>
-          }
+          {<Button type="submit">Crear audiencia</Button>}
         </div>
       }
       onSubmit={edit ? onEditAppointment : onCreateAppointment}

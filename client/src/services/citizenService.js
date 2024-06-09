@@ -54,6 +54,18 @@ export const getCitizenById = async (id) => {
     }
 };
 
+// Función asincrónica para obtener a un ciudadano por su RUT
+export const getCitizenByRUT = async (rut) => {
+    try {
+        // Llamada a la función httpRequest para obtener un ciudadano por su RUT
+        const data = await httpRequest(`${API_URL}/rut/${rut}`, { method: 'GET' });
+        return data;
+    } catch (error) {
+        console.error("Error al obtener el ciudadano.", error);
+        throw error;
+    }
+};
+
 // Función asincrónica para crear un nuevo ciudadano
 export const createCitizen = async (citizenData) => {
     try {
