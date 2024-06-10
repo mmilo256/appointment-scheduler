@@ -8,10 +8,10 @@ export const JWT_SECRET = process.env.JWT_SECRET || 'secretkey'
 
 // Configuración de la base de datos
 export const DATABASE = {
-  name: process.env.DB_NAME || 'agenda_muni',
-  host: process.env.DB_HOST || 'localhost',
-  password: process.env.DB_PASS || '',
-  user: process.env.DB_USER || 'root',
+  name: process.env.DB_NAME || 'sql10712921',
+  host: process.env.DB_HOST || 'sql10.freemysqlhosting.net',
+  password: process.env.DB_PASS || 'nq4mtSx3Av',
+  user: process.env.DB_USER || 'sql10712921',
   port: process.env.DB_PORT || 3306
 }
 

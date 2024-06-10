@@ -14,7 +14,7 @@ export const comparePasswords = (originalPass, passwordToCheck) => {
 
 // Generar JSON Web Token
 export const generateToken = (username) => {
-  return jwt.sign({ username }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN
+  return jwt.sign({ username }, process.env.JWT_SECRET ? process.env.JWT_SECRET : "secretkey", {
+    expiresIn: process.env.JWT_EXPIRES_IN ? process.env.JWT_EXPIRES_IN : "8h"
   })
 }
