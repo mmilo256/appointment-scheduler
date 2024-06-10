@@ -7,7 +7,7 @@ function Button({ children, className, isLoading, href, type }) {
       <Link
         disabled={isLoading}
         to={href}
-        className={`flex w-full py-2 justify-center rounded text-white bg-secondary-500 hover:bg-secondary-600 disabled:bg-secondary-300 disabled:text-slate-500 ${
+        className={`flex w-full py-1 justify-center rounded text-white bg-secondary-500 hover:bg-secondary-600 disabled:bg-secondary-300 disabled:text-slate-500 ${
           isLoading && "cursor-wait"
         } ${className}`}
       >
@@ -20,7 +20,7 @@ function Button({ children, className, isLoading, href, type }) {
     <button
       disabled={isLoading}
       type={type === "submit" ? "submit" : "button"}
-      className={`flex w-full py-2 justify-center rounded text-white bg-secondary-500 hover:bg-secondary-600 disabled:bg-secondary-300 disabled:text-slate-500 ${
+      className={`flex w-full py-1 justify-center rounded text-white bg-secondary-500 hover:bg-secondary-600 disabled:bg-secondary-300 disabled:text-slate-500 ${
         isLoading && "cursor-wait"
       } ${className}`}
     >

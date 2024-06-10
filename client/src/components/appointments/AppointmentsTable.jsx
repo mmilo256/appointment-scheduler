@@ -77,13 +77,13 @@ function AppointmentTable() {
   // Configuración de la tabla con columnas y datos formateados
   const table = {
     columns: [
-      { label: "N°", styles: "w-content" },
-      { label: "SOLICITANTE", styles: "w-content" },
-      { label: "MATERIA", styles: "w-content" },
-      { label: "DERIVACIÓN", styles: "w-content" },
-      { label: "FECHA AUDIENCIA", styles: "w-content" },
-      { label: "ESTADO", styles: "w-content" },
-      { label: "ACCIONES", styles: "w-content" },
+      { label: "N°" },
+      { label: "SOLICITANTE" },
+      { label: "MATERIA" },
+      { label: "DERIVACIÓN" },
+      { label: "FECHA AUDIENCIA" },
+      { label: "ESTADO" },
+      { label: "ACCIONES" },
     ],
     data: formatData(), // Datos formateados de los audiencias
   };

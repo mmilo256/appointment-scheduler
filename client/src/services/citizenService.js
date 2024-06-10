@@ -62,7 +62,6 @@ export const getCitizenByRUT = async (rut) => {
         return data;
     } catch (error) {
         console.error("Error al obtener el ciudadano.", error);
-        throw error;
     }
 };
 

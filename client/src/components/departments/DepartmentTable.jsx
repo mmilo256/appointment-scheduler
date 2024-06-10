@@ -56,10 +56,10 @@ function DepartmentTable() {
   // Configuración de la tabla con columnas y datos formateados
   const table = {
     columns: [
-      { label: "N°", styles: "w-content" },
-      { label: "NOMBRE DE LA DIRECCIÓN", styles: "w-content" },
-      { label: "DESCRIPCIÓN", styles: "w-content" },
-      { label: "ACCIONES", styles: "w-content" },
+      { label: "N°" },
+      { label: "NOMBRE DE LA DIRECCIÓN" },
+      { label: "DESCRIPCIÓN" },
+      { label: "ACCIONES" },
     ],
     data: formatData(), // Datos formateados de los departamentos
   };

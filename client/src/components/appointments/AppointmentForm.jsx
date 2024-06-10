@@ -3,126 +3,104 @@ import BaseForm from "../ui/BaseForm";
 import {
   createAppointment,
   getAppointmentById,
-  updateAppointment,
 } from "../../services/appointmentService";
 import Button from "../ui/Button";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { checkToken } from "../../utils/helpers";
+import { getAllDepartments } from "../../services/departmentService";
 
-function AppointmentForm({ edit, appointmentId }) {
+function AppointmentForm({ citizenData, appointmentId }) {
   // Estado para almacenar los datos del usuario
   const [appointmentData, setAppointmentData] = useState({});
+  const [departments, setDepartments] = useState([]);
   // Hook para la navegación
   const navigate = useNavigate();
   const { logout } = useContext(AuthContext);
 
-  // Datos por defecto para los inputs del formulario
-  const defaultData = {
-    appointmentname: appointmentData?.appointmentname,
-    password: appointmentData?.password,
-  };
-
-  // Efecto de lado para obtener un usuario por su ID cuando se está editando
+  // Efecto de lado para obtener la lista de departamentos al cargar el componente
   useEffect(() => {
-    if (edit) {
-      // Función asincrónica para obtener al usuario
-      const getAppointments = async () => {
-        const isTokenExpired = checkToken(localStorage.getItem("jwt"));
-        try {
-          if (!isTokenExpired) {
-            // Llamada al servicio para obtener al usuario por su ID
-            const data = await getAppointmentById(appointmentId);
-            // Actualización del estado con los datos del usuario obtenidos
-            setAppointmentData(data);
-          } else {
-            logout("expired");
-          }
-        } catch (error) {
-          // Manejo de errores en caso de fallo al obtener al usuario
-          console.log("Error al obtener al usuario.", error);
+    // Función asincrónica para obtener los departamentos
+    const getDepartments = async () => {
+      const isTokenExpired = checkToken(localStorage.getItem("jwt"));
+      try {
+        if (!isTokenExpired) {
+          // Llamada a la función getAllDepartments del servicio para obtener los departamentos
+          const data = await getAllDepartments();
+          // Actualización del estado con la lista de departamentos obtenida
+          const departmentsOptions = data.map((dep) => ({
+            value: dep.id,
+            label: dep.dep_name,
+          }));
+          setDepartments(departmentsOptions);
+        } else {
+          logout("expired");
         }
-      };
-      // Llamada a la función para obtener al usuario al montar el componente
-      getAppointments();
-    }
-  }, [appointmentId, edit, logout]); // Dependencias del efecto: se ejecuta cuando cambian appointmentId o edit
+      } catch (error) {
+        // Manejo de errores en caso de fallo al obtener los departamentos
+        console.log("Error al obtener las direcciones.", error);
+      }
+    };
+    // Llamada a la función para obtener los departamentos al montar el componente
+    getDepartments();
+  }, [logout, citizenData]);
 
   // Definición de los inputs del formulario
   const inputs = [
     {
       label: "Materia",
-      id: "appointmentname",
+      id: "cause",
       styles: "col-span-2",
-      type: "text",
-      defaultValue: defaultData.appointmentname,
+      type: "textarea",
     },
     {
       label: "Derivación",
-      id: "appointmentname",
+      id: "department_id",
       styles: "col-span-2",
-      type: "text",
-      defaultValue: defaultData.appointmentname,
+      type: "select",
+
+      options: departments,
     },
     {
       label: "Fecha",
-      id: "appointmentname",
-      styles: "col-span-2",
-      type: "text",
-      defaultValue: defaultData.appointmentname,
+      id: "date",
+      type: "date",
+    },
+    {
+      label: "Hora",
+      id: "time",
+      type: "time",
     },
   ];
 
   // Función para manejar la creación de un nuevo usuario
   const onCreateAppointment = async (data) => {
-    console.log("Data:", data);
     const isTokenExpired = checkToken(localStorage.getItem("jwt"));
     try {
-      if (!isTokenExpired) {
-        // Llamada al servicio para crear un nuevo usuario
-        await createAppointment(data);
-        navigate("/appointments");
+      if (Object.keys(citizenData).length !== 0) {
+        if (!isTokenExpired) {
+          const appointmentData = {
+            cause: data.cause,
+            appointment_date: `${data.date}T${data.time}:00.000Z`,
+            appointment_status: "pendiente",
+            user_id: 1,
+            citizen_id: citizenData.id,
+            department_id: parseInt(data.department_id),
+          };
+          // Llamada al servicio para crear un nuevo usuario
+          await createAppointment(appointmentData);
+          navigate("/appointments");
+        } else {
+          logout("expired");
+        }
       } else {
-        logout("expired");
+        alert("Debes buscar al solicitante con su RUT");
       }
     } catch (error) {
       // Manejo de errores en caso de fallo al crear al usuario
-      console.log("No se pudo crear el usuario");
-      throw error;
-    }
-  };
-
-  // Función para manejar la edición de un usuario existente
-  const onEditAppointment = async (data) => {
-    // Preparar un objeto con los nuevos datos del usuario
-    const newData = {};
-    if (data.appointmentname) newData.appointmentname = data.appointmentname;
-    if (data.password) newData.password = data.password;
-
-    console.log("newData:", newData);
-    // Comprobar que newData no está vacío antes de intentar actualizar el usuario
-    if (newData && Object.keys(newData).length > 0) {
-      // Verificar si el nombre de usuario ha cambiado antes de actualizar
-      if (newData.appointmentname !== appointmentData.appointmentname) {
-        const isTokenExpired = checkToken(localStorage.getItem("jwt"));
-        try {
-          if (!isTokenExpired) {
-            // Llamada al servicio para actualizar al usuario
-            await updateAppointment(appointmentId, newData);
-            // Limpiar los datos por defecto después de la actualización
-            defaultData.appointmentname = "";
-            defaultData.password = "";
-            // Navegar de vuelta a la lista de usuarios
-            navigate("/appointments");
-          } else {
-            logout("expired");
-          }
-        } catch (error) {
-          // Manejo de errores en caso de fallo al actualizar al usuario
-          console.log("No se pudo editar el usuario");
-          throw error;
-        }
-      }
+      alert(
+        "El solicitante no está en la base datos. Primero agregue al solicitante y luego cree la audiencia."
+      );
     }
   };
 
@@ -135,7 +113,7 @@ function AppointmentForm({ edit, appointmentId }) {
           {<Button type="submit">Crear audiencia</Button>}
         </div>
       }
-      onSubmit={edit ? onEditAppointment : onCreateAppointment}
+      onSubmit={onCreateAppointment}
       inputs={inputs}
     />
   );

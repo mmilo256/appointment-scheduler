@@ -68,13 +68,13 @@ function CitizensTable() {
   // Configuración de la tabla con columnas y datos formateados
   const table = {
     columns: [
-      { label: "RUT", styles: "w-content" },
-      { label: "NOMBRE COMPLETO", styles: "w-content" },
-      { label: "DIRECCIÓN", styles: "w-content" },
-      { label: "CORREO ELECTRÓNICO", styles: "w-content" },
-      { label: "TELEFONO", styles: "w-content" },
-      { label: "TELÉFONO 2", styles: "w-content" },
-      { label: "ACCIONES", styles: "w-content" },
+      { label: "RUT" },
+      { label: "NOMBRE COMPLETO" },
+      { label: "DIRECCIÓN" },
+      { label: "CORREO ELECTRÓNICO" },
+      { label: "TELEFONO" },
+      { label: "TELÉFONO 2" },
+      { label: "ACCIONES" },
     ],
     data: formatData(), // Datos formateados de los ciudadanos
   };

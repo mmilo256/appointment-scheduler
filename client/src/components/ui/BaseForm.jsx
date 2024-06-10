@@ -11,12 +11,16 @@ function BaseForm({ inputs, onSubmit, footer }) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmitHandler)} className=" py-10">
+    <form
+      onSubmit={handleSubmit(onSubmitHandler)}
+      className="bg-gray-100 p-5 rounded shadow"
+    >
       <div className="grid grid-cols-2 gap-x-10 mb-10">
         {inputs.map((input) => (
           <Input
             className={input.styles}
             key={input.label}
+            options={input.options}
             label={input.label}
             defaultValue={input.defaultValue}
             type={input.type}
@@ -24,7 +28,6 @@ function BaseForm({ inputs, onSubmit, footer }) {
           />
         ))}
       </div>
-
       {footer}
     </form>
   );
