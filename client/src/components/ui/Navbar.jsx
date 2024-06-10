@@ -21,7 +21,7 @@ function Navbar() {
           {navigation.map((item) => (
             <li key={item.label}>
               <NavLink
-                className="hover:bg-secondary-500 transition-colors px-4 block h-full content-center"
+                className="hover:bg-secondary-500 transition-colors px-2 block h-full content-center"
                 to={item.href}
               >
                 {item.label}

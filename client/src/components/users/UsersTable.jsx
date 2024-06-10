@@ -53,7 +53,12 @@ function UserTable() {
         id: user.id,
         name: user.username,
         password: user.password,
-        actions: <ActionsRow module="users" id={user.id} onDelete={onDelete} />,
+        actions:
+          user.id !== 1 ? (
+            <ActionsRow module="users" id={user.id} onDelete={onDelete} />
+          ) : (
+            ""
+          ),
       };
       return userData;
     });
@@ -63,10 +68,10 @@ function UserTable() {
   // Configuración de la tabla con columnas y datos formateados
   const table = {
     columns: [
-      { label: "N°", styles: "w-content" },
-      { label: "USUARIO", styles: "w-content" },
-      { label: "CONTRASEÑA", styles: "w-content" },
-      { label: "ACCIONES", styles: "w-content" },
+      { label: "N°" },
+      { label: "USUARIO" },
+      { label: "CONTRASEÑA" },
+      { label: "ACCIONES" },
     ],
     data: formatData(), // Datos formateados de los usuarios
   };
