@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000/api/departments'; // URL de la API para obtener los departamentos
+const API_URL = 'https://appointment-scheduler-api.onrender.com/api/departments'; // URL de la API para obtener los departamentos
 
 // Función asincrónica para obtener todos los departamentos
 export const getAllDepartments = async () => {

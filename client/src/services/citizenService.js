@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000/api/citizens'; // URL de la API para obtener los ciudadanos
+const API_URL = 'https://appointment-scheduler-api.onrender.com/api/citizens'; // URL de la API para obtener los ciudadanos
 
 // Función para obtener el token almacenado en localStorage
 const getToken = () => localStorage.getItem('jwt');

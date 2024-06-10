@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000/api/auth";
+const API_URL = "https://appointment-scheduler-api.onrender.com/api/auth";
 
 const login = async (username, password) => {
     try {

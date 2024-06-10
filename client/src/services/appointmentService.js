@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000/api/appointments'; // URL de la API para obtener los audiencias
+const API_URL = 'https://appointment-scheduler-api.onrender.com/api/appointments'; // URL de la API para obtener los audiencias
 
 // Función para obtener el token almacenado en localStorage
 const getToken = () => localStorage.getItem('jwt');
