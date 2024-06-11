@@ -54,14 +54,6 @@ function AppointmentForm({ citizenData, appointmentId }) {
       type: "textarea",
     },
     {
-      label: "Derivación",
-      id: "department_id",
-      styles: "col-span-2",
-      type: "select",
-
-      options: departments,
-    },
-    {
       label: "Fecha",
       id: "date",
       type: "date",
@@ -82,10 +74,7 @@ function AppointmentForm({ citizenData, appointmentId }) {
           const appointmentData = {
             cause: data.cause,
             appointment_date: `${data.date}T${data.time}:00.000Z`,
-            appointment_status: "pendiente",
-            user_id: 1,
             citizen_id: citizenData.id,
-            department_id: parseInt(data.department_id),
           };
           // Llamada al servicio para crear un nuevo usuario
           await createAppointment(appointmentData);

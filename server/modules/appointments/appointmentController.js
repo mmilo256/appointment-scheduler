@@ -10,6 +10,9 @@ export const getAllAppointments = async (req, res) => {
     const appointments = await Appointment.findAll({
       include: [
         { model: Citizen, attributes: ['first_name', 'last_name'], as: 'citizen' }
+      ],
+      order: [
+        ['appointment_date', 'ASC']
       ]
     })
     res.json(appointments)

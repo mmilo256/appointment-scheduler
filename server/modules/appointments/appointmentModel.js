@@ -20,6 +20,10 @@ export const Appointment = sequelize.define('appointments', {
     type: DataTypes.DATE,
     allowNull: false
   },
+  is_referred: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  },
   citizen_id: {
     type: DataTypes.INTEGER,
     allowNull: false,

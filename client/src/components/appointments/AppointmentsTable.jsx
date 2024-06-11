@@ -7,7 +7,6 @@ import {
 } from "../../services/appointmentService";
 import { checkToken, formatDate } from "../../utils/helpers";
 import { AuthContext } from "../../context/AuthContext";
-import StatusTag from "./StatusTag";
 
 function AppointmentTable() {
   // Estado local para almacenar la lista de audiencias
@@ -58,9 +57,7 @@ function AppointmentTable() {
         id: appointment.id,
         citizenName: `${appointment.citizen.first_name} ${appointment.citizen.last_name}`,
         cause: appointment.cause,
-        department: appointment.department.dep_name,
         date: formattedDate,
-        status: <StatusTag status={appointment.appointment_status} />,
         actions: (
           <ActionsRow
             module="appointments"
@@ -80,9 +77,7 @@ function AppointmentTable() {
       { label: "N°" },
       { label: "SOLICITANTE" },
       { label: "MATERIA" },
-      { label: "DERIVACIÓN" },
       { label: "FECHA AUDIENCIA" },
-      { label: "ESTADO" },
       { label: "ACCIONES" },
     ],
     data: formatData(), // Datos formateados de los audiencias

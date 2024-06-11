@@ -5,6 +5,7 @@ import { AuthContext } from "../../context/AuthContext";
 
 const navigation = [
   { label: "Inicio", href: "/" },
+  { label: "Crear audiencia", href: "appointments/create" },
   { label: "Audiencias", href: "appointments" },
   { label: "Ciudadanos", href: "citizens" },
   { label: "Direcciones", href: "departments" },
