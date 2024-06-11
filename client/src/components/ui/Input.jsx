@@ -8,6 +8,9 @@ function Input({
   className,
   important,
   options,
+  max,
+  onChange,
+  value,
 }) {
   const renderInputField = () => {
     switch (type) {
@@ -67,6 +70,10 @@ function Input({
               important && "bg-yellow-100"
             }`}
             type={type}
+            onChange={onChange}
+            value={value}
+            maxLength={max}
+            max={max}
             defaultValue={defaultValue}
           />
         );
