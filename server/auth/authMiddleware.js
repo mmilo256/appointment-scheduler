@@ -12,7 +12,7 @@ export const verifyToken = (req, res, next) => {
   }
   // Si existe el token, obtener el payload y almacenarlo en la petición
   try {
-    const payload = jwt.verify(token, process.env.JWT_SECRET ? process.env.JWT_SECRET : "secretkey")
+    const payload = jwt.verify(token, process.env.JWT_SECRET)
     req.payload = {
       username: payload.username
     }

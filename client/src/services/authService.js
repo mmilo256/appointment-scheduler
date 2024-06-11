@@ -1,4 +1,6 @@
-const API_URL = "https://appointment-scheduler-api.onrender.com/api/auth";
+import { DEV_API_URL } from "../constants";
+
+const API_URL = `${DEV_API_URL}/auth`;
 
 const login = async (username, password) => {
     try {

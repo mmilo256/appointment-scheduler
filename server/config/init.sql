@@ -29,13 +29,18 @@ id INT AUTO_INCREMENT PRIMARY KEY,
 cause TEXT NOT NULL,
 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 appointment_date DATETIME NOT NULL,
-appointment_status ENUM('pendiente', 'finalizada', 'cancelada') NOT NULL,
-user_id INT NOT NULL,
 citizen_id INT NOT NULL,
-department_id INT NOT NULL,
-FOREIGN KEY (user_id) REFERENCES users(id),
-FOREIGN KEY (citizen_id) REFERENCES citizens(id) ON DELETE CASCADE,
-FOREIGN KEY (department_id) REFERENCES departments(id)
+FOREIGN KEY (citizen_id) REFERENCES citizens(id) ON DELETE CASCADE
+);
+
+CREATE TABLE referrals(
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    department_id INT,
+    appointment_id INT,
+    outcome TEXT,
+    ref_status ENUM('pendiente', 'en proceso', 'finalizada'),
+    FOREIGN KEY (department_id) REFERENCES departments(id),
+    FOREIGN KEY (appointment_id) REFERENCES appointments(id) ON DELETE CASCADE
 );
 
 
@@ -57,5 +62,8 @@ INSERT INTO departments (dep_name) VALUES ('Secretaría Comunal de Planificació
 INSERT INTO departments (dep_name) VALUES ('Juzgado de Policía Local');
 
 
-INSERT INTO appointments (cause, appointment_date, appointment_status, user_id, citizen_id, department_id) VALUES ('Renombrar Chile', '2024-12-06 09:00:00', 1, 1, 1, 1);
-INSERT INTO appointments (cause, appointment_date, appointment_status, user_id, citizen_id, department_id) VALUES ('Destruir Castro', '2025-04-27 23:59:59', 2, 1, 1, 1);
+INSERT INTO appointments (cause, appointment_date, citizen_id) VALUES ('Renombrar Chile', '2024-12-06 09:00:00', 1);
+INSERT INTO appointments (cause, appointment_date, citizen_id) VALUES ('Destruir Castro', '2025-04-27 23:59:59', 2);
+
+INSERT INTO referrals (department_id, appointment_id, outcome, ref_status) VALUES (4, 1, "Ahora se va a llamar Chule", 1);
+INSERT INTO referrals (department_id, appointment_id, outcome, ref_status) VALUES (7, 2, "Señora cállese xd", 2);
