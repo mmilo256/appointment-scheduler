@@ -9,8 +9,13 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { checkToken } from "../../utils/helpers";
 import { getAllDepartments } from "../../services/departmentService";
+import Input from "../ui/Input";
+import { useForm } from "react-hook-form";
+import DatePickerInput from "../ui/DatePickerInput";
 
 function AppointmentForm({ citizenData, appointmentId }) {
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const { register } = useForm();
   // Estado para almacenar los datos del usuario
   const [appointmentData, setAppointmentData] = useState({});
   const [departments, setDepartments] = useState([]);
@@ -95,16 +100,22 @@ function AppointmentForm({ citizenData, appointmentId }) {
 
   // Renderización del formulario con los botones y la lógica de envío
   return (
-    <BaseForm
-      footer={
-        <div className="flex gap-2 max-w-80 ml-auto">
-          <Button href="/appointments">Volver</Button>
-          {<Button type="submit">Crear audiencia</Button>}
-        </div>
-      }
-      onSubmit={onCreateAppointment}
-      inputs={inputs}
-    />
+    <form action="">
+      <Input
+        type="textarea"
+        label="Materia"
+        register={{ ...register("cause") }}
+      />
+      <DatePickerInput
+        currentDate={currentDate}
+        setCurrentDate={setCurrentDate}
+      />
+      <p>Fecha seleccionada: {currentDate.toDateString()}</p>
+      <div className="flex ml-auto mt-5 gap-2 w-96">
+        <Button href="/appointments">Volver</Button>
+        <Button type="submit">Crear audiencia</Button>
+      </div>
+    </form>
   );
 }
 

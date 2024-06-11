@@ -5,6 +5,7 @@ function Input({
   register,
   type,
   defaultValue,
+  placeholder,
   className,
   important,
   options,
@@ -22,6 +23,7 @@ function Input({
               important && "bg-yellow-100"
             }`}
             defaultValue={defaultValue}
+            placeholder={placeholder}
           />
         );
       case "select":
@@ -40,28 +42,7 @@ function Input({
             ))}
           </select>
         );
-      case "date":
-        return (
-          <input
-            {...register}
-            className={`px-2 py-1 w-full rounded border border-primary-100 ${
-              important && "bg-yellow-100"
-            }`}
-            type="date"
-            defaultValue={defaultValue}
-          />
-        );
-      case "time":
-        return (
-          <input
-            {...register}
-            className={`px-2 py-1 w-full rounded border border-primary-100 ${
-              important && "bg-yellow-100"
-            }`}
-            type="time"
-            defaultValue={defaultValue}
-          />
-        );
+
       default:
         return (
           <input
@@ -71,6 +52,7 @@ function Input({
             }`}
             type={type}
             onChange={onChange}
+            placeholder={placeholder}
             value={value}
             maxLength={max}
             max={max}
