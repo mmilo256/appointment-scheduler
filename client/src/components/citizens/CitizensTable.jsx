@@ -18,27 +18,23 @@ function CitizensTable() {
       const isTokenExpired = checkToken(localStorage.getItem("jwt"));
       try {
         if (!isTokenExpired) {
-          // Llamada a la función getAllCitizens del servicio para obtener los ciudadanos
           const data = await getAllCitizens();
-          // Actualización del estado con la lista de ciudadanos obtenida
           setCitizens(data);
         } else {
           logout("expired");
         }
       } catch (error) {
-        // Manejo de errores en caso de fallo al obtener los ciudadanos
         console.log("Error al obtener los ciudadanos.", error);
       }
     };
-    // Llamada a la función para obtener los ciudadanos al montar el componente
     getCitizens();
   }, [refreshData, logout]);
 
+  // Función para eliminar un ciudadano
   const onDelete = async (id) => {
-    console.log("ID a eliminar:", id);
     try {
       await deleteCitizen(id);
-      console.log("Ciudadano eliminado correctamente");
+      // Refrescar la lista de ciudadanos después de la eliminación
       setRefreshData((prevState) => !prevState);
     } catch (error) {
       throw error;
@@ -48,7 +44,6 @@ function CitizensTable() {
   // Función para dar formato a los datos de los ciudadanos
   const formatData = () => {
     const formattedData = citizens.map((citizen) => {
-      // Formato de cada ciudadano con sus respectivos campos
       const citizenData = {
         rut: citizen.rut,
         fullName: `${citizen.first_name} ${citizen.last_name}`,
@@ -57,7 +52,12 @@ function CitizensTable() {
         phone: citizen.phone,
         phone2: citizen.phone_2 ?? "(Sin número)",
         actions: (
-          <ActionsRow module="citizens" id={citizen.id} onDelete={onDelete} />
+          <ActionsRow
+            module="citizens"
+            noEdit
+            id={citizen.id}
+            onDelete={onDelete}
+          />
         ),
       };
       return citizenData;

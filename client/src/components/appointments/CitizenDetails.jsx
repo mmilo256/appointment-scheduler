@@ -11,7 +11,7 @@ function CitizenDetails({ data }) {
       ) : (
         <ul className="flex flex-col gap-1">
           <li className="font-bold">
-            <p>RUT</p> <span className="font-normal">{data.rut}</span>{" "}
+            <p>RUT</p> <span className="font-normal">{data.rut}</span>
           </li>
           <li className="font-bold">
             <p>Nombre completo</p>
@@ -22,14 +22,18 @@ function CitizenDetails({ data }) {
           </li>
           <li className="font-bold">
             <p>Correo electrónico</p>
-            <span className="font-normal">{data.email}</span>
+            <span className="font-normal">
+              {data.email ? data.email : "No tiene"}
+            </span>
           </li>
           <li className="font-bold">
             <p>Teléfono</p> <span className="font-normal">{data.phone}</span>
           </li>
           <li className="font-bold">
             <p>Teléfono 2</p>{" "}
-            <span className="font-normal">{data.phone_2}</span>
+            <span className="font-normal">
+              {data.phone_2 ? data.phone_2 : "No tiene"}
+            </span>
           </li>
         </ul>
       )}

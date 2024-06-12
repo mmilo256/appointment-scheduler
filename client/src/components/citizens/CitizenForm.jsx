@@ -20,27 +20,22 @@ function CitizenForm({ edit, citizenId }) {
   // Efecto de lado para obtener un ciudadano por su ID cuando se está editando
   useEffect(() => {
     if (edit) {
-      // Función asincrónica para obtener al ciudadano
-      const getCitizens = async () => {
+      const getCitizen = async () => {
         const isTokenExpired = checkToken(localStorage.getItem("jwt"));
         try {
           if (!isTokenExpired) {
-            // Llamada al servicio para obtener al ciudadano por su ID
             const data = await getCitizenById(citizenId);
-            // Actualización del estado con los datos del ciudadano obtenidos
             setCitizenData(data);
           } else {
             logout("expired");
           }
         } catch (error) {
-          // Manejo de errores en caso de fallo al obtener al ciudadano
           console.log("Error al obtener al ciudadano.", error);
         }
       };
-      // Llamada a la función para obtener al ciudadano al montar el componente
-      getCitizens();
+      getCitizen();
     }
-  }, [citizenId, edit, logout]); // Dependencias del efecto: se ejecuta cuando cambian citizenId o edit
+  }, [citizenId, edit, logout]);
 
   // Datos por defecto para los inputs del formulario
   const defaultData = {
@@ -102,18 +97,15 @@ function CitizenForm({ edit, citizenId }) {
 
   // Función para manejar la creación de un nuevo ciudadano
   const onCreateCitizen = async (data) => {
-    console.log("Data:", data);
     const isTokenExpired = checkToken(localStorage.getItem("jwt"));
     try {
       if (!isTokenExpired) {
-        // Llamada al servicio para crear un nuevo ciudadano
         await createCitizen(data);
         navigate("/citizens");
       } else {
         logout("expired");
       }
     } catch (error) {
-      // Manejo de errores en caso de fallo al crear al ciudadano
       console.log("No se pudo crear el ciudadano");
       throw error;
     }
@@ -121,7 +113,6 @@ function CitizenForm({ edit, citizenId }) {
 
   // Función para manejar la edición de un ciudadano existente
   const onEditCitizen = async (data) => {
-    // Preparar un objeto con los nuevos datos del ciudadano
     const newData = {};
     if (data.rut) newData.rut = data.rut;
     if (data.first_name) newData.first_name = data.first_name;
@@ -131,17 +122,12 @@ function CitizenForm({ edit, citizenId }) {
     if (data.phone) newData.phone = data.phone;
     if (data.phone_2) newData.phone_2 = data.phone_2;
 
-    console.log(newData);
-
-    // Comprobar que newData no está vacío antes de intentar actualizar el ciudadano
     if (newData && Object.keys(newData).length > 0) {
       const isTokenExpired = checkToken(localStorage.getItem("jwt"));
       try {
         if (!isTokenExpired) {
-          // Llamada al servicio para actualizar al ciudadano
           await updateCitizen(citizenId, newData);
           navigate("/citizens");
-          // Limpiar los datos por defecto después de la actualización
           (defaultData.rut = ""),
             (defaultData.firstName = ""),
             (defaultData.lastName = ""),
@@ -149,12 +135,10 @@ function CitizenForm({ edit, citizenId }) {
             (defaultData.email = ""),
             (defaultData.phone = ""),
             (defaultData.phone2 = "");
-          // Navegar de vuelta a la lista de ciudadanos
         } else {
           logout("expired");
         }
       } catch (error) {
-        // Manejo de errores en caso de fallo al actualizar al ciudadano
         console.log("No se pudo editar el ciudadano");
         throw error;
       }
@@ -167,11 +151,11 @@ function CitizenForm({ edit, citizenId }) {
       footer={
         <div className="flex gap-2 max-w-80 ml-auto">
           <Button href="/citizens">Volver</Button>
-          {
-            <Button type="submit">
-              {edit ? "Editar ciudadano" : "Crear ciudadano"}
-            </Button>
-          }
+          {edit ? (
+            <Button type="submit">Editar ciudadano</Button>
+          ) : (
+            <Button type="submit">Crear ciudadano</Button>
+          )}
         </div>
       }
       onSubmit={edit ? onEditCitizen : onCreateCitizen}

@@ -10,9 +10,7 @@ function CitizenByRutForm({ setCitizen }) {
     const isTokenExpired = checkToken(localStorage.getItem("jwt"));
     try {
       if (!isTokenExpired) {
-        // Llamada a la función getAllUsers del servicio para obtener los usuarios
         const data = await getCitizenByRUT(rut);
-        // Actualización del estado con la lista de usuarios obtenida
         if (data) {
           setCitizen(data);
         } else {
@@ -24,12 +22,11 @@ function CitizenByRutForm({ setCitizen }) {
         logout("expired");
       }
     } catch (error) {
-      // Manejo de errores en caso de fallo al obtener los usuarios
-      console.log("Error al obtener los usuarios.", error);
+      console.log("Error al obtener los ciudadanos.", error);
     }
   };
 
-  // Validar rut
+  // Formatear y validar RUT
   const validateRut = (e) => {
     setRut(formatRut(e.target.value));
   };
@@ -40,26 +37,23 @@ function CitizenByRutForm({ setCitizen }) {
   };
 
   return (
-    <>
-      <form
-        onSubmit={handleSubmit}
-        className="grid grid-cols-10 gap-4 items-end border"
-      >
-        <Input
-          important
-          onChange={validateRut}
-          max={12}
-          value={rut}
-          type="text"
-          className="col-span-7"
-          label="RUT del solicitante"
-        />
-
-        <button className="col-span-3 mb-2 p-1 rounded border bg-secondary-500 hover:bg-secondary-600 text-white">
-          Buscar
-        </button>
-      </form>
-    </>
+    <form
+      onSubmit={handleSubmit}
+      className="grid grid-cols-10 gap-4 items-end border"
+    >
+      <Input
+        important
+        onChange={validateRut}
+        max={12}
+        value={rut}
+        type="text"
+        className="col-span-7"
+        label="RUT del solicitante"
+      />
+      <button className="col-span-3 mb-2 p-1 rounded border bg-secondary-500 hover:bg-secondary-600 text-white">
+        Buscar
+      </button>
+    </form>
   );
 }
 

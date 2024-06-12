@@ -6,6 +6,7 @@ import Button from "../ui/Button";
 import { AuthContext } from "../../context/AuthContext";
 import { updateAppointment } from "../../services/appointmentService";
 import { createReferral } from "../../services/referralService";
+import { useNavigate } from "react-router-dom";
 function ReferralForm({ appointment }) {
   // Estado local para almacenar la lista de departamentos
   const [departments, setDepartments] = useState([]);
@@ -13,6 +14,7 @@ function ReferralForm({ appointment }) {
   const [result, setResult] = useState("");
   const [status, setStatus] = useState("pendiente");
   const { logout } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const depOptions = departments.map((dep) => ({
     label: dep.dep_name,
@@ -58,6 +60,7 @@ function ReferralForm({ appointment }) {
         await updateAppointment(appointment.id, setReferred);
         // Actualización del estado con la lista de departamentos obtenida
         alert("Derivación realizada correctamente");
+        navigate("/referrals");
       } else {
         logout("expired");
       }

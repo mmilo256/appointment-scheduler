@@ -1,7 +1,6 @@
 import Container from "../components/ui/Container";
 import Heading from "../components/ui/Heading";
 import Button from "../components/ui/Button";
-import AppointmentsTable from "../components/appointments/AppointmentsTable";
 import AppointmentsList from "../components/appointments/AppointmentsList";
 
 function Appointments() {

@@ -1,7 +1,19 @@
 import Button from "../ui/Button";
-function AppointmentCard({ data }) {
+import { deleteAppointment } from "../../services/appointmentService";
+
+function AppointmentCard({ data, setRefreshData }) {
   const onClickHandler = (e) => {
     e.preventDefault();
+  };
+
+  const onDeleteAppointment = async () => {
+    try {
+      await deleteAppointment(data.id);
+      // Refrescar la lista de ciudadanos después de la eliminación
+      setRefreshData((prevState) => !prevState);
+    } catch (error) {
+      throw error;
+    }
   };
 
   return (
@@ -10,7 +22,7 @@ function AppointmentCard({ data }) {
         data.isReferred ? "bg-green-100" : "bg-slate-100"
       } rounded shadow p-4`}
     >
-      {/** Info */}
+      {/* Información de la cita */}
       <div className="flex flex-col gap-1">
         <p className="text-lg">
           <strong>Hora:</strong> {data.time}
@@ -27,7 +39,8 @@ function AppointmentCard({ data }) {
           <p className="font-bold text-gray-500">Por derivar</p>
         )}
       </div>
-      {/** Acciones */}
+
+      {/* Acciones disponibles para la cita */}
       <div>
         <div className="flex gap-2">
           <Button
@@ -41,8 +54,7 @@ function AppointmentCard({ data }) {
           >
             {data.isReferred ? "Derivada" : "Derivar"}
           </Button>
-          <Button>Editar</Button>
-          <Button>Borrar</Button>
+          <Button onClick={onDeleteAppointment}>Eliminar</Button>
         </div>
       </div>
     </div>

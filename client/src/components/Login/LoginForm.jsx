@@ -6,7 +6,7 @@ import { AuthContext } from "../../context/AuthContext";
 const inputStyles = "border rounded-md p-2 w-full"; // Define los estilos comunes para los inputs
 
 function LoginForm() {
-  const { login, user, isLoading } = useContext(AuthContext); // Usa useContext para obtener login y user del contexto de autenticación
+  const { login, isLoading } = useContext(AuthContext); // Obtiene login y isLoading del contexto de autenticación
   const {
     register, // Función para registrar los inputs en el formulario
     handleSubmit, // Función para manejar el envío del formulario
@@ -15,7 +15,6 @@ function LoginForm() {
 
   // Función que se ejecuta al enviar el formulario
   const onSubmit = async (data) => {
-    console.log(data); // Imprime los datos del formulario en la consola
     try {
       await login(data.username, data.password); // Intenta iniciar sesión con los datos del formulario
     } catch (error) {

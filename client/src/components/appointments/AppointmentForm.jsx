@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import BaseForm from "../ui/BaseForm";
 import {
   createAppointment,
-  getAppointmentById,
   getAvailableTimes,
 } from "../../services/appointmentService";
 import Button from "../ui/Button";
@@ -10,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { checkToken } from "../../utils/helpers";
 import Input from "../ui/Input";
-import { useForm } from "react-hook-form";
 import DatePickerInput from "../ui/DatePickerInput";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
@@ -23,25 +21,22 @@ function AppointmentForm({ citizenData, appointmentId }) {
   const [selectedTime, setSelectedTime] = useState(
     availableTimes ? availableTimes[0] : null
   );
-  // Estado para almacenar los datos del usuario
   const [appointmentData, setAppointmentData] = useState({});
-  // Hook para la navegación
   const navigate = useNavigate();
   const { logout } = useContext(AuthContext);
 
+  // Efecto para obtener los horarios disponibles cada vez que se seleccione una fecha o se refresque la lista
   useEffect(() => {
     const getAllAvailableTimes = async (date) => {
       const isTokenExpired = checkToken(localStorage.getItem("jwt"));
       try {
         if (!isTokenExpired) {
-          // Llamada a la función getAllDepartments del servicio para obtener los departamentos
           const data = await getAvailableTimes(date);
           setAvailableTimes(data);
         } else {
           logout("expired");
         }
       } catch (error) {
-        // Manejo de errores en caso de fallo al obtener los departamentos
         console.log("Error al obtener las direcciones.", error);
       }
     };
@@ -50,12 +45,11 @@ function AppointmentForm({ citizenData, appointmentId }) {
     }
   }, [refreshTimes]);
 
-  // Función para manejar la creación de un nuevo usuario
+  // Función para manejar la creación de una nueva cita
   const onCreateAppointment = async (data) => {
     const isTokenExpired = checkToken(localStorage.getItem("jwt"));
     try {
       if (!isTokenExpired) {
-        // Llamada al servicio para crear un nuevo usuario
         await createAppointment(data);
         alert("La audiencia fue creada exitosamente");
         navigate("/appointments");
@@ -63,7 +57,6 @@ function AppointmentForm({ citizenData, appointmentId }) {
         logout("expired");
       }
     } catch (error) {
-      // Manejo de errores en caso de fallo al crear al usuario
       console.log(error);
     }
   };

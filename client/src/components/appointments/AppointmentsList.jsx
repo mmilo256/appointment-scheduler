@@ -1,27 +1,22 @@
 import React, { useContext, useEffect, useState } from "react";
 import { checkToken, groupAppointments } from "../../utils/helpers";
-import {
-  deleteAppointment,
-  getAllAppointments,
-} from "../../services/appointmentService";
+import { getAllAppointments } from "../../services/appointmentService";
 import { AuthContext } from "../../context/AuthContext";
 import AppointmentsCardsGroup from "./AppointmentsCardsGroup";
 import { format } from "date-fns";
-import { es } from "date-fns/locale";
 
 function AppointmentsList() {
   // Estado local para almacenar la lista de audiencias
   const [appointments, setAppointments] = useState([]);
-  const { logout } = useContext(AuthContext);
   const [refreshData, setRefreshData] = useState(false);
-  // Efecto de lado para obtener la lista de audiencias al cargar el componente
+  const { logout } = useContext(AuthContext);
+
+  // Efecto para obtener la lista de audiencias al cargar el componente
   useEffect(() => {
-    // Función asincrónica para obtener los audiencias
     const getAppointments = async () => {
       const isTokenExpired = checkToken(localStorage.getItem("jwt"));
       try {
         if (!isTokenExpired) {
-          // Llamada a la función getAllAppointments del servicio para obtener los audiencias
           const data = await getAllAppointments();
           // Formatear audiencias
           const formattedData = data.map((appointment) => {
@@ -40,11 +35,9 @@ function AppointmentsList() {
           logout("expired");
         }
       } catch (error) {
-        // Manejo de errores en caso de fallo al obtener los audiencias
-        console.log("Error al obtener los audiencias.", error);
+        console.log("Error al obtener las audiencias.", error);
       }
     };
-    // Llamada a la función para obtener los audiencias al montar el componente
     getAppointments();
   }, [refreshData, logout]);
 
@@ -54,7 +47,13 @@ function AppointmentsList() {
   return (
     <div className="grid grid-cols-1 gap-4">
       {groupedAppointments.map((group, index) => {
-        return <AppointmentsCardsGroup key={index} data={group} />;
+        return (
+          <AppointmentsCardsGroup
+            setRefreshData={setRefreshData}
+            key={index}
+            data={group}
+          />
+        );
       })}
     </div>
   );

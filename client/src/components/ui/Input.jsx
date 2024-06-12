@@ -10,6 +10,7 @@ function Input({
   important,
   options,
   max,
+  optional,
   onChange,
   value,
 }) {
@@ -68,7 +69,8 @@ function Input({
 
   return (
     <label className={`block mb-2 ${className}`}>
-      <p className="font-semibold mb-0.5">{label}</p>
+      <span className="inline-block font-semibold mb-0.5">{label}</span>{" "}
+      <span className="text-gray-600">{optional && "(opcional)"}</span>
       {renderInputField()}
     </label>
   );

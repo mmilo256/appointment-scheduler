@@ -80,7 +80,7 @@ function UserForm({ edit, userId }) {
       }
     } catch (error) {
       // Manejo de errores en caso de fallo al crear al usuario
-      console.log("No se pudo crear el usuario");
+      alert("Debes completar todos los campos");
       throw error;
     }
   };

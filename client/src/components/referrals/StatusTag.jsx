@@ -4,13 +4,13 @@ function StatusTag({ status }) {
   let tagColor;
   switch (status) {
     case "pendiente":
+      tagColor = "bg-red-200";
+      break;
+    case "en proceso":
       tagColor = "bg-yellow-200";
       break;
     case "finalizada":
       tagColor = "bg-green-200";
-      break;
-    case "cancelada":
-      tagColor = "bg-red-200";
       break;
     default:
       tagColor = "bg-gray-200";

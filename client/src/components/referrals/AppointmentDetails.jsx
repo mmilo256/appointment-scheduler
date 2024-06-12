@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { checkToken } from "../../utils/helpers";
-
-import { getAppointmentById } from "../../services/appointmentService";
-import { format } from "date-fns-tz";
-import { es } from "date-fns/locale";
+import React from "react";
+import { format } from "date-fns-tz"; // Importa la función de formato de fecha desde date-fns-tz
+import { es } from "date-fns/locale"; // Importa el idioma español desde date-fns
 
 function AppointmentDetails({ appointment }) {
   return (
