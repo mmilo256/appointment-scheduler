@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function Button({ children, className, href, type, color, disabled }) {
+function Button({ children, onClick, className, href, type, color, disabled }) {
   let colorStyles;
 
   switch (color) {
@@ -18,8 +18,8 @@ function Button({ children, className, href, type, color, disabled }) {
   if (href) {
     return (
       <Link
-        disabled={disabled}
         to={href}
+        onClick={onClick}
         className={`${colorStyles} flex w-full py-1 px-2 justify-center rounded text-white    ${className}`}
       >
         {children}
@@ -31,6 +31,7 @@ function Button({ children, className, href, type, color, disabled }) {
     <button
       className={` ${colorStyles} flex w-full py-1 px-2 justify-center rounded text-white   ${className}`}
       disabled={disabled}
+      onClick={onClick}
       type={type === "submit" ? "submit" : "button"}
     >
       {children}

@@ -94,7 +94,6 @@ function AppointmentForm({ citizenData, appointmentId }) {
 
   const onSelectTimeHandler = (e) => {
     setSelectedTime(e.target.value);
-    console.log(selectedTime);
   };
 
   const onChangeCause = (e) => {

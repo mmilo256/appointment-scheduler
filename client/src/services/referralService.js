@@ -54,7 +54,7 @@ export const createReferral = async (referralData) => {
         });
         return data;
     } catch (error) {
-        console.error("Error al crear el audiencia.", error);
+        console.error("Error al crear la derivacion.", error);
         throw error;
     }
 };

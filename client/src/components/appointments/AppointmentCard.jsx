@@ -1,5 +1,9 @@
 import Button from "../ui/Button";
 function AppointmentCard({ data }) {
+  const onClickHandler = (e) => {
+    e.preventDefault();
+  };
+
   return (
     <div
       className={`flex justify-between items-center ${
@@ -27,9 +31,13 @@ function AppointmentCard({ data }) {
       <div>
         <div className="flex gap-2">
           <Button
+            onClick={data.isReferred && onClickHandler}
             href={`/referrals/create?id=${data.id}`}
-            disabled={data.isReferred}
             color="secondary"
+            className={
+              data.isReferred &&
+              "bg-secondary-200 hover:bg-secondary-200 cursor-not-allowed"
+            }
           >
             {data.isReferred ? "Derivada" : "Derivar"}
           </Button>

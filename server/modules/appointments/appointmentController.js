@@ -130,18 +130,19 @@ export const updateAppointment = async (req, res) => {
     const {
       cause,
       appointment_date: date,
-      citizen_id: citizenId
+      citizen_id: citizenId,
+      is_referred: isReferred
     } = req.body
     const appointment = await Appointment.findOne({ where: { id } })
     if (!appointment) {
       return res.status(HTTP_STATUS.NOT_FOUND).json({ message: 'No se encontró la audiencia' })
     }
-    console.log(appointment.dep_name)
     // Validación
     const { error } = appointmentSchema.validate({
       cause,
       appointment_date: date,
-      citizen_id: citizenId
+      citizen_id: citizenId,
+      is_referred: isReferred
     })
     if (error) {
       return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: 'Datos no válidos' })
@@ -151,6 +152,7 @@ export const updateAppointment = async (req, res) => {
     if (cause) updates.cause = cause
     if (date) updates.appointment_date = date
     if (citizenId) updates.citizen_id = citizenId
+    if (isReferred) updates.is_referred = isReferred
     // Modificar audiencia
     await Appointment.update(updates, { where: { id } })
     res.json({

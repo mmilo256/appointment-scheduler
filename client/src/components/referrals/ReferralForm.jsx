@@ -4,12 +4,14 @@ import { checkToken } from "../../utils/helpers";
 import Input from "../ui/Input";
 import Button from "../ui/Button";
 import { AuthContext } from "../../context/AuthContext";
+import { updateAppointment } from "../../services/appointmentService";
+import { createReferral } from "../../services/referralService";
 function ReferralForm({ appointment }) {
   // Estado local para almacenar la lista de departamentos
   const [departments, setDepartments] = useState([]);
   const [department, setDepartment] = useState(1);
   const [result, setResult] = useState("");
-  const [status, setStatus] = useState(1);
+  const [status, setStatus] = useState("pendiente");
   const { logout } = useContext(AuthContext);
 
   const depOptions = departments.map((dep) => ({
@@ -18,9 +20,9 @@ function ReferralForm({ appointment }) {
   }));
 
   const statusOptions = [
-    { label: "pendiente", value: 1 },
-    { label: "en proceso", value: 2 },
-    { label: "finalizada", value: 3 },
+    { label: "pendiente", value: "pendiente" },
+    { label: "en proceso", value: "en proceso" },
+    { label: "finalizada", value: "finalizada" },
   ];
 
   // Efecto de lado para obtener la lista de departamentos al cargar el componente
@@ -46,16 +48,34 @@ function ReferralForm({ appointment }) {
     getDepartments();
   }, [logout]);
 
+  const referralAppointment = async (data) => {
+    const isTokenExpired = checkToken(localStorage.getItem("jwt"));
+    try {
+      if (!isTokenExpired) {
+        const setReferred = { is_referred: true };
+        // Llamada a la función getAllDepartments del servicio para obtener los departamentos
+        await createReferral(data);
+        await updateAppointment(appointment.id, setReferred);
+        // Actualización del estado con la lista de departamentos obtenida
+        alert("Derivación realizada correctamente");
+      } else {
+        logout("expired");
+      }
+    } catch (error) {
+      // Manejo de errores en caso de fallo al obtener los departamentos
+      console.log("No se pudo derivar la audiencia", error);
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const data = {
       department_id: Number(department),
-      citizen_id: appointment.citizen.id,
       outcome: result,
-      ref_status: Number(status),
+      ref_status: status,
       appointment_id: appointment.id,
     };
-    console.log(data);
+    referralAppointment(data);
   };
 
   return (
