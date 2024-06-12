@@ -56,6 +56,18 @@ export const getAppointmentById = async (id) => {
     }
 };
 
+// Función asincrónica para obtener a un audiencia por su ID
+export const getAvailableTimes = async (date) => {
+    try {
+        // Llamada a la función httpRequest para obtener un audiencia por su ID
+        const data = await httpRequest(`${API_URL}/date/${date}`, { method: 'GET' });
+        return data;
+    } catch (error) {
+        console.error("Error al obtener el audiencia.", error);
+        throw error;
+    }
+};
+
 // Función asincrónica para crear un nuevo audiencia
 export const createAppointment = async (appointmentData) => {
     try {

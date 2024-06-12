@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   startOfMonth,
   endOfMonth,
@@ -6,24 +6,35 @@ import {
   endOfWeek,
   eachDayOfInterval,
   format,
-  addMonths,
-  subMonths,
+  subWeeks,
   addWeeks,
 } from "date-fns";
 import { es } from "date-fns/locale";
 
-const DatePickerInput = ({ currentDate, setCurrentDate }) => {
+const DatePickerInput = ({
+  setSelectedDate,
+  setRefreshTimes,
+  refreshTimes,
+}) => {
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const today = new Date();
+
   useEffect(() => {
-    const startDay = addWeeks(startOfWeek(currentDate, { weekStartsOn: 1 }), 1);
+    let startDay;
+    if (format(currentDate, "E") === "Mon") {
+      startDay = currentDate;
+    } else {
+      startDay = startOfWeek(addWeeks(currentDate, 1), { weekStartsOn: 1 });
+    }
     setCurrentDate(startDay);
   }, []);
 
   const handlePreviousMonth = () => {
-    setCurrentDate(subMonths(currentDate, 1));
+    setCurrentDate(subWeeks(currentDate, 5));
   };
 
   const handleNextMonth = () => {
-    setCurrentDate(addMonths(currentDate, 1));
+    setCurrentDate(addWeeks(currentDate, 5));
   };
 
   const startDate = startOfWeek(startOfMonth(currentDate), { weekStartsOn: 1 });
@@ -35,6 +46,8 @@ const DatePickerInput = ({ currentDate, setCurrentDate }) => {
 
   const selectDay = (date) => {
     setCurrentDate(date);
+    setSelectedDate(date);
+    setRefreshTimes(!refreshTimes);
   };
 
   return (
@@ -43,7 +56,7 @@ const DatePickerInput = ({ currentDate, setCurrentDate }) => {
       <div className="flex justify-between items-center py-2">
         <button
           type="button"
-          className="bg-primary-500 font-black rounded text-white h-10 w-10"
+          className="bg-primary-500 font-black rounded text-white h-8 w-8"
           onClick={handlePreviousMonth}
         >
           {"<"}
@@ -53,15 +66,15 @@ const DatePickerInput = ({ currentDate, setCurrentDate }) => {
         </h2>
         <button
           type="button"
-          className="bg-primary-500 font-black rounded text-white h-10 w-10"
+          className="bg-primary-500 font-black rounded text-white h-8 w-8"
           onClick={handleNextMonth}
         >
           {">"}
         </button>
       </div>
-      <div className="grid grid-cols-7">
+      <div className="grid grid-cols-7 gap-x-2">
         {monthsList.map((day) => (
-          <div className="font-bold p-1 text-primary-400 text-center" key={day}>
+          <div className="font-bold text-primary-400 text-center" key={day}>
             {day}
           </div>
         ))}
@@ -72,11 +85,16 @@ const DatePickerInput = ({ currentDate, setCurrentDate }) => {
             disabled={format(date, "E") !== "Mon"}
             onClick={() => selectDay(date)}
             key={date.toString()}
-            className={`text-center p-1 rounded font-black disabled:text-gray-400 disabled:font-normal  ${
-              currentDate.toDateString() === date.toDateString()
+            className={`text-center rounded font-black disabled:text-gray-400 disabled:font-normal  ${
+              format(currentDate, "yyyy-MM-dd HH:mm") ===
+              format(date, "yyyy-MM-dd HH:mm")
                 ? "bg-secondary-500 text-white"
                 : "text-secondary-500"
-            }`}
+            } ${
+              format(today, "yyyy-MM-dd") === format(date, "yyyy-MM-dd")
+                ? "bg-secondary-100"
+                : ""
+            } `}
           >
             {format(date, "d")}
           </button>

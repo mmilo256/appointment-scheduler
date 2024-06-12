@@ -17,8 +17,10 @@ function AppointmentCard({ data }) {
         <p className="text-lg">
           <strong>Motivo:</strong> {data.cause}
         </p>
-        {data.isReferred && (
+        {data.isReferred ? (
           <p className="font-bold text-green-600">Derivada</p>
+        ) : (
+          <p className="font-bold text-gray-500">Por derivar</p>
         )}
       </div>
       {/** Acciones */}

@@ -2,6 +2,7 @@ import Appointment from './appointmentModel.js'
 import Citizen from '../citizens/citizenModel.js'
 import { HTTP_STATUS } from '../../config/config.js'
 import { appointmentSchema } from './appointmentSchema.js'
+import { format } from 'date-fns'
 
 // Petición para obtener a todos los audiencias
 export const getAllAppointments = async (req, res) => {
@@ -32,6 +33,48 @@ export const getAppointmentById = async (req, res) => {
       where: { id }
     })
     res.json(appointment)
+  } catch (error) {
+    console.log('Error al obtener audiencia.', error)
+  }
+}
+
+export const getAvailableSchedules = async (req, res) => {
+  // Define los horarios disponibles
+  const allTimes = [
+    '08:30', '08:50', '09:10', '09:30', '09:50',
+    '10:10', '10:30', '10:50', '11:10', '11:30',
+    '11:50', '12:10', '12:30', '12:50'
+  ]
+
+  try {
+    const { date } = req.params
+    // Obtener las audiencias que coincidan con la fecha seleccionada
+    const appointments = await Appointment.findAll({ attributes: ['appointment_date'] })
+
+    // Obtener las fechas sin su hora
+    const splittedDates = appointments.map(app => (
+      {
+        date: format(app.appointment_date, 'yyyy-MM-dd'),
+        time: format(app.appointment_date, 'HH:mm')
+      }
+    ))
+
+    // Filtrar las fechas segun la fecha proporcionada
+    const filteredDates = splittedDates.filter(app => (
+      app.date === date
+    ))
+
+    // Obtener las horas ocupadas
+    const occupiedTimes = filteredDates.map(app => app.time)
+
+    // Devolver fechas disponibles
+    const availableTimes = allTimes.filter(time => (
+      !occupiedTimes.includes(time)
+    ))
+
+    // Devolver las horas disponibles
+
+    res.json(availableTimes)
   } catch (error) {
     console.log('Error al obtener audiencia.', error)
   }

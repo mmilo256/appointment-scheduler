@@ -1,3 +1,4 @@
+import { format } from "date-fns-tz";
 import { jwtDecode } from "jwt-decode"
 
 export const checkToken = (token) => {
@@ -11,28 +12,6 @@ export const checkToken = (token) => {
 
     return expirationTime < currentTime; // Devuelve true si el token ha expirado, de lo contrario, devuelve false
 };
-
-export const formatDate = (date) => {
-    const monthsList = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
-    const rawDate = new Date(date)
-    const day = rawDate.getDate();
-    const year = rawDate.getFullYear()
-    const month = monthsList[rawDate.getMonth()];
-    const hours = rawDate.getHours();
-    const minutes = rawDate.getMinutes();
-    const formattedDate = `${day} de ${month} de ${year} a las ${hours}:${minutes < 10 ? '0' : ''}${minutes}`
-    return formattedDate
-}
-export const formatJustDate = (date) => {
-    const monthsList = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
-    const rawDate = new Date(date)
-    const day = rawDate.getDate();
-    const year = rawDate.getFullYear()
-    const month = monthsList[rawDate.getMonth()];
-    const formattedDate = `${day} de ${month} de ${year}`
-    return formattedDate
-}
-
 export const splitDateHour = (fulldate) => {
     const splittedFullDate = fulldate.split("T")
     const [date, time] = splittedFullDate
@@ -76,14 +55,18 @@ export const formatRut = (value) => {
    return result + verifier;
 }
 
+// Buscar una hora disponible
+
 
 export const groupAppointments = (appointments) => {
     const groupedAppointments = appointments.reduce((acc, appointment) => {
         const { date } = appointment;
-        if (!acc[date]) {
-          acc[date] = [];
+        const newDate = format(new Date(date), 'yyy-MM-ddd', {timeZone: 'America/Santiago'})
+        console.log(newDate)
+        if (!acc[newDate]) {
+          acc[newDate] = [];
         }
-        acc[date].push(appointment);
+        acc[newDate].push(appointment);
         return acc;
       }, {});
       

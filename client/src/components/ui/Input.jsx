@@ -24,6 +24,8 @@ function Input({
             }`}
             defaultValue={defaultValue}
             placeholder={placeholder}
+            value={value}
+            onChange={onChange}
           />
         );
       case "select":

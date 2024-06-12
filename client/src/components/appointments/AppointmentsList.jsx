@@ -1,15 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  checkToken,
-  groupAppointments,
-  splitDateHour,
-} from "../../utils/helpers";
+import { checkToken, groupAppointments } from "../../utils/helpers";
 import {
   deleteAppointment,
   getAllAppointments,
 } from "../../services/appointmentService";
 import { AuthContext } from "../../context/AuthContext";
 import AppointmentsCardsGroup from "./AppointmentsCardsGroup";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 
 function AppointmentsList() {
   // Estado local para almacenar la lista de audiencias
@@ -27,14 +25,12 @@ function AppointmentsList() {
           const data = await getAllAppointments();
           // Formatear audiencias
           const formattedData = data.map((appointment) => {
-            const fullDate = splitDateHour(appointment.appointment_date);
-            const { date, time } = fullDate;
             return {
               id: appointment.id,
               cause: appointment.cause,
               isReferred: appointment.is_referred,
-              date,
-              time,
+              date: appointment.appointment_date,
+              time: format(appointment.appointment_date, "hh:mm"),
               citizen: `${appointment.citizen.first_name} ${appointment.citizen.last_name}`,
             };
           });
@@ -54,13 +50,12 @@ function AppointmentsList() {
 
   // Formatear las audiencias para agruparlas por fecha
   const groupedAppointments = groupAppointments(appointments);
-  console.log(groupedAppointments);
 
   return (
-    <div className="flex flex-col gap-5 ">
-      {groupedAppointments.map((group, index) => (
-        <AppointmentsCardsGroup key={index} data={group} />
-      ))}
+    <div className="grid grid-cols-1 gap-4">
+      {groupedAppointments.map((group, index) => {
+        return <AppointmentsCardsGroup key={index} data={group} />;
+      })}
     </div>
   );
 }

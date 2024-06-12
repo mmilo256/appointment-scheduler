@@ -9,7 +9,7 @@ function CitizenDetails({ data }) {
       {Object.keys(data).length === 0 ? (
         <p className="text-center">No se ha seleccionado ningún solicitante</p>
       ) : (
-        <ul className="flex flex-col gap-4">
+        <ul className="flex flex-col gap-1">
           <li className="font-bold">
             <p>RUT</p> <span className="font-normal">{data.rut}</span>{" "}
           </li>

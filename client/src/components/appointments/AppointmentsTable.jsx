@@ -5,7 +5,7 @@ import {
   deleteAppointment,
   getAllAppointments,
 } from "../../services/appointmentService";
-import { checkToken, formatDate } from "../../utils/helpers";
+import { checkToken } from "../../utils/helpers";
 import { AuthContext } from "../../context/AuthContext";
 
 function AppointmentTable() {
@@ -52,12 +52,11 @@ function AppointmentTable() {
   const formatData = () => {
     const formattedData = appointments.map((appointment) => {
       // Formato de cada audiencia con sus respectivos campos
-      const formattedDate = formatDate(appointment.appointment_date);
       const appointmentData = {
         id: appointment.id,
         citizenName: `${appointment.citizen.first_name} ${appointment.citizen.last_name}`,
         cause: appointment.cause,
-        date: formattedDate,
+        date: appointment.appointment_date,
         actions: (
           <ActionsRow
             module="appointments"

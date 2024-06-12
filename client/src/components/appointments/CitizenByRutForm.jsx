@@ -17,7 +17,7 @@ function CitizenByRutForm({ setCitizen }) {
           setCitizen(data);
         } else {
           alert(
-            "El ciudadano no está en la base de datos. Primero agréguelo y luego cree la audiencia."
+            "El ciudadano no existe. Debe agregarlo al sistema para realizar la solicitud"
           );
         }
       } else {
@@ -36,7 +36,6 @@ function CitizenByRutForm({ setCitizen }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(rut);
     onSubmit(rut);
   };
 
@@ -44,7 +43,7 @@ function CitizenByRutForm({ setCitizen }) {
     <>
       <form
         onSubmit={handleSubmit}
-        className="grid grid-cols-10 gap-4 items-end border bg-gray-100 p-5 rounded shadow mb-4"
+        className="grid grid-cols-10 gap-4 items-end border"
       >
         <Input
           important
@@ -56,7 +55,7 @@ function CitizenByRutForm({ setCitizen }) {
           label="RUT del solicitante"
         />
 
-        <button className="col-span-3 mb-2 p-1 rounded border bg-secondary-500 text-white">
+        <button className="col-span-3 mb-2 p-1 rounded border bg-secondary-500 hover:bg-secondary-600 text-white">
           Buscar
         </button>
       </form>
