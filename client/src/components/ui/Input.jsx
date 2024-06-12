@@ -36,6 +36,8 @@ function Input({
               important && "bg-yellow-100"
             }`}
             defaultValue={defaultValue}
+            value={value}
+            onChange={onChange}
           >
             {options?.map((option, index) => (
               <option key={index} value={option.value}>

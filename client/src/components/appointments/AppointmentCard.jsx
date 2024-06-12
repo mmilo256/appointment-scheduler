@@ -26,7 +26,11 @@ function AppointmentCard({ data }) {
       {/** Acciones */}
       <div>
         <div className="flex gap-2">
-          <Button disabled={data.isReferred} color="secondary">
+          <Button
+            href={`/referrals/create?id=${data.id}`}
+            disabled={data.isReferred}
+            color="secondary"
+          >
             {data.isReferred ? "Derivada" : "Derivar"}
           </Button>
           <Button>Editar</Button>

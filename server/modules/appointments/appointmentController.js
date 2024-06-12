@@ -28,7 +28,7 @@ export const getAppointmentById = async (req, res) => {
     const { id } = req.params
     const appointment = await Appointment.findOne({
       include: [
-        { model: Citizen, attributes: ['first_name', 'last_name'], as: 'citizen' }
+        { model: Citizen, attributes: ['id', 'first_name', 'last_name'], as: 'citizen' }
       ],
       where: { id }
     })

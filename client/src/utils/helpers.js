@@ -62,7 +62,6 @@ export const groupAppointments = (appointments) => {
     const groupedAppointments = appointments.reduce((acc, appointment) => {
         const { date } = appointment;
         const newDate = format(new Date(date), 'yyy-MM-ddd', {timeZone: 'America/Santiago'})
-        console.log(newDate)
         if (!acc[newDate]) {
           acc[newDate] = [];
         }

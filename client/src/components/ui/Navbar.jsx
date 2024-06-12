@@ -8,7 +8,7 @@ const navigation = [
   { label: "Crear audiencia", href: "appointments/create" },
   { label: "Audiencias", href: "appointments" },
   { label: "Ciudadanos", href: "citizens" },
-  { label: "Direcciones", href: "departments" },
+  { label: "Derivaciones", href: "referrals" },
   { label: "Usuarios", href: "users" },
 ];
 
