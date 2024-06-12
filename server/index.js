@@ -1,6 +1,5 @@
 import e from 'express'
 import cors from 'cors'
-import { PORT } from './config/config.js'
 import userRouter from './modules/users/userRoutes.js'
 import departmentRouter from './modules/departments/departmentRoutes.js'
 import authRouter from './auth/authRoutes.js'
@@ -28,6 +27,6 @@ app.use('/api/appointments', verifyToken, appointmentRouter)
 app.use('/api/referrals', verifyToken, referralRouter)
 
 // Arrancar el servidor
-app.listen(PORT, () => {
-  console.log(`listening to http://localhost:${PORT}`)
+app.listen(() => {
+  console.log('listening...')
 })
