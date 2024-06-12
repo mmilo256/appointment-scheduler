@@ -5,9 +5,14 @@ function Input({
   register,
   type,
   defaultValue,
+  placeholder,
   className,
   important,
   options,
+  max,
+  optional,
+  onChange,
+  value,
 }) {
   const renderInputField = () => {
     switch (type) {
@@ -19,6 +24,9 @@ function Input({
               important && "bg-yellow-100"
             }`}
             defaultValue={defaultValue}
+            placeholder={placeholder}
+            value={value}
+            onChange={onChange}
           />
         );
       case "select":
@@ -29,6 +37,8 @@ function Input({
               important && "bg-yellow-100"
             }`}
             defaultValue={defaultValue}
+            value={value}
+            onChange={onChange}
           >
             {options?.map((option, index) => (
               <option key={index} value={option.value}>
@@ -37,28 +47,7 @@ function Input({
             ))}
           </select>
         );
-      case "date":
-        return (
-          <input
-            {...register}
-            className={`px-2 py-1 w-full rounded border border-primary-100 ${
-              important && "bg-yellow-100"
-            }`}
-            type="date"
-            defaultValue={defaultValue}
-          />
-        );
-      case "time":
-        return (
-          <input
-            {...register}
-            className={`px-2 py-1 w-full rounded border border-primary-100 ${
-              important && "bg-yellow-100"
-            }`}
-            type="time"
-            defaultValue={defaultValue}
-          />
-        );
+
       default:
         return (
           <input
@@ -67,6 +56,11 @@ function Input({
               important && "bg-yellow-100"
             }`}
             type={type}
+            onChange={onChange}
+            placeholder={placeholder}
+            value={value}
+            maxLength={max}
+            max={max}
             defaultValue={defaultValue}
           />
         );
@@ -75,7 +69,8 @@ function Input({
 
   return (
     <label className={`block mb-2 ${className}`}>
-      <p className="font-semibold mb-0.5">{label}</p>
+      <span className="inline-block font-semibold mb-0.5">{label}</span>{" "}
+      <span className="text-gray-600">{optional && "(opcional)"}</span>
       {renderInputField()}
     </label>
   );

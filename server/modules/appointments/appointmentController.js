@@ -1,9 +1,8 @@
 import Appointment from './appointmentModel.js'
-import User from '../users/userModel.js'
 import Citizen from '../citizens/citizenModel.js'
-import Department from '../departments/departmentModel.js'
 import { HTTP_STATUS } from '../../config/config.js'
 import { appointmentSchema } from './appointmentSchema.js'
+import { format } from 'date-fns'
 
 // Petición para obtener a todos los audiencias
 export const getAllAppointments = async (req, res) => {
@@ -11,9 +10,10 @@ export const getAllAppointments = async (req, res) => {
     // Obtener las audiencias y los nombres de sus usuarios, ciudadanos y departamentos correspondientes
     const appointments = await Appointment.findAll({
       include: [
-        { model: User, attributes: ['username'], as: 'user' },
-        { model: Citizen, attributes: ['first_name', 'last_name'], as: 'citizen' },
-        { model: Department, attributes: ['dep_name'], as: 'department' }
+        { model: Citizen, attributes: ['first_name', 'last_name'], as: 'citizen' }
+      ],
+      order: [
+        ['appointment_date', 'ASC']
       ]
     })
     res.json(appointments)
@@ -28,13 +28,53 @@ export const getAppointmentById = async (req, res) => {
     const { id } = req.params
     const appointment = await Appointment.findOne({
       include: [
-        { model: User, attributes: ['username'], as: 'user' },
-        { model: Citizen, attributes: ['first_name', 'last_name'], as: 'citizen' },
-        { model: Department, attributes: ['dep_name'], as: 'department' }
+        { model: Citizen, attributes: ['id', 'first_name', 'last_name'], as: 'citizen' }
       ],
       where: { id }
     })
     res.json(appointment)
+  } catch (error) {
+    console.log('Error al obtener audiencia.', error)
+  }
+}
+
+export const getAvailableSchedules = async (req, res) => {
+  // Define los horarios disponibles
+  const allTimes = [
+    '08:30', '08:50', '09:10', '09:30', '09:50',
+    '10:10', '10:30', '10:50', '11:10', '11:30',
+    '11:50', '12:10', '12:30', '12:50'
+  ]
+
+  try {
+    const { date } = req.params
+    // Obtener las audiencias que coincidan con la fecha seleccionada
+    const appointments = await Appointment.findAll({ attributes: ['appointment_date'] })
+
+    // Obtener las fechas sin su hora
+    const splittedDates = appointments.map(app => (
+      {
+        date: format(app.appointment_date, 'yyyy-MM-dd'),
+        time: format(app.appointment_date, 'HH:mm')
+      }
+    ))
+
+    // Filtrar las fechas segun la fecha proporcionada
+    const filteredDates = splittedDates.filter(app => (
+      app.date === date
+    ))
+
+    // Obtener las horas ocupadas
+    const occupiedTimes = filteredDates.map(app => app.time)
+
+    // Devolver fechas disponibles
+    const availableTimes = allTimes.filter(time => (
+      !occupiedTimes.includes(time)
+    ))
+
+    // Devolver las horas disponibles
+
+    res.json(availableTimes)
   } catch (error) {
     console.log('Error al obtener audiencia.', error)
   }
@@ -47,19 +87,13 @@ export const createAppointment = async (req, res) => {
     const {
       cause,
       appointment_date: date,
-      appointment_status: status,
-      user_id: userId,
-      citizen_id: citizenId,
-      department_id: departmentId
+      citizen_id: citizenId
     } = req.body
     // Validación de la audiencia
     const { error } = appointmentSchema.validate({
       cause,
       appointment_date: date,
-      appointment_status: status,
-      user_id: userId,
-      citizen_id: citizenId,
-      department_id: departmentId
+      citizen_id: citizenId
     })
     if (error) {
       return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: 'Datos no validos' })
@@ -68,10 +102,7 @@ export const createAppointment = async (req, res) => {
     const newAppointment = await Appointment.create({
       cause,
       appointment_date: date,
-      appointment_status: status,
-      user_id: userId,
-      citizen_id: citizenId,
-      department_id: departmentId
+      citizen_id: citizenId
     })
     res.status(HTTP_STATUS.CREATED).json({ message: 'Audiencia creado correctamente', newAppointment })
   } catch (error) {
@@ -99,24 +130,19 @@ export const updateAppointment = async (req, res) => {
     const {
       cause,
       appointment_date: date,
-      appointment_status: status,
-      user_id: userId,
       citizen_id: citizenId,
-      department_id: departmentId
+      is_referred: isReferred
     } = req.body
     const appointment = await Appointment.findOne({ where: { id } })
     if (!appointment) {
       return res.status(HTTP_STATUS.NOT_FOUND).json({ message: 'No se encontró la audiencia' })
     }
-    console.log(appointment.dep_name)
     // Validación
     const { error } = appointmentSchema.validate({
       cause,
       appointment_date: date,
-      appointment_status: status,
-      user_id: userId,
       citizen_id: citizenId,
-      department_id: departmentId
+      is_referred: isReferred
     })
     if (error) {
       return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: 'Datos no válidos' })
@@ -125,10 +151,8 @@ export const updateAppointment = async (req, res) => {
     const updates = {}
     if (cause) updates.cause = cause
     if (date) updates.appointment_date = date
-    if (status) updates.appointment_status = status
-    if (userId) updates.user_id = userId
     if (citizenId) updates.citizen_id = citizenId
-    if (departmentId) updates.department_id = departmentId
+    if (isReferred) updates.is_referred = isReferred
     // Modificar audiencia
     await Appointment.update(updates, { where: { id } })
     res.json({

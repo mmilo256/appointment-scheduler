@@ -1,4 +1,6 @@
-const API_URL = 'https://appointment-scheduler-api.onrender.com/api/appointments'; // URL de la API para obtener los audiencias
+import { DEV_API_URL } from "../constants";
+
+const API_URL = `${DEV_API_URL}/appointments`; // URL de la API para obtener los audiencias
 
 // Función para obtener el token almacenado en localStorage
 const getToken = () => localStorage.getItem('jwt');
@@ -47,6 +49,18 @@ export const getAppointmentById = async (id) => {
     try {
         // Llamada a la función httpRequest para obtener un audiencia por su ID
         const data = await httpRequest(`${API_URL}/${id}`, { method: 'GET' });
+        return data;
+    } catch (error) {
+        console.error("Error al obtener el audiencia.", error);
+        throw error;
+    }
+};
+
+// Función asincrónica para obtener a un audiencia por su ID
+export const getAvailableTimes = async (date) => {
+    try {
+        // Llamada a la función httpRequest para obtener un audiencia por su ID
+        const data = await httpRequest(`${API_URL}/date/${date}`, { method: 'GET' });
         return data;
     } catch (error) {
         console.error("Error al obtener el audiencia.", error);

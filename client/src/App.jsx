@@ -2,7 +2,6 @@ import { Routes, Route } from "react-router-dom";
 import Home from "./layouts/Home";
 import Login from "./layouts/Login";
 import Appointments from "./layouts/Appointments";
-import Departments from "./layouts/Departments";
 import Citizens from "./layouts/Citizens";
 import Users from "./layouts/Users";
 import RootLayout from "./layouts/RootLayout";
@@ -13,6 +12,8 @@ import CreateUser from "./layouts/CreateUser";
 import EditUser from "./layouts/EditUser";
 import CreateCitizen from "./layouts/CreateCitizen";
 import EditCitizen from "./layouts/EditCitizen";
+import Referrals from "./layouts/Referrals";
+import CreateReferral from "./layouts/CreateReferral";
 
 function App() {
   // Componente principal de la aplicación que define las rutas de navegación
@@ -35,8 +36,9 @@ function App() {
               element={<CreateAppointment />}
             />
             <Route path="/appointments/edit" element={<EditAppointment />} />
-            {/* Ruta para gestionar departamentos */}
-            <Route path="/departments" element={<Departments />} />
+            {/* Ruta para gestionar derivaciones */}
+            <Route path="/referrals" element={<Referrals />} />
+            <Route path="/referrals/create" element={<CreateReferral />} />
             {/* Rutas para gestionar ciudadanos */}
             <Route path="/citizens" element={<Citizens />} />
             <Route path="/citizens/create" element={<CreateCitizen />} />

@@ -7,9 +7,9 @@ function Users() {
   return (
     <Container>
       <Heading>Listado de usuarios</Heading>
-      <div className="max-w-40 mb-5">
+      {/* <div className="max-w-40 mb-5">
         <Button href="/users/create">Nuevo usuario</Button>
-      </div>
+      </div> */}
       <UsersTable />
     </Container>
   );

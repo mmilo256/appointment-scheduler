@@ -6,6 +6,7 @@ import departmentRouter from './modules/departments/departmentRoutes.js'
 import authRouter from './auth/authRoutes.js'
 import citizenRouter from './modules/citizens/citizenRoutes.js'
 import appointmentRouter from './modules/appointments/appointmentRoutes.js'
+import referralRouter from './modules/referrals/referralRoutes.js'
 import { verifyToken } from './auth/authMiddleware.js'
 const app = e()
 
@@ -24,6 +25,7 @@ app.use('/api/users', verifyToken, userRouter)
 app.use('/api/departments', verifyToken, departmentRouter)
 app.use('/api/citizens', verifyToken, citizenRouter)
 app.use('/api/appointments', verifyToken, appointmentRouter)
+app.use('/api/referrals', referralRouter)
 
 // Arrancar el servidor
 app.listen(PORT, () => {
