@@ -12,9 +12,7 @@ export const getAllReferrals = async (req, res) => {
     const referrals = await Referral.findAll({
       include: [
         { model: Department, attributes: ['dep_name'], as: 'department' },
-        { model: Appointment, attributes: ['cause'], as: 'appointment' },
-        { model: Citizen, attributes: ['first_name', 'last_name'], as: 'citizen' }
-      ]
+        { model: Appointment, attributes: ['cause'], as: 'appointment' }]
     })
     res.json(referrals)
   } catch (error) {
@@ -48,14 +46,16 @@ export const createReferral = async (req, res) => {
       outcome,
       ref_status: status,
       department_id: department,
-      appointment_id: appointment
+      appointment_id: appointment,
+      citizen_fullname: citizen
     } = req.body
     // Validación de la derivación
     const { error } = referralSchema.validate({
       outcome,
       ref_status: status,
       department_id: department,
-      appointment_id: appointment
+      appointment_id: appointment,
+      citizen_fullname: citizen
     })
     if (error) {
       return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: 'Datos no validos' })
@@ -65,7 +65,8 @@ export const createReferral = async (req, res) => {
       outcome,
       ref_status: status,
       department_id: department,
-      appointment_id: appointment
+      appointment_id: appointment,
+      citizen_fullname: citizen
     })
     res.status(HTTP_STATUS.CREATED).json({ message: 'Derivación creado correctamente', newReferral })
   } catch (error) {
@@ -94,7 +95,8 @@ export const updateReferral = async (req, res) => {
       outcome,
       ref_status: status,
       department_id: department,
-      appointment_id: appointment
+      appointment_id: appointment,
+      citizen_fullname: citizen
     } = req.body
     const referral = await Referral.findOne({ where: { id } })
     if (!referral) {
@@ -105,7 +107,8 @@ export const updateReferral = async (req, res) => {
       outcome,
       ref_status: status,
       department_id: department,
-      appointment_id: appointment
+      appointment_id: appointment,
+      citizen_fullname: citizen
     })
     if (error) {
       return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: 'Datos no válidos' })
@@ -116,6 +119,7 @@ export const updateReferral = async (req, res) => {
     if (status) updates.ref_status = status
     if (department) updates.department_id = department
     if (appointment) updates.appointment_id = appointment
+    if (citizen) updates.citizen_fullname = citizen
     // Modificar derivación
     await Referral.update(updates, { where: { id } })
     res.json({

@@ -77,6 +77,9 @@ function ReferralForm({ appointment }) {
       outcome: result,
       ref_status: status,
       appointment_id: appointment.id,
+      citizen_fullname:
+        appointment.citizen &&
+        `${appointment.citizen.first_name} ${appointment.citizen.last_name}`,
     };
     referralAppointment(data);
   };

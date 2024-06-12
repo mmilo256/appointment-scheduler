@@ -25,7 +25,7 @@ app.use('/api/users', verifyToken, userRouter)
 app.use('/api/departments', verifyToken, departmentRouter)
 app.use('/api/citizens', verifyToken, citizenRouter)
 app.use('/api/appointments', verifyToken, appointmentRouter)
-app.use('/api/referrals', verifyToken, referralRouter)
+app.use('/api/referrals', referralRouter)
 
 // Arrancar el servidor
 app.listen(PORT, () => {

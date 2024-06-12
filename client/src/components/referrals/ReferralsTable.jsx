@@ -38,7 +38,7 @@ function ReferralsTable() {
     const formattedData = referrals.map((ref) => {
       // Formato de cada ciudadano con sus respectivos campos
       const refData = {
-        fullName: `${ref.citizen.first_name} ${ref.citizen.last_name}`,
+        fullName: `${ref.citizen_fullname}`,
         cause: ref.appointment.cause,
         referral: ref.department.dep_name,
         outcome: ref.outcome,

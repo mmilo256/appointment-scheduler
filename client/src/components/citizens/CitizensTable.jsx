@@ -48,7 +48,7 @@ function CitizensTable() {
         rut: citizen.rut,
         fullName: `${citizen.first_name} ${citizen.last_name}`,
         address: citizen.address,
-        email: citizen.email,
+        email: citizen.email ?? "(Sin correo)",
         phone: citizen.phone,
         phone2: citizen.phone_2 ?? "(Sin número)",
         actions: (
