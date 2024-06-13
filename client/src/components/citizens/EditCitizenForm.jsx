@@ -39,7 +39,6 @@ function EditCitizenForm() {
     const isTokenExpired = checkToken(localStorage.getItem("jwt"));
     try {
       if (!isTokenExpired) {
-        console.log(dataToEdit);
         await editCitizen(selectedCitizen.id, dataToEdit);
         navigate("/citizens");
       } else {

@@ -8,6 +8,8 @@ import {
   format,
   subWeeks,
   addWeeks,
+  addDays,
+  isBefore,
 } from "date-fns";
 import { es } from "date-fns/locale";
 
@@ -43,6 +45,14 @@ const DatePickerInput = ({
   const dates = eachDayOfInterval({ start: startDate, end: endDate });
 
   const monthsList = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
+
+  const isAvailableDate = (date) => {
+    if (format(date, "E") === "Mon" && !isBefore(addDays(date, 1), today)) {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   const selectDay = (date) => {
     setCurrentDate(date);
@@ -82,7 +92,7 @@ const DatePickerInput = ({
         {dates.map((date) => (
           <button
             type="button"
-            disabled={format(date, "E") !== "Mon"}
+            disabled={!isAvailableDate(date)}
             onClick={() => selectDay(date)}
             key={date.toString()}
             className={`text-center rounded font-black disabled:text-gray-400 disabled:font-normal  ${
