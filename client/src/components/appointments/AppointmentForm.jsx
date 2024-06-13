@@ -1,27 +1,26 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  createAppointment,
-  getAvailableTimes,
-} from "../../services/appointmentService";
 import Button from "../ui/Button";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
-import { checkToken } from "../../utils/helpers";
 import Input from "../ui/Input";
 import DatePickerInput from "../ui/DatePickerInput";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { useAppointmentStore } from "../../stores/useAppointmentStore";
 import { ALL_TIMES } from "../../constants";
+import { formatDate } from "../../utils/helpers";
 
 function AppointmentForm({ citizenData }) {
   const [selectedDate, setSelectedDate] = useState();
   const [cause, setCause] = useState("");
-  const [selectedTime, setSelectedTime] = useState();
+  const [selectedTime, setSelectedTime] = useState("");
   const navigate = useNavigate();
   const { logout } = useContext(AuthContext);
 
   const availableTimes = useAppointmentStore((state) => state.availableTimes);
+  const createAppointment = useAppointmentStore(
+    (state) => state.createAppointment
+  );
 
   const getTimesOptions = () => {
     return ALL_TIMES.map((time) => {
@@ -33,36 +32,21 @@ function AppointmentForm({ citizenData }) {
       };
     });
   };
-
-  // Función para manejar la creación de una nueva cita
-  const onCreateAppointment = async (data) => {
-    const isTokenExpired = checkToken(localStorage.getItem("jwt"));
-    try {
-      if (!isTokenExpired) {
-        await createAppointment(data);
-        alert("La audiencia fue creada exitosamente");
-        navigate("/appointments");
-      } else {
-        logout("expired");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (Object.keys(citizenData).length !== 0) {
       if (cause) {
         if (selectedDate && selectedTime) {
           const data = {
             cause,
-            appointment_date: new Date(
-              `${format(selectedDate, "yyyy-MM-dd")} ${selectedTime}`
-            ),
+            date: formatDate(new Date(selectedDate), 2),
+            time: selectedTime,
             citizen_id: citizenData.id,
           };
-          onCreateAppointment(data);
+          console.log(data);
+          await createAppointment(data);
+          alert("Audiencia creada con éxito");
+          navigate("/appointments");
         } else {
           alert("Debes ingresar la fecha de la audiencia");
         }
@@ -81,6 +65,10 @@ function AppointmentForm({ citizenData }) {
   const onChangeCause = (e) => {
     setCause(e.target.value);
   };
+
+  useEffect(() => {
+    setSelectedTime("");
+  }, [selectedDate]);
 
   // Renderización del formulario con los botones y la lógica de envío
   return (
@@ -113,32 +101,13 @@ function AppointmentForm({ citizenData }) {
               type="select"
             />
           )}
-          {/*  {selectedDate && (
-            <label htmlFor="available_times">
-              <p className="font-semibold">Hora</p>
-              <select
-                className="border w-full rounded p-2"
-                name="available_times"
-                id="available_times"
-                value={selectedTime}
-                onChange={onSelectTimeHandler}
-              >
-                <option value="">Seleccione una hora</option>
-                {ALL_TIMES.map((time) => (
-                  <option disabled key={time} value={time}>
-                    {time}
-                  </option>
-                ))}
-              </select>
-            </label>
-          )} */}
         </div>
         <p
           className={`col-span-3 bg-green-200 text-center text-green-800 p-1 ${
             Object.keys(citizenData).length !== 0 &&
             cause &&
             selectedDate &&
-            selectedTime
+            selectedTime !== ""
               ? "opacity-100"
               : "opacity-0"
           }`}

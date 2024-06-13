@@ -25,16 +25,22 @@ export const splitDateHour = (fulldate) => {
     return dateAndTime
 }
 
-export const formatDate = (date) => {
+export const formatDate = (date, format = 1) => {
   const monthsList = [
     'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
     'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'
 ];
   const year = new Date(date).getFullYear()
+  const monthNum = new Date(date).getMonth() + 1 > 9 ? new Date(date).getMonth() + 1 : "0" + (new Date(date).getMonth() + 1)
   const month = monthsList[new Date(date).getMonth()]
-  const day = new Date(date).getUTCDate()
+  const day = new Date(date).getUTCDate() > 9 ? new Date(date).getUTCDate() : "0" + new Date(date).getUTCDate()
 
-  const dateString = `${day} de ${month} de ${year}`
+  let dateString
+  if (format === 1) {
+    dateString = `${day} de ${month} de ${year}`
+  } else if (format === 2) {
+    dateString = `${year}-${monthNum}-${day}`
+  }
   return dateString
 }
 

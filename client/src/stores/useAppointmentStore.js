@@ -2,6 +2,8 @@ import {create} from 'zustand'
 import { createAppointment, deleteAppointment, getAllAppointments, getAppointmentById, getAvailableTimes, updateAppointment } from '../services/appointmentService'
 import { checkToken } from '../utils/helpers'
 
+const isTokenExpired = checkToken(localStorage.getItem("jwt"));
+
 export const useAppointmentStore = create(set => ({
     appointments: [],
     availableTimes: [],
@@ -21,16 +23,15 @@ export const useAppointmentStore = create(set => ({
         }})
     },
     getAllAppointments: async () => {
-        const isTokenExpired = checkToken(localStorage.getItem("jwt"));
         try {
             if (!isTokenExpired) {
-              const data = await getAllAppointments();              
-              // Actualización del estado con la lista de audiencias obtenida
-              set({appointments: data})
+                const data = await getAllAppointments();              
+                // Actualización del estado con la lista de audiencias obtenida
+                set({appointments: data})
             }
-          } catch (error) {
+            } catch (error) {
             console.log("Error al obtener las audiencias.", error);
-          }
+            }
         
     },
     getAvailableTimes: async (date) => {
@@ -38,7 +39,13 @@ export const useAppointmentStore = create(set => ({
         set({availableTimes: data})
     },
     createAppointment: async (data) => {
-        await createAppointment(data)
+        try {
+            if (!isTokenExpired) {
+                await createAppointment(data)                         
+            }
+            } catch (error) {
+            console.log("Error al obtener las audiencias.", error);
+            }
     },
     deleteAppointment: async (id) => {
         await deleteAppointment(id)

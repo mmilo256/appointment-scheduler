@@ -77,7 +77,8 @@ export const createAppointment = async (req, res) => {
     // Obtener datos del nuevo audiencia desde la request
     const {
       cause,
-      appointment_date: date,
+      date,
+      time,
       citizen_id: citizenId
     } = req.body
     // Validación de la audiencia
@@ -92,7 +93,8 @@ export const createAppointment = async (req, res) => {
     // Crear al nuevo audiencia en la base de datos
     const newAppointment = await Appointment.create({
       cause,
-      appointment_date: date,
+      date,
+      time,
       citizen_id: citizenId
     })
     res.status(HTTP_STATUS.CREATED).json({ message: 'Audiencia creado correctamente', newAppointment })

@@ -7,7 +7,7 @@ function AppointmentsCardsGroup({ data, setRefreshData }) {
     <div>
       {/* Título con la fecha formateada */}
       <h2 className="text-2xl text-primary-500 font-semibold mb-2">
-        {formatDate(data.date)}
+        {formatDate(data.date, 1)}
       </h2>
 
       {/* Lista de tarjetas de citas */}
