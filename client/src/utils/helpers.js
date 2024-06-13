@@ -25,6 +25,19 @@ export const splitDateHour = (fulldate) => {
     return dateAndTime
 }
 
+export const formatDate = (date) => {
+  const monthsList = [
+    'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
+    'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'
+];
+  const year = new Date(date).getFullYear()
+  const month = monthsList[new Date(date).getMonth()]
+  const day = new Date(date).getUTCDate()
+
+  const dateString = `${day} de ${month} de ${year}`
+  return dateString
+}
+
 // Formatera rut
 export const formatRut = (value) => {
    // Remover todos los caracteres que no sean dígitos o 'k'/'K'
@@ -59,13 +72,22 @@ export const formatRut = (value) => {
 
 
 export const groupAppointments = (appointments) => {
-    const groupedAppointments = appointments.reduce((acc, appointment) => {
-        const { date } = appointment;
-        const newDate = format(new Date(date), 'yyy-MM-ddd', {timeZone: 'America/Santiago'})
-        if (!acc[newDate]) {
-          acc[newDate] = [];
+  const formattedAppointments = appointments.map(app => (
+    {
+      id: app.id,
+      cause: app.cause,
+      isReferred: app.is_referred,
+      date: app.date,
+      time: app.time,
+      citizen: `${app.citizen.first_name} ${app.citizen.last_name}`
+    }
+  ))
+    const groupedAppointments = formattedAppointments.reduce((acc, appointment) => {
+
+        if (!acc[appointment.date]) {
+          acc[appointment.date] = [];
         }
-        acc[newDate].push(appointment);
+        acc[appointment.date].push(appointment);
         return acc;
       }, {});
       
@@ -73,10 +95,11 @@ export const groupAppointments = (appointments) => {
   const result = Object.keys(groupedAppointments).map((date) => {
     return {
       date,
-      appointments: groupedAppointments[date].map(({ id, isReferred, cause, time, citizen }) => ({
+      appointments: groupedAppointments[date].map(({ id, isReferred, cause, date, time, citizen }) => ({
         id,
         isReferred,
         cause,
+        date,
         time,
         citizen
       }))

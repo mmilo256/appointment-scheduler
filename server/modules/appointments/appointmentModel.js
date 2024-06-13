@@ -16,13 +16,18 @@ export const Appointment = sequelize.define('appointments', {
   created_at: {
     type: DataTypes.DATE
   },
-  appointment_date: {
-    type: DataTypes.DATE,
-    allowNull: false
+  date: {
+    type: DataTypes.STRING
+  },
+  time: {
+    type: DataTypes.STRING
   },
   is_referred: {
     type: DataTypes.BOOLEAN,
     defaultValue: false
+  },
+  response: {
+    type: DataTypes.STRING
   },
   citizen_id: {
     type: DataTypes.INTEGER,

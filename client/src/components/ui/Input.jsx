@@ -40,8 +40,14 @@ function Input({
             value={value}
             onChange={onChange}
           >
+            <option value="">Seleccionar</option>
             {options?.map((option, index) => (
-              <option key={index} value={option.value}>
+              <option
+                className={option.disabled ? "bg-gray-300" : ""}
+                key={index}
+                value={option.disabled ? "" : option.value}
+                disabled={option.disabled}
+              >
                 {option.label}
               </option>
             ))}

@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import BaseForm from "../ui/BaseForm";
 import {
   createAppointment,
   getAvailableTimes,
@@ -12,38 +11,28 @@ import Input from "../ui/Input";
 import DatePickerInput from "../ui/DatePickerInput";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import { useAppointmentStore } from "../../stores/useAppointmentStore";
+import { ALL_TIMES } from "../../constants";
 
-function AppointmentForm({ citizenData, appointmentId }) {
+function AppointmentForm({ citizenData }) {
   const [selectedDate, setSelectedDate] = useState();
   const [cause, setCause] = useState("");
-  const [refreshTimes, setRefreshTimes] = useState(false);
-  const [availableTimes, setAvailableTimes] = useState([]);
-  const [selectedTime, setSelectedTime] = useState(
-    availableTimes ? availableTimes[0] : null
-  );
-  const [appointmentData, setAppointmentData] = useState({});
+  const [selectedTime, setSelectedTime] = useState();
   const navigate = useNavigate();
   const { logout } = useContext(AuthContext);
 
-  // Efecto para obtener los horarios disponibles cada vez que se seleccione una fecha o se refresque la lista
-  useEffect(() => {
-    const getAllAvailableTimes = async (date) => {
-      const isTokenExpired = checkToken(localStorage.getItem("jwt"));
-      try {
-        if (!isTokenExpired) {
-          const data = await getAvailableTimes(date);
-          setAvailableTimes(data);
-        } else {
-          logout("expired");
-        }
-      } catch (error) {
-        console.log("Error al obtener las direcciones.", error);
-      }
-    };
-    if (selectedDate) {
-      getAllAvailableTimes(format(selectedDate, "yyyy-MM-dd"));
-    }
-  }, [refreshTimes]);
+  const availableTimes = useAppointmentStore((state) => state.availableTimes);
+
+  const getTimesOptions = () => {
+    return ALL_TIMES.map((time) => {
+      const isOcuppied = availableTimes.includes(time);
+      return {
+        value: time,
+        label: time,
+        disabled: isOcuppied,
+      };
+    });
+  };
 
   // Función para manejar la creación de una nueva cita
   const onCreateAppointment = async (data) => {
@@ -105,8 +94,6 @@ function AppointmentForm({ citizenData, appointmentId }) {
       <div className="grid grid-cols-3 gap-2">
         <div className="col-span-2">
           <DatePickerInput
-            refreshTimes={refreshTimes}
-            setRefreshTimes={setRefreshTimes}
             selectedtDate={selectedDate}
             setSelectedDate={setSelectedDate}
           />
@@ -118,6 +105,15 @@ function AppointmentForm({ citizenData, appointmentId }) {
               format(selectedDate, "d 'de' MMMM 'de' yyyy", { locale: es })}
           </p>
           {selectedDate && (
+            <Input
+              label="Hora"
+              value={selectedTime}
+              onChange={onSelectTimeHandler}
+              options={getTimesOptions()}
+              type="select"
+            />
+          )}
+          {/*  {selectedDate && (
             <label htmlFor="available_times">
               <p className="font-semibold">Hora</p>
               <select
@@ -128,14 +124,14 @@ function AppointmentForm({ citizenData, appointmentId }) {
                 onChange={onSelectTimeHandler}
               >
                 <option value="">Seleccione una hora</option>
-                {availableTimes.map((time) => (
-                  <option key={time} value={time}>
+                {ALL_TIMES.map((time) => (
+                  <option disabled key={time} value={time}>
                     {time}
                   </option>
                 ))}
               </select>
             </label>
-          )}
+          )} */}
         </div>
         <p
           className={`col-span-3 bg-green-200 text-center text-green-800 p-1 ${

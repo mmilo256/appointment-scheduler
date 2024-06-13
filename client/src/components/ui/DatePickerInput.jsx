@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   startOfMonth,
   endOfMonth,
@@ -12,13 +12,14 @@ import {
   isBefore,
 } from "date-fns";
 import { es } from "date-fns/locale";
+import { useAppointmentStore } from "../../stores/useAppointmentStore";
 
-const DatePickerInput = ({
-  setSelectedDate,
-  setRefreshTimes,
-  refreshTimes,
-}) => {
+const DatePickerInput = ({ setSelectedDate }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const getAvailableTimes = useAppointmentStore(
+    (state) => state.getAvailableTimes
+  );
+
   const today = new Date();
 
   useEffect(() => {
@@ -55,9 +56,9 @@ const DatePickerInput = ({
   };
 
   const selectDay = (date) => {
-    setCurrentDate(date);
-    setSelectedDate(date);
-    setRefreshTimes(!refreshTimes);
+    getAvailableTimes(format(date, "yyyy-MM-dd"));
+    setCurrentDate(date, "yyyy-MM-dd");
+    setSelectedDate(date, "yyyy-MM-dd");
   };
 
   return (
