@@ -22,11 +22,11 @@ app.use(e.json())
 app.use('/api/auth', authRouter)
 app.use('/api/users', verifyToken, userRouter)
 app.use('/api/departments', verifyToken, departmentRouter)
-app.use('/api/citizens', verifyToken, citizenRouter)
+app.use('/api/citizens', citizenRouter)
 app.use('/api/appointments', verifyToken, appointmentRouter)
 app.use('/api/referrals', verifyToken, referralRouter)
 
 // Arrancar el servidor
-app.listen(() => {
+app.listen(3000, () => {
   console.log('listening...')
 })

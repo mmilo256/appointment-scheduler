@@ -4,10 +4,14 @@ import ActionsRow from "../ui/ActionsRow";
 import { deleteCitizen, getAllCitizens } from "../../services/citizenService";
 import { checkToken } from "../../utils/helpers";
 import { AuthContext } from "../../context/AuthContext";
+import { useCitizenStore } from "../../stores/useCitizenStore";
+import CitizenTableActions from "./CitizenTableActions";
 
 function CitizensTable() {
+  const getAllCitizens = useCitizenStore((state) => state.getAllCitizens);
+  const citizens = useCitizenStore((state) => state.citizens);
+
   // Estado local para almacenar la lista de ciudadanos
-  const [citizens, setCitizens] = useState([]);
   const [refreshData, setRefreshData] = useState(false);
   const { logout } = useContext(AuthContext);
 
@@ -18,8 +22,7 @@ function CitizensTable() {
       const isTokenExpired = checkToken(localStorage.getItem("jwt"));
       try {
         if (!isTokenExpired) {
-          const data = await getAllCitizens();
-          setCitizens(data);
+          getAllCitizens();
         } else {
           logout("expired");
         }
@@ -28,7 +31,7 @@ function CitizensTable() {
       }
     };
     getCitizens();
-  }, [refreshData, logout]);
+  }, [logout, getAllCitizens]);
 
   // Función para eliminar un ciudadano
   const onDelete = async (id) => {
@@ -42,7 +45,7 @@ function CitizensTable() {
   };
 
   // Función para dar formato a los datos de los ciudadanos
-  const formatData = () => {
+  const formatTableData = () => {
     const formattedData = citizens.map((citizen) => {
       const citizenData = {
         rut: citizen.rut,
@@ -51,14 +54,7 @@ function CitizensTable() {
         email: citizen.email ?? "(Sin correo)",
         phone: citizen.phone,
         phone2: citizen.phone_2 ?? "(Sin número)",
-        actions: (
-          <ActionsRow
-            module="citizens"
-            noEdit
-            id={citizen.id}
-            onDelete={onDelete}
-          />
-        ),
+        actions: <CitizenTableActions id={citizen.id} />,
       };
       return citizenData;
     });
@@ -76,7 +72,7 @@ function CitizensTable() {
       { label: "TELÉFONO 2" },
       { label: "ACCIONES" },
     ],
-    data: formatData(), // Datos formateados de los ciudadanos
+    data: formatTableData(), // Datos formateados de los ciudadanos
   };
 
   // Renderizado de la tabla con los datos configurados
