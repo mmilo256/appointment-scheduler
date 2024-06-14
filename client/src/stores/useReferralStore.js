@@ -3,8 +3,6 @@ import {
   createReferral,
   deleteReferral,
   getAllReferrals,
-  getReferralById,
-  getAvailableTimes,
   updateReferral,
 } from "../services/referralService";
 import { checkToken } from "../utils/helpers";
@@ -18,7 +16,7 @@ export const useReferralStore = create((set) => ({
     department_id: '',
     appointment_id: '',
     ref_status: '',
-    citizen_fullname: ''
+    citizen_id: ''
   },
   
   /* selectReferral: async (id) => {
@@ -41,6 +39,15 @@ export const useReferralStore = create((set) => ({
       console.log("Error al obtener las audiencias.", error);
     }
   },
+  selectReferral: async (id) => {
+    const referral = await getReferralById(id);
+    set({
+      selectedReferral: {
+        ...referral,
+        id,
+      },
+    });
+  },
   createReferral: async (data) => {
     try {
       if (!isTokenExpired) {
@@ -50,7 +57,7 @@ export const useReferralStore = create((set) => ({
       console.log("Error al obtener las audiencias.", error);
     }
   },
-/*   deleteReferral: async (id) => {
+  deleteReferral: async (id) => {
     
     try {
         if (!isTokenExpired) {
@@ -60,6 +67,7 @@ export const useReferralStore = create((set) => ({
         console.log("Error al borrar", error);
       }
   },
+  
   editReferral: async (id, data) => {
     
     try {
@@ -69,5 +77,5 @@ export const useReferralStore = create((set) => ({
     } catch (error) {
       console.log("Error al borrar", error);
     }
-  }, */
+  },
 }));

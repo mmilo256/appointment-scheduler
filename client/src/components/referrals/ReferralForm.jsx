@@ -67,11 +67,9 @@ function ReferralForm() {
     e.preventDefault();
     const data = {
       department_id: Number(department),
-      ref_status: status,
       appointment_id: selectedAppointment.id,
-      citizen_fullname:
-        selectedAppointment.citizen &&
-        `${selectedAppointment.citizen.first_name} ${selectedAppointment.citizen.last_name}`,
+      ref_status: status,
+      citizen_id: selectedAppointment.citizen.id,
     };
     referralAppointment(data);
   };

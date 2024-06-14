@@ -44,6 +44,17 @@ export const getAllReferrals = async () => {
     }
 };
 
+export const getReferralById = async (id) => {
+    try {
+        // Llamada a la función httpRequest para obtener un audiencia por su ID
+        const data = await httpRequest(`${API_URL}/${id}`, { method: 'GET' });
+        return data;
+    } catch (error) {
+        console.error("Error al obtener el audiencia.", error);
+        throw error;
+    }
+};
+
 // Función asincrónica para crear un nuevo audiencia
 export const createReferral = async (referralData) => {
     try {
@@ -55,6 +66,32 @@ export const createReferral = async (referralData) => {
         return data;
     } catch (error) {
         console.error("Error al crear la derivacion.", error);
+        throw error;
+    }
+};
+
+// Función asincrónica para eliminar un audiencia
+export const deleteReferral = async (id) => {
+    try {
+        // Llamada a la función httpRequest para eliminar un audiencia por su ID
+        await httpRequest(`${API_URL}/${id}`, { method: 'DELETE' });
+    } catch (error) {
+        console.error("Error al eliminar el audiencia.", error);
+        throw error;
+    }
+};
+
+// Función asincrónica para actualizar un audiencia
+export const updateReferral = async (id, referralData) => {
+    try {
+        // Llamada a la función httpRequest para actualizar un audiencia por su ID
+        const data = await httpRequest(`${API_URL}/${id}`, {
+            method: 'PATCH',
+            body: JSON.stringify(referralData)
+        });
+        return data;
+    } catch (error) {
+        console.error("Error al editar el audiencia.", error);
         throw error;
     }
 };

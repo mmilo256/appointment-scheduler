@@ -1,48 +1,29 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import BaseTable from "../ui/BaseTable";
-import { getAllReferrals } from "../../services/referralService";
-import { checkToken } from "../../utils/helpers";
-import { AuthContext } from "../../context/AuthContext";
 import StatusTag from "./StatusTag";
+import { useReferralStore } from "../../stores/useReferralStore";
+import ReferralsTableActions from "./ReferralsTableActions";
 
 function ReferralsTable() {
   // Estado local para almacenar la lista de ciudadanos
-  const [referrals, setReferrals] = useState([]);
-  const [refreshData, setRefreshData] = useState(false);
-  const { logout } = useContext(AuthContext);
+  const referrals = useReferralStore((state) => state.referrals);
+  const getAllReferrals = useReferralStore((state) => state.getAllReferrals);
 
   // Efecto de lado para obtener la lista de ciudadanos al cargar el componente
   useEffect(() => {
-    // Función asincrónica para obtener los ciudadanos
-    const getReferrals = async () => {
-      const isTokenExpired = checkToken(localStorage.getItem("jwt"));
-      try {
-        if (!isTokenExpired) {
-          // Llamada a la función getAllReferrals del servicio para obtener los ciudadanos
-          const data = await getAllReferrals();
-          // Actualización del estado con la lista de ciudadanos obtenida
-          setReferrals(data);
-        } else {
-          logout("expired");
-        }
-      } catch (error) {
-        // Manejo de errores en caso de fallo al obtener los ciudadanos
-        console.log("Error al obtener los ciudadanos.", error);
-      }
-    };
-    // Llamada a la función para obtener los ciudadanos al montar el componente
-    getReferrals();
-  }, [refreshData, logout]);
+    getAllReferrals();
+  }, [getAllReferrals]);
 
   const formatData = () => {
     const formattedData = referrals.map((ref) => {
       // Formato de cada ciudadano con sus respectivos campos
       const refData = {
-        fullName: `${ref.citizen_fullname}`,
+        fullName: `${ref.citizen.first_name} ${ref.citizen.last_name}`,
         cause: ref.appointment.cause,
+        response: ref.appointment.response,
         referral: ref.department.dep_name,
-        outcome: ref.outcome,
         status: <StatusTag status={ref.ref_status} />,
+        actions: <ReferralsTableActions id={ref.id} />,
       };
       return refData;
     });
@@ -54,9 +35,10 @@ function ReferralsTable() {
     columns: [
       { label: "NOMBRE COMPLETO" },
       { label: "MATERIA" },
+      { label: "PROPUESTA" },
       { label: "DERIVACIÓN" },
-      { label: "RESULTADO" },
       { label: "ESTADO" },
+      { label: "ACCIONES" },
     ],
     data: formatData(), // Datos formateados de los ciudadanos
   };
