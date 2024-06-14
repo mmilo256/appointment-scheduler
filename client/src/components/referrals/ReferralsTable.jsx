@@ -19,7 +19,7 @@ function ReferralsTable() {
         response: ref.appointment.response,
         referral: ref.department.dep_name,
         status: <StatusTag status={ref.ref_status} />,
-        actions: role <= 2 && <ReferralsTableActions id={ref.id} />,
+        actions: role <= 2 && <ReferralsTableActions data={ref} />,
       };
       return refData;
     });

@@ -54,7 +54,6 @@ function EditAppointmentForm() {
       dataToEdit.response = response;
     }
 
-    console.log(dataToEdit);
     await editAppointment(selectedAppointment.id, dataToEdit);
     await getAllAppointments();
     navigate("/appointments");

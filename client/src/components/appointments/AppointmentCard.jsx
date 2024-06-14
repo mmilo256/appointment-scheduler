@@ -3,9 +3,11 @@ import { useAppointmentStore } from "../../stores/useAppointmentStore";
 import { useState } from "react";
 import AddSolutionModal from "./AddSolutionModal";
 import { useAuthStore } from "../../stores/useAuthStore";
+import ConfirmationModal from "../ui/ConfirmationModal";
 
 function AppointmentCard({ data }) {
   const [modal, setModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
   const role = useAuthStore((state) => state.role);
 
   const navigate = useNavigate();
@@ -22,10 +24,14 @@ function AppointmentCard({ data }) {
     (state) => state.getAllAppointments
   );
 
+  const onOpenConfirmDelete = () => {
+    setDeleteModal(true);
+  };
+
   const onDeleteAppointment = async () => {
     await deleteAppointment(data.id);
-    alert("Audiencia eliminada");
     await getAllAppointments();
+    setDeleteModal(false);
   };
 
   const onEditAppointment = async () => {
@@ -98,7 +104,7 @@ function AppointmentCard({ data }) {
           Editar
         </button>
         <button
-          onClick={onDeleteAppointment}
+          onClick={onOpenConfirmDelete}
           className={`bg-red-500 hover:bg-red-600 ${buttonStyles}`}
         >
           Eliminar
@@ -109,6 +115,13 @@ function AppointmentCard({ data }) {
         modal={modal}
         setModal={setModal}
         title={data.cause}
+      />
+      <ConfirmationModal
+        modal={deleteModal}
+        setModal={setDeleteModal}
+        title="Borrar audiencia"
+        onConfirm={onDeleteAppointment}
+        message={`¿Seguro que desea borrar la audiencia ${data.cause}?`}
       />
     </div>
   );

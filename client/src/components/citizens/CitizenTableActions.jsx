@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { useCitizenStore } from "../../stores/useCitizenStore";
 import { useNavigate } from "react-router-dom";
+import ConfirmationModal from "../ui/ConfirmationModal";
 
-function CitizenTableActions({ id }) {
+function CitizenTableActions({ data }) {
   const buttonStyles = "text-white rounded px-1.5 py-0.5";
+  const [deleteModal, setDeleteModal] = useState(0);
 
   const deleteCitizen = useCitizenStore((state) => state.deleteCitizen);
   const getAllCitizens = useCitizenStore((state) => state.getAllCitizens);
@@ -12,13 +14,14 @@ function CitizenTableActions({ id }) {
   const navigate = useNavigate();
 
   const onDeleteCitizen = async () => {
-    await deleteCitizen(id);
+    await deleteCitizen(data.id);
     await getAllCitizens();
+    setDeleteModal(false);
   };
 
   const onEditCitizen = async () => {
-    await selectCitizen(id);
-    navigate(`edit?id=${id}`);
+    await selectCitizen(data.id);
+    navigate(`edit?id=${data.id}`);
   };
 
   return (
@@ -31,10 +34,19 @@ function CitizenTableActions({ id }) {
       </button>
       <button
         className={`bg-red-500 hover:bg-red-600 ${buttonStyles}`}
-        onClick={onDeleteCitizen}
+        onClick={() => {
+          setDeleteModal(true);
+        }}
       >
         Eliminar
       </button>
+      <ConfirmationModal
+        modal={deleteModal}
+        setModal={setDeleteModal}
+        title="Borrar ciudadano"
+        onConfirm={onDeleteCitizen}
+        message={`¿Seguro que desea borrar al ciudadano ${data.first_name} ${data.last_name}?`}
+      />
     </div>
   );
 }

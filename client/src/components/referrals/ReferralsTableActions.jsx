@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { useReferralStore } from "../../stores/useReferralStore";
 import { useNavigate } from "react-router-dom";
+import ConfirmationModal from "../ui/ConfirmationModal";
 
-function ReferralsTableActions({ id }) {
+function ReferralsTableActions({ data }) {
+  const [deleteModal, setDeleteModal] = useState(false);
   const buttonStyles = "text-white rounded px-1.5 py-0.5";
 
   const deleteReferral = useReferralStore((state) => state.deleteReferral);
@@ -12,13 +14,13 @@ function ReferralsTableActions({ id }) {
   const navigate = useNavigate();
 
   const onDeleteReferral = async () => {
-    await deleteReferral(id);
+    await deleteReferral(data.id);
     await getAllReferrals();
   };
 
   const onEditReferral = async () => {
-    await selectReferral(id);
-    navigate(`edit?id=${id}`);
+    await selectReferral(data.id);
+    navigate(`edit?id=${data.id}`);
   };
 
   return (
@@ -31,10 +33,19 @@ function ReferralsTableActions({ id }) {
       </button>
       <button
         className={`bg-red-500 hover:bg-red-600 ${buttonStyles}`}
-        onClick={onDeleteReferral}
+        onClick={() => {
+          setDeleteModal(true);
+        }}
       >
         Eliminar
       </button>
+      <ConfirmationModal
+        modal={deleteModal}
+        setModal={setDeleteModal}
+        title="Borrar derivación"
+        onConfirm={onDeleteReferral}
+        message={`¿Seguro que desea borrar la derivación?`}
+      />
     </div>
   );
 }

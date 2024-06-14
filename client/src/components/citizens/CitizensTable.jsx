@@ -15,7 +15,7 @@ function CitizensTable() {
         email: citizen.email ?? "(Sin correo)",
         phone: citizen.phone,
         phone2: citizen.phone_2 ?? "(Sin número)",
-        actions: <CitizenTableActions id={citizen.id} />,
+        actions: <CitizenTableActions data={citizen} />,
       };
       return citizenData;
     });

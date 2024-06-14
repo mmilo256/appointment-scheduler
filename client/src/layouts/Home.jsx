@@ -1,10 +1,7 @@
-import React, { useContext, useEffect } from "react";
-import Heading from "../components/ui/Heading";
+import React, { useEffect } from "react";
 import Container from "../components/ui/Container";
-import { AuthContext } from "../context/AuthContext";
 import HomeGrid from "../components/Home/HomeGrid";
 import { useAppointmentStore } from "../stores/useAppointmentStore";
-import Button from "../components/ui/Button";
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../stores/useAuthStore";
 

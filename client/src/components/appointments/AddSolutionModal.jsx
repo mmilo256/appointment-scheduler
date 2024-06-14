@@ -14,10 +14,8 @@ function AddSolutionModal({ id, modal, setModal, title }) {
   const onSubmit = async (e) => {
     e.preventDefault();
     const dataToEdit = { response };
-    console.log(dataToEdit);
     await editAppointment(id, dataToEdit);
     await getAllAppointments();
-    alert("Propuesta agregada");
     setModal(false);
   };
 
