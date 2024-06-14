@@ -36,9 +36,12 @@ function AppointmentForm({ citizenData }) {
     if (Object.keys(citizenData).length !== 0) {
       if (cause) {
         if (selectedDate && selectedTime) {
+          const appDate = `${new Date(selectedDate).getFullYear()}-${
+            new Date(selectedDate).getMonth() + 1
+          }-${new Date(selectedDate).getDate()}`;
           const data = {
             cause,
-            date: formatDate(new Date(selectedDate), 2),
+            date: formatDate(appDate, 2),
             time: selectedTime,
             citizen_id: citizenData.id,
           };

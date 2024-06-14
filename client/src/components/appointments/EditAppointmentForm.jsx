@@ -16,6 +16,9 @@ function EditAppointmentForm() {
   );
 
   const editAppointment = useAppointmentStore((state) => state.editAppointment);
+  const getAllAppointments = useAppointmentStore(
+    (state) => state.getAllAppointments
+  );
 
   const [date, setDate] = useState(selectedAppointment.date ?? "");
   const [cause, setCause] = useState(selectedAppointment.cause ?? "");
@@ -37,9 +40,12 @@ function EditAppointmentForm() {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const appDate = `${new Date(date).getFullYear()}-${
+      new Date(date).getMonth() + 1
+    }-${new Date(date).getDate()}`;
     const dataToEdit = { response };
     if (cause) dataToEdit.cause = cause;
-    if (date) dataToEdit.date = date;
+    if (date) dataToEdit.date = formatDate(appDate, 2);
     if (time) dataToEdit.time = time;
     if (response) {
       dataToEdit.response = response;
@@ -50,6 +56,7 @@ function EditAppointmentForm() {
 
     console.log(dataToEdit);
     await editAppointment(selectedAppointment.id, dataToEdit);
+    await getAllAppointments();
     alert("Audiencia modificada");
     navigate("/appointments");
   };
