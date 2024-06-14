@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { groupAppointments } from "../../utils/helpers";
 import AppointmentsCardsGroup from "./AppointmentsCardsGroup";
 import { useAppointmentStore } from "../../stores/useAppointmentStore";
@@ -6,14 +6,6 @@ import { useAppointmentStore } from "../../stores/useAppointmentStore";
 function AppointmentsList() {
   // Estado local para almacenar la lista de audiencias
   const appointments = useAppointmentStore((state) => state.appointments);
-  const getAllAppointments = useAppointmentStore(
-    (state) => state.getAllAppointments
-  );
-
-  // Efecto para obtener la lista de audiencias al cargar el componente
-  useEffect(() => {
-    getAllAppointments();
-  }, [getAllAppointments]);
 
   // Formatear las audiencias para agruparlas por fecha
   const groupedAppointments = groupAppointments(appointments);

@@ -12,7 +12,6 @@ function ReferralsTableActions({ id }) {
   const navigate = useNavigate();
 
   const onDeleteReferral = async () => {
-    alert("eliminao");
     await deleteReferral(id);
     await getAllReferrals();
   };

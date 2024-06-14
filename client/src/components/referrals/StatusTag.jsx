@@ -18,7 +18,9 @@ function StatusTag({ status }) {
   }
 
   return (
-    <span className={`inline-block py-0.5 px-3 rounded-full ${tagColor}`}>
+    <span
+      className={`inline-block py-0.5 px-3 text-xs capitalize rounded-full ${tagColor}`}
+    >
       {status}
     </span>
   );

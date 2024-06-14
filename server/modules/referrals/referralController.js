@@ -27,7 +27,7 @@ export const getReferralById = async (req, res) => {
     const referral = await Referral.findOne({
       include: [
         { model: Department, attributes: ['dep_name'], as: 'department' },
-        { model: Appointment, attributes: ['cause'], as: 'appointment' },
+        { model: Appointment, attributes: ['date', 'time', 'cause', 'response'], as: 'appointment' },
         { model: Citizen, attributes: ['id', 'first_name', 'last_name'], as: 'citizen' }
       ],
       where: { id }

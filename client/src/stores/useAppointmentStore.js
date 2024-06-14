@@ -7,9 +7,6 @@ import {
   getAvailableTimes,
   updateAppointment,
 } from "../services/appointmentService";
-import { checkToken } from "../utils/helpers";
-
-const isTokenExpired = checkToken(localStorage.getItem("jwt"));
 
 export const useAppointmentStore = create((set) => ({
   appointments: [],
@@ -20,9 +17,9 @@ export const useAppointmentStore = create((set) => ({
     created_at: "",
     appointment_date: "",
     isReferred: false,
-    citizen_id: ""
+    citizen_id: "",
   },
-  
+
   selectAppointment: async (id) => {
     const appointment = await getAppointmentById(id);
     set({
@@ -34,11 +31,9 @@ export const useAppointmentStore = create((set) => ({
   },
   getAllAppointments: async () => {
     try {
-      if (!isTokenExpired) {
-        const data = await getAllAppointments();
-        // Actualización del estado con la lista de audiencias obtenida
-        set({ appointments: data });
-      }
+      const data = await getAllAppointments();
+      // Actualización del estado con la lista de audiencias obtenida
+      set({ appointments: data });
     } catch (error) {
       console.log("Error al obtener las audiencias.", error);
     }
@@ -49,29 +44,21 @@ export const useAppointmentStore = create((set) => ({
   },
   createAppointment: async (data) => {
     try {
-      if (!isTokenExpired) {
-        await createAppointment(data);
-      }
+      await createAppointment(data);
     } catch (error) {
       console.log("Error al obtener las audiencias.", error);
     }
   },
   deleteAppointment: async (id) => {
-    
     try {
-        if (!isTokenExpired) {
-            await deleteAppointment(id);
-        }
-      } catch (error) {
-        console.log("Error al borrar", error);
-      }
+      await deleteAppointment(id);
+    } catch (error) {
+      console.log("Error al borrar", error);
+    }
   },
   editAppointment: async (id, data) => {
-    
     try {
-      if (!isTokenExpired) {
-        await updateAppointment(id, data);
-      }
+      await updateAppointment(id, data);
     } catch (error) {
       console.log("Error al borrar", error);
     }

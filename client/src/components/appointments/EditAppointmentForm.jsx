@@ -24,9 +24,6 @@ function EditAppointmentForm() {
   const navigate = useNavigate();
 
   const availableTimes = useAppointmentStore((state) => state.availableTimes);
-  const createAppointment = useAppointmentStore(
-    (state) => state.createAppointment
-  );
 
   const getTimesOptions = () => {
     return ALL_TIMES.map((time) => {

@@ -7,12 +7,6 @@ import ReferralsTableActions from "./ReferralsTableActions";
 function ReferralsTable() {
   // Estado local para almacenar la lista de ciudadanos
   const referrals = useReferralStore((state) => state.referrals);
-  const getAllReferrals = useReferralStore((state) => state.getAllReferrals);
-
-  // Efecto de lado para obtener la lista de ciudadanos al cargar el componente
-  useEffect(() => {
-    getAllReferrals();
-  }, [getAllReferrals]);
 
   const formatData = () => {
     const formattedData = referrals.map((ref) => {
