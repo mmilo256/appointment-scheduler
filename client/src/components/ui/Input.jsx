@@ -23,7 +23,6 @@ function Input({
             className={`px-2 py-1 w-full rounded border border-primary-100 resize-none ${
               important && "bg-yellow-100"
             }`}
-            defaultValue={defaultValue}
             placeholder={placeholder}
             value={value}
             onChange={onChange}

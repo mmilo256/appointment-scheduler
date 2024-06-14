@@ -84,7 +84,9 @@ export const groupAppointments = (appointments) => {
       cause: app.cause,
       isReferred: app.is_referred,
       date: app.date,
+      response: app.response,
       time: app.time,
+      citizenId: app.citizen_id,
       citizen: `${app.citizen.first_name} ${app.citizen.last_name}`
     }
   ))
@@ -101,9 +103,11 @@ export const groupAppointments = (appointments) => {
   const result = Object.keys(groupedAppointments).map((date) => {
     return {
       date,
-      appointments: groupedAppointments[date].map(({ id, isReferred, cause, date, time, citizen }) => ({
+      appointments: groupedAppointments[date].map(({ id, isReferred, citizenId, response, cause, date, time, citizen }) => ({
         id,
         isReferred,
+        response,
+        citizenId,
         cause,
         date,
         time,

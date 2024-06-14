@@ -15,7 +15,6 @@ function AppointmentForm({ citizenData }) {
   const [cause, setCause] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const navigate = useNavigate();
-  const { logout } = useContext(AuthContext);
 
   const availableTimes = useAppointmentStore((state) => state.availableTimes);
   const createAppointment = useAppointmentStore(
@@ -43,7 +42,6 @@ function AppointmentForm({ citizenData }) {
             time: selectedTime,
             citizen_id: citizenData.id,
           };
-          console.log(data);
           await createAppointment(data);
           alert("Audiencia creada con éxito");
           navigate("/appointments");

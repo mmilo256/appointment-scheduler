@@ -122,7 +122,9 @@ export const updateAppointment = async (req, res) => {
     const { id } = req.params // ID del audiencia a editar
     const {
       cause,
-      appointment_date: date,
+      date,
+      time,
+      response,
       citizen_id: citizenId,
       is_referred: isReferred
     } = req.body
@@ -141,9 +143,11 @@ export const updateAppointment = async (req, res) => {
       return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: 'Datos no válidos' })
     } */
     // Guardar en un objeto los datos nuevos
-    const updates = {}
+    const updates = { response }
     if (cause) updates.cause = cause
-    if (date) updates.appointment_date = date
+    if (date) updates.date = date
+    if (time) updates.time = time
+
     if (citizenId) updates.citizen_id = citizenId
     if (isReferred) updates.is_referred = isReferred
     // Modificar audiencia
