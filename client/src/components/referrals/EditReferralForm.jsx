@@ -5,20 +5,22 @@ import Input from "../ui/Input";
 import Button from "../ui/Button";
 import { AuthContext } from "../../context/AuthContext";
 import { updateAppointment } from "../../services/appointmentService";
-import { createReferral } from "../../services/referralService";
 import { useNavigate } from "react-router-dom";
 import { useAppointmentStore } from "../../stores/useAppointmentStore";
-function ReferralForm() {
-  const selectedAppointment = useAppointmentStore(
-    (state) => state.selectedAppointment
-  );
+import { useReferralStore } from "../../stores/useReferralStore";
+function EditReferralForm({ data }) {
+  const editReferral = useReferralStore((state) => state.editReferral);
   // Estado local para almacenar la lista de departamentos
   const [departments, setDepartments] = useState([]);
-  const [department, setDepartment] = useState(1);
-  const [result, setResult] = useState("");
-  const [status, setStatus] = useState("pendiente");
+  const [department, setDepartment] = useState(data.department_id);
+  const [status, setStatus] = useState(data.ref_status);
   const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setDepartment(data.department_id);
+    setStatus(data.ref_status);
+  }, [data]);
 
   const depOptions = departments.map((dep) => ({
     label: dep.dep_name,
@@ -54,23 +56,20 @@ function ReferralForm() {
     getDepartments();
   }, [logout]);
 
-  const referralAppointment = async (data) => {
+  const referralAppointment = async (newData) => {
     // Llamada a la función getAllDepartments del servicio para obtener los departamentos
-    await createReferral(data);
-    await updateAppointment(selectedAppointment.id, { is_referred: true });
+    await editReferral(data.id, newData);
     // Actualización del estado con la lista de departamentos obtenida
+    // alert("Derivación modificada");
     navigate("/referrals");
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const data = {
-      department_id: Number(department),
-      appointment_id: selectedAppointment.id,
-      ref_status: status,
-      citizen_id: selectedAppointment.citizen.id,
-    };
-    referralAppointment(data);
+    const dataToEdit = {};
+    if (department) dataToEdit.department_id = Number(department);
+    if (status) dataToEdit.ref_status = status;
+    referralAppointment(dataToEdit);
   };
 
   return (
@@ -105,4 +104,4 @@ function ReferralForm() {
   );
 }
 
-export default ReferralForm;
+export default EditReferralForm;

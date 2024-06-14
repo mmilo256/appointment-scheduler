@@ -1,62 +1,128 @@
-import Button from "../ui/Button";
-import { deleteAppointment } from "../../services/appointmentService";
+import { useNavigate } from "react-router-dom";
+import { useAppointmentStore } from "../../stores/useAppointmentStore";
+import { useState } from "react";
+import AddSolutionModal from "./AddSolutionModal";
+import { useAuthStore } from "../../stores/useAuthStore";
+import ConfirmationModal from "../ui/ConfirmationModal";
 
-function AppointmentCard({ data, setRefreshData }) {
-  const onClickHandler = (e) => {
-    e.preventDefault();
+function AppointmentCard({ data }) {
+  const [modal, setModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const role = useAuthStore((state) => state.role);
+
+  const navigate = useNavigate();
+
+  const selectAppointment = useAppointmentStore(
+    (state) => state.selectAppointment
+  );
+
+  const deleteAppointment = useAppointmentStore(
+    (state) => state.deleteAppointment
+  );
+
+  const getAllAppointments = useAppointmentStore(
+    (state) => state.getAllAppointments
+  );
+
+  const onOpenConfirmDelete = () => {
+    setDeleteModal(true);
   };
 
   const onDeleteAppointment = async () => {
-    try {
-      await deleteAppointment(data.id);
-      // Refrescar la lista de ciudadanos después de la eliminación
-      setRefreshData((prevState) => !prevState);
-    } catch (error) {
-      throw error;
-    }
+    await deleteAppointment(data.id);
+    await getAllAppointments();
+    setDeleteModal(false);
   };
+
+  const onEditAppointment = async () => {
+    await selectAppointment(data.id);
+    navigate(`edit?id=${data.id}&citizen=${data.citizenId}`);
+  };
+
+  const onAddSolution = () => {
+    setModal(true);
+  };
+
+  const onReferAppointment = async () => {
+    await selectAppointment(data.id);
+    navigate(`/referrals/create`);
+  };
+
+  const buttonStyles = "text-white text-sm px-2 py-1 rounded";
+
+  if (data.isReferred) return null;
 
   return (
     <div
-      className={`flex justify-between items-center ${
-        data.isReferred ? "bg-green-100" : "bg-slate-100"
-      } rounded shadow p-4`}
+      className={`${
+        data.response ? "bg-green-50" : "bg-slate-50"
+      } p-3 rounded shadow`}
     >
       {/* Información de la cita */}
       <div className="flex flex-col gap-1">
+        <p className="text-xl font-bold">{data.cause}</p>
         <p className="text-lg">
-          <strong>Hora:</strong> {data.time}
+          {" "}
+          <span className="font-semibold">Ciudadano:</span> {data.citizen}
         </p>
         <p className="text-lg">
-          <strong>Ciudadano:</strong> {data.citizen}
+          {" "}
+          <span className="font-semibold">Hora:</span> {data.time}
         </p>
-        <p className="text-lg">
-          <strong>Motivo:</strong> {data.cause}
-        </p>
-        {data.isReferred ? (
-          <p className="font-bold text-green-600">Derivada</p>
-        ) : (
-          <p className="font-bold text-gray-500">Por derivar</p>
+        {data.response && (
+          <p className="bg-green-100 rounded shadow p-2 mb-4">
+            {" "}
+            <span className="font-semibold">Propuesta:</span> {data.response}
+          </p>
         )}
       </div>
 
-      {/* Acciones disponibles para la cita */}
-      <div>
-        <div className="flex gap-2">
-          <Button
-            onClick={data.isReferred && onClickHandler}
-            href={`/referrals/create?id=${data.id}`}
-            color="secondary"
-            className={
-              data.isReferred &&
-              "bg-secondary-200 hover:bg-secondary-200 cursor-not-allowed"
-            }
-          >
-            {data.isReferred ? "Derivada" : "Derivar"}
-          </Button>
-          <Button onClick={onDeleteAppointment}>Eliminar</Button>
-        </div>
+      <div className="flex justify-end gap-2">
+        {role <= 2 && (
+          <div>
+            {data.response ? (
+              <button
+                onClick={onReferAppointment}
+                className={`bg-green-500 hover:bg-green-600 ${buttonStyles}`}
+              >
+                Derivar
+              </button>
+            ) : (
+              <button
+                onClick={onAddSolution}
+                className={`bg-amber-500 hover:bg-amber-600 ${buttonStyles}`}
+              >
+                Agregar propuesta
+              </button>
+            )}
+          </div>
+        )}
+        <button
+          onClick={onEditAppointment}
+          className={`bg-blue-500 hover:bg-blue-600 ${buttonStyles}`}
+        >
+          Editar
+        </button>
+        <button
+          onClick={onOpenConfirmDelete}
+          className={`bg-red-500 hover:bg-red-600 ${buttonStyles}`}
+        >
+          Eliminar
+        </button>
       </div>
+      <AddSolutionModal
+        id={data.id}
+        modal={modal}
+        setModal={setModal}
+        title={data.cause}
+      />
+      <ConfirmationModal
+        modal={deleteModal}
+        setModal={setDeleteModal}
+        title="Borrar audiencia"
+        onConfirm={onDeleteAppointment}
+        message={`¿Seguro que desea borrar la audiencia ${data.cause}?`}
+      />
     </div>
   );
 }

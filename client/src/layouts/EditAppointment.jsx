@@ -1,7 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import Container from "../components/ui/Container";
 import Heading from "../components/ui/Heading";
-import AppointmentForm from "../components/appointments/AppointmentForm";
+import EditAppointmentForm from "../components/appointments/EditAppointmentForm";
 
 function EditAppointment() {
   const [queryParameters] = useSearchParams();
@@ -9,7 +9,7 @@ function EditAppointment() {
   return (
     <Container>
       <Heading className="text-center">Editar audiencia</Heading>
-      <AppointmentForm edit appointmentId={id} />
+      <EditAppointmentForm />
     </Container>
   );
 }

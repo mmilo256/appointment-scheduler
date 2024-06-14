@@ -2,8 +2,18 @@ import Container from "../components/ui/Container";
 import Heading from "../components/ui/Heading";
 import Button from "../components/ui/Button";
 import CitizensTable from "../components/citizens/CitizensTable";
+import { useCitizenStore } from "../stores/useCitizenStore";
+import { useEffect } from "react";
 
 function Citizens() {
+  const getAllCitizens = useCitizenStore((state) => state.getAllCitizens);
+
+  useEffect(() => {
+    (async () => {
+      await getAllCitizens();
+    })();
+  }, [getAllCitizens]);
+
   return (
     <Container>
       <Heading>Listado de ciudadanos</Heading>

@@ -7,7 +7,7 @@ const router = e.Router()
 router.get('/', getAllAppointments)
 router.post('/', createAppointment)
 router.get('/:id', getAppointmentById)
-router.get('/date/:date', getAvailableSchedules)
+router.get('/date/:reqDate', getAvailableSchedules)
 router.delete('/:id', deleteAppointment)
 router.patch('/:id', updateAppointment)
 

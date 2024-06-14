@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   startOfMonth,
   endOfMonth,
@@ -8,15 +8,18 @@ import {
   format,
   subWeeks,
   addWeeks,
+  addDays,
+  isBefore,
 } from "date-fns";
 import { es } from "date-fns/locale";
+import { useAppointmentStore } from "../../stores/useAppointmentStore";
 
-const DatePickerInput = ({
-  setSelectedDate,
-  setRefreshTimes,
-  refreshTimes,
-}) => {
+const DatePickerInput = ({ setSelectedDate }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const getAvailableTimes = useAppointmentStore(
+    (state) => state.getAvailableTimes
+  );
+
   const today = new Date();
 
   useEffect(() => {
@@ -44,10 +47,18 @@ const DatePickerInput = ({
 
   const monthsList = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
 
+  const isAvailableDate = (date) => {
+    if (format(date, "E") === "Mon" && !isBefore(addDays(date, 1), today)) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const selectDay = (date) => {
-    setCurrentDate(date);
-    setSelectedDate(date);
-    setRefreshTimes(!refreshTimes);
+    getAvailableTimes(format(date, "yyyy-MM-dd"));
+    setCurrentDate(date, "yyyy-MM-dd");
+    setSelectedDate(date, "yyyy-MM-dd");
   };
 
   return (
@@ -82,7 +93,7 @@ const DatePickerInput = ({
         {dates.map((date) => (
           <button
             type="button"
-            disabled={format(date, "E") !== "Mon"}
+            disabled={!isAvailableDate(date)}
             onClick={() => selectDay(date)}
             key={date.toString()}
             className={`text-center rounded font-black disabled:text-gray-400 disabled:font-normal  ${

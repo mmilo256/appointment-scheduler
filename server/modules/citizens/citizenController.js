@@ -87,13 +87,7 @@ export const updateCitizen = async (req, res) => {
     if (error) {
       return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: 'Datos no validos' })
     }
-    // Verifica si el ciudadano nuevo ya existe, sólo si citizenname existe en el body request
-    if (rut) {
-      const existingCitizen = await Citizen.findOne({ rut, where: { rut } })
-      if (existingCitizen) {
-        return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: 'El ciudadano ya existe' })
-      }
-    }
+
     // Guardar en un objeto los datos a modificar
     const updates = {}
     if (rut) updates.rut = rut

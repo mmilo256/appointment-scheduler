@@ -32,7 +32,10 @@ function Navbar() {
         </ul>
         <div className="flex items-center gap-4">
           <p className="font-light italic">{user.username}</p>
-          <button className="font-semibold" onClick={logout}>
+          <button
+            className="bg-secondary-500 hover:bg-secondary-600  px-2 py-1 rounded font-semibold"
+            onClick={logout}
+          >
             Cerrar sesión
           </button>
         </div>

@@ -14,7 +14,8 @@ export const verifyToken = (req, res, next) => {
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET)
     req.payload = {
-      username: payload.username
+      username: payload.username,
+      role: payload.role
     }
     next()
   } catch (error) {

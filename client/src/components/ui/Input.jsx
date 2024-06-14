@@ -23,7 +23,6 @@ function Input({
             className={`px-2 py-1 w-full rounded border border-primary-100 resize-none ${
               important && "bg-yellow-100"
             }`}
-            defaultValue={defaultValue}
             placeholder={placeholder}
             value={value}
             onChange={onChange}
@@ -40,8 +39,14 @@ function Input({
             value={value}
             onChange={onChange}
           >
+            <option value="">Seleccionar</option>
             {options?.map((option, index) => (
-              <option key={index} value={option.value}>
+              <option
+                className={option.disabled ? "bg-gray-300" : ""}
+                key={index}
+                value={option.disabled ? "" : option.value}
+                disabled={option.disabled}
+              >
                 {option.label}
               </option>
             ))}

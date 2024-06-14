@@ -2,6 +2,7 @@ import { sequelize } from '../../config/db.js'
 import { DataTypes } from 'sequelize'
 import Department from '../departments/departmentModel.js'
 import Appointment from '../appointments/appointmentModel.js'
+import Citizen from '../citizens/citizenModel.js'
 
 // Modelo de audiencias
 export const Referral = sequelize.define('referrals', {
@@ -9,10 +10,6 @@ export const Referral = sequelize.define('referrals', {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
-  },
-  outcome: {
-    type: DataTypes.STRING,
-    allowNull: false
   },
   ref_status: {
     type: DataTypes.ENUM(['pendiente', 'en proceso', 'finalizada'])
@@ -33,8 +30,12 @@ export const Referral = sequelize.define('referrals', {
       key: 'id'
     }
   },
-  citizen_fullname: {
-    type: DataTypes.STRING
+  citizen_id: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: 'citizens',
+      key: 'id'
+    }
   }
 },
 {
@@ -45,5 +46,6 @@ export const Referral = sequelize.define('referrals', {
 // Definición de asociaciones
 Referral.belongsTo(Department, { as: 'department', foreignKey: 'department_id' })
 Referral.belongsTo(Appointment, { as: 'appointment', foreignKey: 'appointment_id' })
+Referral.belongsTo(Citizen, { as: 'citizen', foreignKey: 'citizen_id' })
 
 export default Referral

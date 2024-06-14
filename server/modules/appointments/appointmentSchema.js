@@ -2,7 +2,8 @@ import Joi from 'joi'
 
 export const appointmentSchema = Joi.object({
   cause: Joi.string(),
-  appointment_date: Joi.date(),
+  date: Joi.string(),
+  time: Joi.string(),
   citizen_id: Joi.number().integer(),
   is_referred: Joi.bool()
-}).or('cause', 'appointment_date', 'citizen_id', 'is_referred')
+}).or('cause', 'date', 'time', 'citizen_id', 'is_referred')
