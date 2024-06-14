@@ -1,7 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { useAppointmentStore } from "../../stores/useAppointmentStore";
+import { useState } from "react";
+import AddSolutionModal from "./AddSolutionModal";
 
 function AppointmentCard({ data }) {
+  const [modal, setModal] = useState(false);
+
   const navigate = useNavigate();
 
   const selectAppointment = useAppointmentStore(
@@ -25,6 +29,10 @@ function AppointmentCard({ data }) {
   const onEditAppointment = async () => {
     await selectAppointment(data.id);
     navigate(`edit?id=${data.id}&citizen=${data.citizenId}`);
+  };
+
+  const onAddSolution = () => {
+    setModal(true);
   };
 
   const buttonStyles = "text-white text-sm px-2 py-1 rounded";
@@ -60,7 +68,10 @@ function AppointmentCard({ data }) {
             Derivar
           </button>
         ) : (
-          <button className={`bg-amber-500 hover:bg-amber-600 ${buttonStyles}`}>
+          <button
+            onClick={onAddSolution}
+            className={`bg-amber-500 hover:bg-amber-600 ${buttonStyles}`}
+          >
             Agregar propuesta
           </button>
         )}
@@ -77,6 +88,12 @@ function AppointmentCard({ data }) {
           Eliminar
         </button>
       </div>
+      <AddSolutionModal
+        id={data.id}
+        modal={modal}
+        setModal={setModal}
+        title={data.cause}
+      />
     </div>
   );
 }

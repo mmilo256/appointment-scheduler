@@ -2,6 +2,7 @@ import Container from "../components/ui/Container";
 import Heading from "../components/ui/Heading";
 import Button from "../components/ui/Button";
 import AppointmentsList from "../components/appointments/AppointmentsList";
+import BaseModal from "../components/ui/BaseModal";
 
 function Appointments() {
   return (

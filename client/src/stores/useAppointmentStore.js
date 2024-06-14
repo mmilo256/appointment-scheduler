@@ -22,6 +22,7 @@ export const useAppointmentStore = create((set) => ({
     isReferred: false,
     citizen_id: ""
   },
+  
   selectAppointment: async (id) => {
     const appointment = await getAppointmentById(id);
     set({
