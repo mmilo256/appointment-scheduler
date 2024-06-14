@@ -10,10 +10,6 @@ export const Referral = sequelize.define('referrals', {
     primaryKey: true,
     autoIncrement: true
   },
-  outcome: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
   ref_status: {
     type: DataTypes.ENUM(['pendiente', 'en proceso', 'finalizada'])
   },

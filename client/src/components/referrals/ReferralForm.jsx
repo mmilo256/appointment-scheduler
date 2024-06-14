@@ -7,7 +7,11 @@ import { AuthContext } from "../../context/AuthContext";
 import { updateAppointment } from "../../services/appointmentService";
 import { createReferral } from "../../services/referralService";
 import { useNavigate } from "react-router-dom";
-function ReferralForm({ appointment }) {
+import { useAppointmentStore } from "../../stores/useAppointmentStore";
+function ReferralForm() {
+  const selectedAppointment = useAppointmentStore(
+    (state) => state.selectedAppointment
+  );
   // Estado local para almacenar la lista de departamentos
   const [departments, setDepartments] = useState([]);
   const [department, setDepartment] = useState(1);
@@ -51,35 +55,23 @@ function ReferralForm({ appointment }) {
   }, [logout]);
 
   const referralAppointment = async (data) => {
-    const isTokenExpired = checkToken(localStorage.getItem("jwt"));
-    try {
-      if (!isTokenExpired) {
-        const setReferred = { is_referred: true };
-        // Llamada a la función getAllDepartments del servicio para obtener los departamentos
-        await createReferral(data);
-        await updateAppointment(appointment.id, setReferred);
-        // Actualización del estado con la lista de departamentos obtenida
-        alert("Derivación realizada correctamente");
-        navigate("/referrals");
-      } else {
-        logout("expired");
-      }
-    } catch (error) {
-      // Manejo de errores en caso de fallo al obtener los departamentos
-      console.log("No se pudo derivar la audiencia", error);
-    }
+    // Llamada a la función getAllDepartments del servicio para obtener los departamentos
+    await createReferral(data);
+    await updateAppointment(selectedAppointment.id, { is_referred: true });
+    // Actualización del estado con la lista de departamentos obtenida
+    alert("Derivación realizada correctamente");
+    navigate("/referrals");
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const data = {
       department_id: Number(department),
-      outcome: result,
       ref_status: status,
-      appointment_id: appointment.id,
+      appointment_id: selectedAppointment.id,
       citizen_fullname:
-        appointment.citizen &&
-        `${appointment.citizen.first_name} ${appointment.citizen.last_name}`,
+        selectedAppointment.citizen &&
+        `${selectedAppointment.citizen.first_name} ${selectedAppointment.citizen.last_name}`,
     };
     referralAppointment(data);
   };
@@ -96,14 +88,6 @@ function ReferralForm({ appointment }) {
         label="Dirección municipal"
       />
       <Input
-        value={result}
-        onChange={(e) => {
-          setResult(e.target.value);
-        }}
-        type="textarea"
-        label="Resultado"
-      />
-      <Input
         value={status}
         onChange={(e) => {
           setStatus(e.target.value);
@@ -112,9 +96,14 @@ function ReferralForm({ appointment }) {
         options={statusOptions}
         label="Estado"
       />
-      <Button type="submit" color="secondary">
-        Derivar
-      </Button>
+      <div className="flex gap-5 max-w-80 ml-auto mt-5">
+        <Button href="/appointments" type="button" color="primary">
+          Volver
+        </Button>
+        <Button type="submit" color="secondary">
+          Derivar
+        </Button>
+      </div>
     </form>
   );
 }

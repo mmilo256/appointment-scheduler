@@ -35,7 +35,14 @@ function AppointmentCard({ data }) {
     setModal(true);
   };
 
+  const onReferAppointment = async () => {
+    await selectAppointment(data.id);
+    navigate(`/referrals/create`);
+  };
+
   const buttonStyles = "text-white text-sm px-2 py-1 rounded";
+
+  if (data.isReferred) return null;
 
   return (
     <div
@@ -64,7 +71,10 @@ function AppointmentCard({ data }) {
 
       <div className="flex justify-end gap-2">
         {data.response ? (
-          <button className={`bg-green-500 hover:bg-green-600 ${buttonStyles}`}>
+          <button
+            onClick={onReferAppointment}
+            className={`bg-green-500 hover:bg-green-600 ${buttonStyles}`}
+          >
             Derivar
           </button>
         ) : (
