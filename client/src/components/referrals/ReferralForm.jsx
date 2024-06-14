@@ -59,7 +59,6 @@ function ReferralForm() {
     await createReferral(data);
     await updateAppointment(selectedAppointment.id, { is_referred: true });
     // Actualización del estado con la lista de departamentos obtenida
-    alert("Derivación realizada correctamente");
     navigate("/referrals");
   };
 

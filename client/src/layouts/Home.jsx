@@ -6,11 +6,18 @@ import HomeGrid from "../components/Home/HomeGrid";
 import { useAppointmentStore } from "../stores/useAppointmentStore";
 import Button from "../components/ui/Button";
 import { Link } from "react-router-dom";
+import { useAuthStore } from "../stores/useAuthStore";
 
 function Home() {
   const getAllAppointments = useAppointmentStore(
     (state) => state.getAllAppointments
   );
+
+  const getUser = useAuthStore((state) => state.getUser);
+
+  useEffect(() => {
+    getUser();
+  }, [getUser]);
 
   const appointments = useAppointmentStore((state) => state.appointments);
 
@@ -22,8 +29,6 @@ function Home() {
     }
   });
 
-  console.log(unresolvedAppointments);
-
   useEffect(() => {
     (async () => {
       await getAllAppointments();
@@ -33,7 +38,7 @@ function Home() {
   return (
     <>
       {unresolvedAppointments && (
-        <div className="bg-amber-100">
+        <div className="bg-amber-100 shadow">
           <Container>
             <div className="flex justify-between items-center">
               <p className="py-6 text-lg font-semibold text-amber-700">

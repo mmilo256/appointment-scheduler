@@ -1,7 +1,6 @@
 import User from './userModel.js'
 import { encryptPassword } from '../../utils/helpers.js'
 import { HTTP_STATUS } from '../../config/config.js'
-import { userSchema } from './userSchema.js'
 
 // Petición para obtener a todos los usuarios
 export const getAllUsers = async (req, res) => {
@@ -28,21 +27,16 @@ export const getUserById = async (req, res) => {
 export const createUser = async (req, res) => {
   try {
     // Obtener datos del nuevo usuario desde la request y encriptar la contraseña
-    const { username, password } = req.body
-    // Validación del usuario
-    const { error } = userSchema.validate({ username, password })
-    if (error) {
-      return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: 'Datos no validos' })
-    }
+    const { username, password, role } = req.body
     // Verifica si el usuario ya existe
-    const existingUser = await User.findOne({ username, where: { username } })
+    const existingUser = await User.findOne({ attributes: ['username'], where: { username } })
     if (existingUser) {
       return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: 'El usuario ya existe' })
     }
     // Encriptar contraseña
     const hashedPassword = encryptPassword(password)
     // Crear al nuevo usuario en la base de datos
-    const newUser = await User.create({ username, password: hashedPassword })
+    const newUser = await User.create({ username, password: hashedPassword, role })
     res.status(HTTP_STATUS.CREATED).json({ message: 'Usuario creado correctamente', newUser })
   } catch (error) {
     console.log('No se pudo crear el usuario.', error)
@@ -68,16 +62,12 @@ export const updateUser = async (req, res) => {
     // id del usuario a editar
     const { id } = req.params
     // obtener el body de la petición
-    const { username, password } = req.body
-    const user = await User.findOne({ attributes: ['username', 'password'], where: { id } })
+    const { username, password, role } = req.body
+    const user = await User.findOne({ where: { id } })
     if (!user) {
       return res.status(HTTP_STATUS.NOT_FOUND).json({ message: 'No se encontró al usuario' })
     }
-    // Validación del usuario
-    const { error } = userSchema.validate({ username, password })
-    if (error) {
-      return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: 'Datos no validos' })
-    }
+
     // Verifica si el usuario nuevo ya existe, sólo si username existe en el body request
     if (username) {
       const existingUser = await User.findOne({ username, where: { username } })
@@ -88,6 +78,7 @@ export const updateUser = async (req, res) => {
     // Guardar en un objeto los datos a modificar
     const updates = {}
     if (username) updates.username = username
+    if (role) updates.role = role
     if (password) {
       const hashedPassword = encryptPassword(password)
       updates.password = hashedPassword

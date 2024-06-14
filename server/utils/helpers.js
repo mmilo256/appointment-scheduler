@@ -13,8 +13,8 @@ export const comparePasswords = (originalPass, passwordToCheck) => {
 }
 
 // Generar JSON Web Token
-export const generateToken = (username) => {
-  return jwt.sign({ username }, process.env.JWT_SECRET, {
+export const generateToken = (username, role) => {
+  return jwt.sign({ username, role }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN
   })
 }

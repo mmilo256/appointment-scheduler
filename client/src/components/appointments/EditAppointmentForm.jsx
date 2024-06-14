@@ -57,7 +57,6 @@ function EditAppointmentForm() {
     console.log(dataToEdit);
     await editAppointment(selectedAppointment.id, dataToEdit);
     await getAllAppointments();
-    alert("Audiencia modificada");
     navigate("/appointments");
   };
 

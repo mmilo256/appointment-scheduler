@@ -2,9 +2,11 @@ import { useNavigate } from "react-router-dom";
 import { useAppointmentStore } from "../../stores/useAppointmentStore";
 import { useState } from "react";
 import AddSolutionModal from "./AddSolutionModal";
+import { useAuthStore } from "../../stores/useAuthStore";
 
 function AppointmentCard({ data }) {
   const [modal, setModal] = useState(false);
+  const role = useAuthStore((state) => state.role);
 
   const navigate = useNavigate();
 
@@ -70,20 +72,24 @@ function AppointmentCard({ data }) {
       </div>
 
       <div className="flex justify-end gap-2">
-        {data.response ? (
-          <button
-            onClick={onReferAppointment}
-            className={`bg-green-500 hover:bg-green-600 ${buttonStyles}`}
-          >
-            Derivar
-          </button>
-        ) : (
-          <button
-            onClick={onAddSolution}
-            className={`bg-amber-500 hover:bg-amber-600 ${buttonStyles}`}
-          >
-            Agregar propuesta
-          </button>
+        {role <= 2 && (
+          <div>
+            {data.response ? (
+              <button
+                onClick={onReferAppointment}
+                className={`bg-green-500 hover:bg-green-600 ${buttonStyles}`}
+              >
+                Derivar
+              </button>
+            ) : (
+              <button
+                onClick={onAddSolution}
+                className={`bg-amber-500 hover:bg-amber-600 ${buttonStyles}`}
+              >
+                Agregar propuesta
+              </button>
+            )}
+          </div>
         )}
         <button
           onClick={onEditAppointment}

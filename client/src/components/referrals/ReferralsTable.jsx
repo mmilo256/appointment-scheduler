@@ -3,10 +3,12 @@ import BaseTable from "../ui/BaseTable";
 import StatusTag from "./StatusTag";
 import { useReferralStore } from "../../stores/useReferralStore";
 import ReferralsTableActions from "./ReferralsTableActions";
+import { useAuthStore } from "../../stores/useAuthStore";
 
 function ReferralsTable() {
   // Estado local para almacenar la lista de ciudadanos
   const referrals = useReferralStore((state) => state.referrals);
+  const role = useAuthStore((state) => state.role);
 
   const formatData = () => {
     const formattedData = referrals.map((ref) => {
@@ -17,7 +19,7 @@ function ReferralsTable() {
         response: ref.appointment.response,
         referral: ref.department.dep_name,
         status: <StatusTag status={ref.ref_status} />,
-        actions: <ReferralsTableActions id={ref.id} />,
+        actions: role <= 2 && <ReferralsTableActions id={ref.id} />,
       };
       return refData;
     });

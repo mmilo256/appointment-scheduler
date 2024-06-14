@@ -53,12 +53,7 @@ function UserTable() {
         id: user.id,
         name: user.username,
         password: user.password,
-        actions:
-          user.id !== 1 ? (
-            <ActionsRow module="users" id={user.id} onDelete={onDelete} />
-          ) : (
-            ""
-          ),
+        role: user.role,
       };
       return userData;
     });
@@ -71,7 +66,7 @@ function UserTable() {
       { label: "N°" },
       { label: "USUARIO" },
       { label: "CONTRASEÑA" },
-      { label: "ACCIONES" },
+      { label: "PERMISOS" },
     ],
     data: formatData(), // Datos formateados de los usuarios
   };

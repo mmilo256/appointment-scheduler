@@ -20,6 +20,9 @@ function AppointmentForm({ citizenData }) {
   const createAppointment = useAppointmentStore(
     (state) => state.createAppointment
   );
+  const getAllAppointments = useAppointmentStore(
+    (state) => state.getAllAppointments
+  );
 
   const getTimesOptions = () => {
     return ALL_TIMES.map((time) => {
@@ -46,7 +49,7 @@ function AppointmentForm({ citizenData }) {
             citizen_id: citizenData.id,
           };
           await createAppointment(data);
-          alert("Audiencia creada con éxito");
+          await getAllAppointments();
           navigate("/appointments");
         } else {
           alert("Debes ingresar la fecha de la audiencia");
