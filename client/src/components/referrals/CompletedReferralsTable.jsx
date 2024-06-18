@@ -1,24 +1,27 @@
-import React, { useEffect } from "react";
 import BaseTable from "../ui/BaseTable";
-import StatusTag from "./StatusTag";
 import { useReferralStore } from "../../stores/useReferralStore";
 import ReferralsTableActions from "./ReferralsTableActions";
 import { useAuthStore } from "../../stores/useAuthStore";
+import { formatDate } from "../../utils/helpers";
 
-function ReferralsTable() {
+function CompletedReferralsTable() {
   // Estado local para almacenar la lista de ciudadanos
   const referrals = useReferralStore((state) => state.referrals);
   const role = useAuthStore((state) => state.role);
 
   const formatData = () => {
-    const formattedData = referrals.map((ref) => {
+    const filteredData = referrals.filter(
+      (ref) => ref.ref_status === "finalizada"
+    );
+    const formattedData = filteredData.map((ref) => {
       // Formato de cada ciudadano con sus respectivos campos
+
       const refData = {
         fullName: `${ref.citizen.first_name} ${ref.citizen.last_name}`,
         cause: ref.appointment.cause,
-        response: ref.appointment.response,
         referral: ref.department.dep_name,
-        status: <StatusTag status={ref.ref_status} />,
+        solution: ref.solution,
+        solutionDate: formatDate(ref.solution_date, 1),
         actions: role <= 2 && <ReferralsTableActions data={ref} />,
       };
       return refData;
@@ -31,9 +34,9 @@ function ReferralsTable() {
     columns: [
       { label: "NOMBRE COMPLETO" },
       { label: "MATERIA" },
-      { label: "PROPUESTA" },
       { label: "DERIVACIÓN" },
-      { label: "ESTADO" },
+      { label: "SOLUCIÓN" },
+      { label: "FECHA SOLUCIÓN" },
       { label: "ACCIONES" },
     ],
     data: formatData(), // Datos formateados de los ciudadanos
@@ -43,4 +46,4 @@ function ReferralsTable() {
   return <BaseTable table={table} />;
 }
 
-export default ReferralsTable;
+export default CompletedReferralsTable;

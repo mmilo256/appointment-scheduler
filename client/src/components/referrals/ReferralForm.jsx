@@ -15,7 +15,6 @@ function ReferralForm() {
   // Estado local para almacenar la lista de departamentos
   const [departments, setDepartments] = useState([]);
   const [department, setDepartment] = useState(1);
-  const [result, setResult] = useState("");
   const [status, setStatus] = useState("pendiente");
   const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -28,7 +27,6 @@ function ReferralForm() {
   const statusOptions = [
     { label: "pendiente", value: "pendiente" },
     { label: "en proceso", value: "en proceso" },
-    { label: "finalizada", value: "finalizada" },
   ];
 
   // Efecto de lado para obtener la lista de departamentos al cargar el componente
@@ -59,7 +57,11 @@ function ReferralForm() {
     await createReferral(data);
     await updateAppointment(selectedAppointment.id, { is_referred: true });
     // Actualización del estado con la lista de departamentos obtenida
-    navigate("/referrals");
+    if (status === "pendiente") {
+      navigate("/referrals/pending");
+    } else {
+      navigate("/referrals/in-progress");
+    }
   };
 
   const handleSubmit = (e) => {

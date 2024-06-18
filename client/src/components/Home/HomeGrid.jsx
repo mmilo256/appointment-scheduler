@@ -13,7 +13,7 @@ const navigation = [
     color: "lime",
   },
   { label: "Ciudadanos", href: "citizens", color: "blue" },
-  { label: "Derivaciones", href: "referrals", color: "orange" },
+  { label: "Derivaciones", href: "referrals/pending", color: "orange" },
   { label: "Usuarios", href: "users", color: "purple" },
 ];
 

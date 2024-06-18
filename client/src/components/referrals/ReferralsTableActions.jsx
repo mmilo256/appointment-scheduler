@@ -20,7 +20,7 @@ function ReferralsTableActions({ data }) {
 
   const onEditReferral = async () => {
     await selectReferral(data.id);
-    navigate(`edit?id=${data.id}`);
+    navigate(`/referrals/edit?id=${data.id}`);
   };
 
   return (
