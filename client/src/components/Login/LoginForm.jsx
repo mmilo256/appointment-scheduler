@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import Button from "../ui/Button";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../../context/AuthContext";
@@ -6,19 +6,24 @@ import { AuthContext } from "../../context/AuthContext";
 const inputStyles = "border rounded-md p-2 w-full"; // Define los estilos comunes para los inputs
 
 function LoginForm() {
-  const { login, isLoading } = useContext(AuthContext); // Obtiene login y isLoading del contexto de autenticación
+  const { login } = useContext(AuthContext); // Obtiene login y isLoading del contexto de autenticación
   const {
     register, // Función para registrar los inputs en el formulario
     handleSubmit, // Función para manejar el envío del formulario
     formState: { errors }, // Objeto que contiene los errores del formulario
   } = useForm();
 
+  const [loading, setLoading] = useState(false);
+
   // Función que se ejecuta al enviar el formulario
   const onSubmit = async (data) => {
     try {
+      setLoading(true);
       await login(data.username, data.password); // Intenta iniciar sesión con los datos del formulario
     } catch (error) {
       console.log(error.message); // Imprime cualquier error que ocurra en el proceso de inicio de sesión
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -56,8 +61,13 @@ function LoginForm() {
           </span>
         )}
       </div>
-      <Button type="submit" isLoading={isLoading} className="mt-5">
-        Entrar
+      <Button
+        color="secondary"
+        type="submit"
+        disabled={loading}
+        className={`mt-5 ${loading ? "cursor-wait" : ""}`}
+      >
+        {loading ? "Entrando..." : "Entrar"}
       </Button>{" "}
       {/* Renderiza el botón de entrada */}
     </form>
