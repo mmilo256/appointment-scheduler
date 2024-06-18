@@ -27,7 +27,7 @@ export const getUserById = async (req, res) => {
 export const createUser = async (req, res) => {
   try {
     // Obtener datos del nuevo usuario desde la request y encriptar la contraseña
-    const { username, password, role } = req.body
+    const { username, password, role, first_name: firstName, last_name: lastName, email } = req.body
     // Verifica si el usuario ya existe
     const existingUser = await User.findOne({ attributes: ['username'], where: { username } })
     if (existingUser) {
@@ -36,7 +36,7 @@ export const createUser = async (req, res) => {
     // Encriptar contraseña
     const hashedPassword = encryptPassword(password)
     // Crear al nuevo usuario en la base de datos
-    const newUser = await User.create({ username, password: hashedPassword, role })
+    const newUser = await User.create({ username, password: hashedPassword, role, first_name: firstName, last_name: lastName, email })
     res.status(HTTP_STATUS.CREATED).json({ message: 'Usuario creado correctamente', newUser })
   } catch (error) {
     console.log('No se pudo crear el usuario.', error)
@@ -62,7 +62,7 @@ export const updateUser = async (req, res) => {
     // id del usuario a editar
     const { id } = req.params
     // obtener el body de la petición
-    const { username, password, role } = req.body
+    const { username, password, role, first_name: firstName, last_name: lastName, email } = req.body
     const user = await User.findOne({ where: { id } })
     if (!user) {
       return res.status(HTTP_STATUS.NOT_FOUND).json({ message: 'No se encontró al usuario' })
@@ -79,6 +79,9 @@ export const updateUser = async (req, res) => {
     const updates = {}
     if (username) updates.username = username
     if (role) updates.role = role
+    if (email) updates.email = email
+    if (firstName) updates.first_name = firstName
+    if (lastName) updates.last_name = lastName
     if (password) {
       const hashedPassword = encryptPassword(password)
       updates.password = hashedPassword

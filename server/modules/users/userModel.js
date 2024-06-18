@@ -20,6 +20,15 @@ const User = sequelize.define(
     },
     role: {
       type: DataTypes.NUMBER
+    },
+    first_name: {
+      type: DataTypes.STRING
+    },
+    last_name: {
+      type: DataTypes.STRING
+    },
+    email: {
+      type: DataTypes.STRING
     }
   },
   {

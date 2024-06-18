@@ -1,49 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useEffect } from "react";
 import BaseTable from "../ui/BaseTable";
-import ActionsRow from "../ui/ActionsRow";
-import { deleteUser, getAllUsers } from "../../services/userService";
-import { checkToken } from "../../utils/helpers";
-import { AuthContext } from "../../context/AuthContext";
+import { useUserStore } from "../../stores/useUserStore";
+import UserTableActions from "./UserTableActions";
 
 function UserTable() {
   // Estado local para almacenar la lista de usuarios
-  const [users, setUsers] = useState([]);
-  const [refreshData, setRefreshData] = useState(false);
-  const { logout } = useContext(AuthContext);
-
-  // Efecto de lado para obtener la lista de usuarios al cargar el componente
-  useEffect(() => {
-    // Función asincrónica para obtener los usuarios
-    const getUsers = async () => {
-      const isTokenExpired = checkToken(localStorage.getItem("jwt"));
-      try {
-        if (!isTokenExpired) {
-          // Llamada a la función getAllUsers del servicio para obtener los usuarios
-          const data = await getAllUsers();
-          // Actualización del estado con la lista de usuarios obtenida
-          setUsers(data);
-        } else {
-          logout("expired");
-        }
-      } catch (error) {
-        // Manejo de errores en caso de fallo al obtener los usuarios
-        console.log("Error al obtener los usuarios.", error);
-      }
-    };
-    // Llamada a la función para obtener los usuarios al montar el componente
-    getUsers();
-  }, [refreshData, logout]);
-
-  const onDelete = async (id) => {
-    console.log("ID a eliminar:", id);
-    try {
-      await deleteUser(id);
-      console.log("Usuario eliminado correctamente");
-      setRefreshData((prevState) => !prevState);
-    } catch (error) {
-      throw error;
-    }
-  };
+  const users = useUserStore((state) => state.users);
 
   // Función para dar formato a los datos de los usuarios
   const formatData = () => {
@@ -51,9 +13,11 @@ function UserTable() {
       // Formato de cada usuario con sus respectivos campos
       const userData = {
         id: user.id,
+        fullName: `${user.first_name} ${user.last_name}`,
         name: user.username,
-        password: user.password,
+        password: user.email,
         role: user.role,
+        actions: user.id !== 1 ? <UserTableActions data={user} /> : "",
       };
       return userData;
     });
@@ -64,9 +28,11 @@ function UserTable() {
   const table = {
     columns: [
       { label: "N°" },
+      { label: "NOMBRE COMPLETO" },
       { label: "USUARIO" },
-      { label: "CONTRASEÑA" },
+      { label: "CORREO ELECTRÓNICO" },
       { label: "PERMISOS" },
+      { label: "ACCIONES" },
     ],
     data: formatData(), // Datos formateados de los usuarios
   };

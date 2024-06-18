@@ -5,7 +5,7 @@ import { comparePasswords, encryptPassword, generateToken } from '../utils/helpe
 export const login = async (req, res) => {
   const { username, password } = req.body
   // Primero buscar usuario segun su username
-  const user = await User.findOne({ attributes: ['username', 'password', 'role'], where: { username } })
+  const user = await User.findOne({ where: { username } })
 
   // Si no se encontró al usuario, devolver mensaje
   if (!user) {
@@ -21,6 +21,6 @@ export const login = async (req, res) => {
     return
   }
   // Si el usuario y la contraseña coinciden, generar token
-  const token = generateToken(user.username, user.role)
+  const token = generateToken(user.username, user.role, user.first_name, user.last_name, user.email)
   res.json({ message: 'Has iniciado sesión', token })
 }

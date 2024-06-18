@@ -1,7 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 import Container from "../components/ui/Container";
 import Heading from "../components/ui/Heading";
-import UserForm from "../components/users/UserForm";
 
 function EditUser() {
   const [queryParameters] = useSearchParams();
@@ -9,7 +8,6 @@ function EditUser() {
   return (
     <Container>
       <Heading className="text-center">Editar usuario</Heading>
-      <UserForm edit userId={id} />
     </Container>
   );
 }
