@@ -46,7 +46,9 @@ export const createReferral = async (req, res) => {
       ref_status: status,
       department_id: department,
       appointment_id: appointment,
-      citizen_id: citizen
+      citizen_id: citizen,
+      solution,
+      solution_date: solutionDate
     } = req.body
 
     // Crear al nuevo derivación en la base de datos
@@ -54,7 +56,9 @@ export const createReferral = async (req, res) => {
       ref_status: status,
       department_id: department,
       appointment_id: appointment,
-      citizen_id: citizen
+      citizen_id: citizen,
+      solution,
+      solution_date: solutionDate
     })
     res.status(HTTP_STATUS.CREATED).json({ message: 'Derivación creado correctamente', newReferral })
   } catch (error) {
@@ -84,7 +88,9 @@ export const updateReferral = async (req, res) => {
       ref_status: status,
       department_id: department,
       appointment_id: appointment,
-      citizen_id: citizen
+      citizen_id: citizen,
+      solution,
+      solution_date: solutionDate
     } = req.body
     const referral = await Referral.findOne({ where: { id } })
     if (!referral) {
@@ -97,6 +103,8 @@ export const updateReferral = async (req, res) => {
     if (department) updates.department_id = department
     if (appointment) updates.appointment_id = appointment
     if (citizen) updates.citizen_id = citizen
+    if (solution) updates.solution = solution
+    if (solutionDate) updates.solution_date = solutionDate
     // Modificar derivación
     await Referral.update(updates, { where: { id } })
     res.json({

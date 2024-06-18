@@ -60,7 +60,7 @@ function AppointmentCard({ data }) {
     >
       {/* Información de la cita */}
       <div className="flex flex-col gap-1">
-        <p className="text-xl font-bold">{data.cause}</p>
+        <p className="text-xl font-bold">Motivo: {data.cause}</p>
         <p className="text-lg">
           {" "}
           <span className="font-semibold">Ciudadano:</span> {data.citizen}

@@ -36,6 +36,12 @@ export const Referral = sequelize.define('referrals', {
       model: 'citizens',
       key: 'id'
     }
+  },
+  solution: {
+    type: DataTypes.STRING
+  },
+  solution_date: {
+    type: DataTypes.STRING
   }
 },
 {

@@ -38,7 +38,7 @@ function App() {
             />
             <Route path="/appointments/edit" element={<EditAppointment />} />
             {/* Ruta para gestionar derivaciones */}
-            <Route path="/referrals" element={<Referrals />} />
+            <Route path="/referrals/*" element={<Referrals />} />
             <Route path="/referrals/create" element={<CreateReferral />} />
             <Route path="/referrals/edit" element={<EditReferral />} />
             {/* Rutas para gestionar ciudadanos */}

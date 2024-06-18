@@ -40,7 +40,7 @@ function Home() {
             <div className="flex justify-between items-center">
               <p className="py-6 text-lg font-semibold text-amber-700">
                 {" "}
-                Atención: Hay audiencias pendientes sin resolver (
+                Atención: Hay audiencias sin propuesta de solución (
                 {unresolvedAppointments})
               </p>
               <Link

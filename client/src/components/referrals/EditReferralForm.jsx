@@ -4,9 +4,7 @@ import { checkToken } from "../../utils/helpers";
 import Input from "../ui/Input";
 import Button from "../ui/Button";
 import { AuthContext } from "../../context/AuthContext";
-import { updateAppointment } from "../../services/appointmentService";
 import { useNavigate } from "react-router-dom";
-import { useAppointmentStore } from "../../stores/useAppointmentStore";
 import { useReferralStore } from "../../stores/useReferralStore";
 function EditReferralForm({ data }) {
   const editReferral = useReferralStore((state) => state.editReferral);
@@ -14,6 +12,9 @@ function EditReferralForm({ data }) {
   const [departments, setDepartments] = useState([]);
   const [department, setDepartment] = useState(data.department_id);
   const [status, setStatus] = useState(data.ref_status);
+  const [solution, setSolution] = useState(data.solution ?? "");
+  const [solutionDate, setSolutionDate] = useState(data.solution_date ?? "");
+  const [isValid, setIsValid] = useState(false);
   const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -55,13 +56,37 @@ function EditReferralForm({ data }) {
     // Llamada a la función para obtener los departamentos al montar el componente
     getDepartments();
   }, [logout]);
+  useEffect(() => {
+    const validateForm = () => {
+      if (department && status) {
+        if (status === "finalizada") {
+          if (solution && solutionDate) {
+            setIsValid(true);
+          } else {
+            setIsValid(false);
+          }
+        } else {
+          setIsValid(true);
+        }
+      } else {
+        setIsValid(false);
+      }
+    };
+    validateForm();
+  }, [department, solution, solutionDate, status]);
 
   const referralAppointment = async (newData) => {
     // Llamada a la función getAllDepartments del servicio para obtener los departamentos
     await editReferral(data.id, newData);
     // Actualización del estado con la lista de departamentos obtenida
     // alert("Derivación modificada");
-    navigate("/referrals");
+    if (status === "pendiente") {
+      navigate("/referrals/pending");
+    } else if (status === "en proceso") {
+      navigate("/referrals/in-progress");
+    } else {
+      navigate("/referrals/completed");
+    }
   };
 
   const handleSubmit = (e) => {
@@ -69,6 +94,8 @@ function EditReferralForm({ data }) {
     const dataToEdit = {};
     if (department) dataToEdit.department_id = Number(department);
     if (status) dataToEdit.ref_status = status;
+    if (solution) dataToEdit.solution = solution;
+    if (solutionDate) dataToEdit.solution_date = solutionDate;
     referralAppointment(dataToEdit);
   };
 
@@ -92,11 +119,31 @@ function EditReferralForm({ data }) {
         options={statusOptions}
         label="Estado"
       />
+      {status === "finalizada" && (
+        <div>
+          <Input
+            label="Solución"
+            type="textarea"
+            value={solution}
+            onChange={(e) => {
+              setSolution(e.target.value);
+            }}
+          />
+          <Input
+            label="Fecha solución"
+            type="date"
+            value={solutionDate}
+            onChange={(e) => {
+              setSolutionDate(e.target.value);
+            }}
+          />
+        </div>
+      )}
       <div className="flex gap-5 max-w-80 ml-auto mt-5">
-        <Button href="/appointments" type="button" color="primary">
+        <Button href="/referrals/pending" type="button" color="primary">
           Volver
         </Button>
-        <Button type="submit" color="secondary">
+        <Button disabled={!isValid} type="submit" color="secondary">
           Derivar
         </Button>
       </div>
