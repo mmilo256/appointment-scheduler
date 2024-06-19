@@ -45,7 +45,7 @@ export const formatDate = (date, format = 1) => {
   const monthNum =
     splittedDate[1] > 9 ? splittedDate[1] : "0" + splittedDate[1];
   const month = Number(splittedDate[1]);
-  const day = splittedDate[2] > 9 ? splittedDate[2] : "0" + splittedDate[2];
+  const day = String(splittedDate[2]).length > 1 ? splittedDate[2] : "0" + splittedDate[2];
 
   let dateString;
   if (format === 1) {

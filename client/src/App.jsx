@@ -18,6 +18,7 @@ import EditReferral from "./layouts/EditReferral";
 
 function App() {
   // Componente principal de la aplicación que define las rutas de navegación
+
   return (
     <div className="min-h-dvh bg-gray-200">
       {/* Definición de las rutas utilizando el componente Routes */}
