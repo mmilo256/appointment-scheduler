@@ -144,7 +144,7 @@ function EditReferralForm({ data }) {
           Volver
         </Button>
         <Button disabled={!isValid} type="submit" color="secondary">
-          Derivar
+          Terminar
         </Button>
       </div>
     </form>
