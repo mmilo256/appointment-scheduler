@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Input from "../ui/Input";
-import { checkToken, formatRut } from "../../utils/helpers";
+import { checkToken, formatRut, verifyRut } from "../../utils/helpers";
 import { getCitizenByRUT } from "../../services/citizenService";
 import CreateCitizenModal from "./CreateCitizenModal";
 
@@ -33,7 +33,10 @@ function CitizenByRutForm({ setCitizen }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(rut);
+    const isValid = verifyRut(rut);
+    isValid
+      ? onSubmit(rut)
+      : alert("El RUT no corresponde con el Dígito Verificador");
   };
 
   return (
