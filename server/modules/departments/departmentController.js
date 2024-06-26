@@ -14,7 +14,7 @@ export const getAllDepartments = async (req, res) => {
 export const getDepartmentById = async (req, res) => {
   try {
     const { id } = req.params
-    const department = await Department.findOne({ attributes: ['dep_name'], where: { id } })
+    const department = await Department.findOne({ where: { id } })
     res.json(department)
   } catch (error) {
     console.log('Error al obtener departamento.', error)

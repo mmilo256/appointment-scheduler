@@ -25,3 +25,6 @@ export const getAllDepartments = async () => {
         throw error; // Relanzamiento del error para su posterior manejo
     }
 };
+
+
+

@@ -11,6 +11,12 @@ const Department = sequelize.define('departments', {
   dep_name: {
     type: DataTypes.STRING,
     allowNull: false
+  },
+  email: {
+    type: DataTypes.STRING
+  },
+  director_name: {
+    type: DataTypes.STRING
   }
 },
 {
