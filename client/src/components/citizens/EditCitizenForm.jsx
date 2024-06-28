@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import Button from "../ui/Button";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
-import { checkToken, formatRut } from "../../utils/helpers";
+import { checkToken, formatRut, verifyRut } from "../../utils/helpers";
 import Input from "../ui/Input";
 import { useCitizenStore } from "../../stores/useCitizenStore";
 
@@ -38,11 +38,15 @@ function EditCitizenForm() {
 
     const isTokenExpired = checkToken(localStorage.getItem("jwt"));
     try {
-      if (!isTokenExpired) {
-        await editCitizen(selectedCitizen.id, dataToEdit);
-        navigate("/citizens");
+      if (verifyRut(rut)) {
+        if (!isTokenExpired) {
+          await editCitizen(selectedCitizen.id, dataToEdit);
+          navigate("/citizens");
+        } else {
+          logout("expired");
+        }
       } else {
-        logout("expired");
+        alert("El RUT es inválido");
       }
     } catch (error) {
       console.log("No se pudo crear el ciudadano", error);

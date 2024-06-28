@@ -13,6 +13,7 @@ function ReferralForm() {
   const selectedAppointment = useAppointmentStore(
     (state) => state.selectedAppointment
   );
+
   // Estado local para almacenar la lista de departamentos
   const [departments, setDepartments] = useState([]);
   const [department, setDepartment] = useState(1);
@@ -74,7 +75,7 @@ function ReferralForm() {
       citizen_id: selectedAppointment.citizen.id,
     };
     sendReferralEmail(department, selectedAppointment);
-    // referralAppointment(data);
+    referralAppointment(data);
   };
 
   const getDepById = (id) => {
@@ -87,9 +88,10 @@ function ReferralForm() {
     const dep = getDepById(Number(department));
     const depName = dep.dep_name;
     const depDirector = dep.director_name;
-    const depEmail = dep.email;
+    const depEmail = "emiliosotoandrade256@gmail.com";
+    // const depEmail = dep.email;
     const emailData = {
-      to: "emiliosotoandrade256@gmail.com",
+      to: depEmail,
       subject: "DERIVACIÓN DE AUDIENCIA",
       html: `
       <!DOCTYPE html>
@@ -164,7 +166,7 @@ function ReferralForm() {
                 }</li>
             </ul>
             <p>Por favor, tome las medidas necesarias para atender esta audiencia y proporcione una solución a la brevedad posible.</p>
-            <p>Puede acceder al sistema de gestión de audiencias haciendo <a href='http://localhost:5173/'>click aquí</a> para más detalles y para registrar la solución correspondiente.</p>
+            <p>Puede acceder al sistema de gestión de audiencias haciendo <a href='https://appointment-scheduler-brown.vercel.app/'>click aquí</a> para más detalles y para registrar la solución correspondiente.</p>
         </div>
         <div class="footer">
             <p>Este es un correo generado automáticamente. Por favor, no responda a este mensaje.</p>
