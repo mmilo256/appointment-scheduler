@@ -90,7 +90,8 @@ function ReferralForm() {
     const depDirector = dep.director_name;
     const depEmail = [
       "emiliosotoandrade256@gmail.com",
-      "emiliosotoandrade97@gmail.com",
+      "rbravo@municipalidadchonchi.cl",
+      "rjulianbravoh@gmail.com",
     ];
     // const depEmail = dep.email;
     const emailData = {
