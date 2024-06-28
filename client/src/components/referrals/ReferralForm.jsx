@@ -88,7 +88,10 @@ function ReferralForm() {
     const dep = getDepById(Number(department));
     const depName = dep.dep_name;
     const depDirector = dep.director_name;
-    const depEmail = "emiliosotoandrade256@gmail.com";
+    const depEmail = [
+      "emiliosotoandrade256@gmail.com",
+      "emiliosotoandrade97@gmail.com",
+    ];
     // const depEmail = dep.email;
     const emailData = {
       to: depEmail,
