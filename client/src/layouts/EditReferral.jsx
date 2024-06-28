@@ -1,7 +1,6 @@
 import Container from "../components/ui/Container";
 import Heading from "../components/ui/Heading";
 import AppointmentDetails from "../components/referrals/AppointmentDetails";
-import ReferralForm from "../components/referrals/ReferralForm";
 import { useReferralStore } from "../stores/useReferralStore";
 import { useSearchParams } from "react-router-dom";
 import { useEffect } from "react";

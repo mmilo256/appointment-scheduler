@@ -1,8 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Button from "../ui/Button";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
-import { checkToken, formatRut } from "../../utils/helpers";
+import { checkToken, formatRut, verifyRut } from "../../utils/helpers";
 import Input from "../ui/Input";
 import { useCitizenStore } from "../../stores/useCitizenStore";
 
@@ -14,6 +14,7 @@ function CreateCitizenForm() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [phone2, setPhone2] = useState("");
+  const [isValid, setIsValid] = useState(false);
   // Hook para la navegación
   const navigate = useNavigate();
   const { logout } = useContext(AuthContext);
@@ -36,7 +37,7 @@ function CreateCitizenForm() {
     if (email) {
       data.email = email;
     }
-    if (rut && name && lastName && address && phone) {
+    if (verifyRut(rut)) {
       const isTokenExpired = checkToken(localStorage.getItem("jwt"));
       try {
         if (!isTokenExpired) {
@@ -49,7 +50,7 @@ function CreateCitizenForm() {
         console.log("No se pudo crear el ciudadano", error);
       }
     } else {
-      alert("Rellene los campos requeridos");
+      alert("El RUT no es válido");
     }
   };
 
@@ -57,6 +58,18 @@ function CreateCitizenForm() {
   const validateRut = (e) => {
     setRut(formatRut(e.target.value));
   };
+
+  useEffect(() => {
+    const validateForm = () => {
+      if (rut && name && lastName && address && phone) {
+        setIsValid(true);
+      } else {
+        setIsValid(false);
+      }
+    };
+
+    validateForm();
+  }, [address, lastName, name, phone, rut]);
 
   // Renderización del formulario con los botones y la lógica de envío
   return (
@@ -126,7 +139,9 @@ function CreateCitizenForm() {
       </div>
       <div className="flex gap-2 max-w-80 my-4 ml-auto">
         <Button href="/citizens">Volver</Button>
-        <Button type="submit">Crear ciudadano</Button>
+        <Button disabled={!isValid} type="submit">
+          Crear ciudadano
+        </Button>
       </div>
     </form>
   );

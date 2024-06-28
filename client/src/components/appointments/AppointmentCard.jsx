@@ -45,7 +45,7 @@ function AppointmentCard({ data }) {
 
   const onReferAppointment = async () => {
     await selectAppointment(data.id);
-    navigate(`/referrals/create`);
+    navigate(`/referrals/create?appointmentId=${data.id}`);
   };
 
   const buttonStyles = "text-white text-sm px-2 py-1 rounded";

@@ -3,7 +3,6 @@ import AppointmentCard from "./AppointmentCard";
 import { formatDate } from "../../utils/helpers";
 
 function AppointmentsCardsGroup({ data, setRefreshData }) {
-  console.log(data);
   return (
     <div>
       {/* Título con la fecha formateada */}

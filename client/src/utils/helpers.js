@@ -45,7 +45,10 @@ export const formatDate = (date, format = 1) => {
   const monthNum =
     splittedDate[1] > 9 ? splittedDate[1] : "0" + splittedDate[1];
   const month = Number(splittedDate[1]);
-  const day = String(splittedDate[2]).length > 1 ? splittedDate[2] : "0" + splittedDate[2];
+  const day =
+    String(splittedDate[2]).length > 1
+      ? splittedDate[2]
+      : "0" + splittedDate[2];
 
   let dateString;
   if (format === 1) {
@@ -57,7 +60,7 @@ export const formatDate = (date, format = 1) => {
   return dateString;
 };
 
-// Formatera rut
+// Formatear rut
 export const formatRut = (value) => {
   // Remover todos los caracteres que no sean dígitos o 'k'/'K'
   let cleanValue = value.replace(/[^0-9kK]/g, "").toUpperCase();
@@ -85,6 +88,49 @@ export const formatRut = (value) => {
   }
 
   return result + verifier;
+};
+
+// Verificación del RUT con el algoritmo Modulo 11
+function validarRut(number, dv) {
+  if (number.length === 0 || number.length > 8) {
+    console.error("El número del RUT debe tener entre 1 y 8 dígitos.");
+    return false;
+  } else {
+    return getDV(number) == dv;
+  }
+}
+
+function getDV(number) {
+  let newNumber = number.toString().split("").reverse().join("");
+  let sum = 0;
+  let j = 2;
+
+  for (let i = 0; i < newNumber.length; i++) {
+    sum += parseInt(newNumber.charAt(i)) * j;
+    j = j < 7 ? j + 1 : 2;
+  }
+
+  let n_dv = 11 - (sum % 11);
+  return n_dv === 11 ? 0 : n_dv === 10 ? "K" : n_dv;
+}
+
+export const verifyRut = (rut) => {
+  if (!rut.includes("-")) {
+    console.error(
+      "El RUT debe tener un guion para separar el número del dígito verificador."
+    );
+    return false;
+  }
+
+  const [number, dv] = rut.split("-");
+  const cleanedNumber = number.replace(/\./g, "");
+
+  if (isNaN(cleanedNumber) || dv.length !== 1) {
+    console.error("Formato de RUT inválido.");
+    return false;
+  }
+
+  return validarRut(cleanedNumber, dv.toUpperCase());
 };
 
 // Buscar una hora disponible
