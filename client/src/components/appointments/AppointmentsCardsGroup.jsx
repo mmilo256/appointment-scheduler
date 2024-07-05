@@ -1,14 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 import AppointmentCard from "./AppointmentCard";
 import { formatDate } from "../../utils/helpers";
 
 function AppointmentsCardsGroup({ data, setRefreshData }) {
+  const checkEmptyAppointmentsGroup = () => {
+    let isNotReferred = 0
+    data.appointments.forEach(appointment => {
+      if (appointment.isReferred === false) {
+        isNotReferred += 1
+      }
+    });
+    return isNotReferred
+  }
+
+  let notReferredCount = checkEmptyAppointmentsGroup()
+
   return (
     <div>
       {/* Título con la fecha formateada */}
-      <h2 className="text-2xl text-primary-500 font-semibold mb-2">
+      {notReferredCount > 0 && <h2 className="text-2xl text-primary-500 font-semibold mb-2">
         {formatDate(data.date, 1)}
-      </h2>
+      </h2>}
 
       {/* Lista de tarjetas de citas */}
       <div className="flex flex-col gap-4">
