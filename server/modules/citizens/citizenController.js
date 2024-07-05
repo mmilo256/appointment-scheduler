@@ -4,9 +4,19 @@ import { citizenSchema } from './citizenSchema.js'
 
 // Petición para obtener a todos los ciudadanos
 export const getAllCitizens = async (req, res) => {
+  const page = parseInt(req.query.page)
+  const pageSize = parseInt(req.query.pageSize)
+  // Calculate the start and end indexes for the requested page
+  const startIndex = (page - 1) * pageSize
+  const endIndex = page * pageSize
   try {
     const citizens = await Citizen.findAll()
-    res.json(citizens)
+    // Slice the products array based on the indexes
+    const paginatedCitizens = citizens.slice(startIndex, endIndex)
+    // Calculate the total number of pages
+    const totalPages = Math.ceil(citizens.length / pageSize)
+    // Send the paginated products and total pages as the API response
+    res.json({ citizens: paginatedCitizens, totalPages })
   } catch (error) {
     console.log('Error al realizar la consulta.', error)
   }

@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import AppointmentCard from "./AppointmentCard";
 import { formatDate } from "../../utils/helpers";
 
