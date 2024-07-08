@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Home from "./layouts/Home";
 import Login from "./layouts/Login";
 import Appointments from "./layouts/Appointments";
@@ -15,9 +15,23 @@ import EditCitizen from "./layouts/EditCitizen";
 import Referrals from "./layouts/Referrals";
 import CreateReferral from "./layouts/CreateReferral";
 import EditReferral from "./layouts/EditReferral";
+import { useEffect } from "react";
+import { jwtDecode } from 'jwt-decode'
 
 function App() {
   // Componente principal de la aplicación que define las rutas de navegación
+
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const token = localStorage.getItem("jwt")
+    if (!token) {
+      navigate("/login")
+    } else {
+      const decoded = jwtDecode(token)
+  console.log(decoded)
+    }
+  }, [navigate])
 
   return (
     <div className="min-h-dvh bg-gray-200">
