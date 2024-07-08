@@ -15,23 +15,32 @@ import EditCitizen from "./layouts/EditCitizen";
 import Referrals from "./layouts/Referrals";
 import CreateReferral from "./layouts/CreateReferral";
 import EditReferral from "./layouts/EditReferral";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { jwtDecode } from 'jwt-decode'
+import { AuthContext } from "./context/AuthContext";
 
 function App() {
   // Componente principal de la aplicación que define las rutas de navegación
 
-  const navigate = useNavigate()
+  const {logout} = useContext(AuthContext)
 
   useEffect(() => {
     const token = localStorage.getItem("jwt")
     if (!token) {
-      navigate("/login")
+      logout()
     } else {
-      const decoded = jwtDecode(token)
-  console.log(decoded)
+      try {
+        const decoded = jwtDecode(token)
+        const currentTime = Date.now() / 1000
+        if (decoded.exp < currentTime) {
+          logout()
+        }
+      } catch(e) {
+        console.log(e)
+        logout()
+      }
     }
-  }, [navigate])
+  }, [logout])
 
   return (
     <div className="min-h-dvh bg-gray-200">

@@ -12,7 +12,7 @@ function Users() {
 
   // Efecto de lado para obtener la lista de usuarios al cargar el componente
   useEffect(() => {
-    getAllUsers();
+    getAllUsers()
   }, [getAllUsers]);
 
   return (
