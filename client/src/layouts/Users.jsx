@@ -4,9 +4,11 @@ import Heading from "../components/ui/Heading";
 import UsersTable from "../components/users/UsersTable";
 import { useUserStore } from "../stores/useUserStore";
 import Button from "../components/ui/Button";
+import { useAuthStore } from "../stores/useAuthStore";
 
 function Users() {
   const getAllUsers = useUserStore((state) => state.getAllUsers);
+  const role = useAuthStore(state => state.role)
 
   // Efecto de lado para obtener la lista de usuarios al cargar el componente
   useEffect(() => {
@@ -33,11 +35,11 @@ function Users() {
           audiencias, derivar audiencias ni editar derivaciones
         </p>
       </div>
-      <div className="w-52 my-5">
+      {role === 1 && <div className="w-52 my-5">
         <Button color="secondary" href="/users/create">
           Crear usuario
         </Button>
-      </div>
+      </div>}
       <UsersTable />
     </Container>
   );
