@@ -33,10 +33,10 @@ const httpRequest = async (url, options) => {
 };
 
 // Función asincrónica para obtener todos los ciudadanos
-export const getAllCitizens = async () => {
+export const getAllCitizens = async (page) => {
     try {
         // Llamada a la función httpRequest para obtener todos los ciudadanos
-        const data = await httpRequest(API_URL, { method: 'GET' });
+        const data = await httpRequest(`${API_URL}?page=${page}&pageSize=10`, { method: 'GET' });
         return data;
     } catch (error) {
         console.error("Error al obtener los ciudadanos.", error);
