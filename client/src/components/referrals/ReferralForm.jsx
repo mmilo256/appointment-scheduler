@@ -18,6 +18,7 @@ function ReferralForm() {
   const [departments, setDepartments] = useState([]);
   const [department, setDepartment] = useState(1);
   const [status, setStatus] = useState("pendiente");
+  const [isLoading, setIsLoading] = useState(false)
   const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -64,10 +65,12 @@ function ReferralForm() {
     } else {
       navigate("/referrals/in-progress");
     }
+    setIsLoading(false)
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setIsLoading(true)
     const data = {
       department_id: Number(department),
       appointment_id: selectedAppointment.id,
@@ -206,7 +209,7 @@ function ReferralForm() {
         <Button href="/appointments" type="button" color="primary">
           Volver
         </Button>
-        <Button type="submit" color="secondary">
+        <Button disabled={isLoading} type="submit" color="secondary">
           Derivar
         </Button>
       </div>

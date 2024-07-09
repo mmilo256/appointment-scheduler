@@ -67,7 +67,7 @@ function AppointmentForm({ citizenData }) {
           };
           await createAppointment(data);
           await getAllAppointments();
-          
+          setIsLoading(false)
           navigate("/appointments");
         } else {
           alert("Debes ingresar la fecha de la audiencia");

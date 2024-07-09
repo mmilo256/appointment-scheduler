@@ -15,6 +15,7 @@ function CreateCitizenForm() {
   const [phone, setPhone] = useState("");
   const [phone2, setPhone2] = useState("");
   const [isValid, setIsValid] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
   // Hook para la navegación
   const navigate = useNavigate();
   const { logout } = useContext(AuthContext);
@@ -24,6 +25,7 @@ function CreateCitizenForm() {
   // Función para manejar la creación de un nuevo ciudadano
   const onCreateCitizen = async (e) => {
     e.preventDefault();
+    setIsLoading(true)
     const data = {
       rut,
       first_name: name,
@@ -52,6 +54,7 @@ function CreateCitizenForm() {
     } else {
       alert("El RUT no es válido");
     }
+    setIsLoading(false)
   };
 
   // Formatear y validar RUT
@@ -139,7 +142,7 @@ function CreateCitizenForm() {
       </div>
       <div className="flex gap-2 max-w-80 my-4 ml-auto">
         <Button href="/citizens">Volver</Button>
-        <Button disabled={!isValid} type="submit">
+        <Button disabled={!isValid || isLoading} type="submit">
           Crear ciudadano
         </Button>
       </div>
