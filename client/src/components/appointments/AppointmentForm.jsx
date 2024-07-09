@@ -14,6 +14,8 @@ function AppointmentForm({ citizenData }) {
   const [cause, setCause] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const navigate = useNavigate();
+  const [isValid, setIsValid] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const availableTimes = useAppointmentStore((state) => state.availableTimes);
   const createAppointment = useAppointmentStore(
@@ -22,6 +24,21 @@ function AppointmentForm({ citizenData }) {
   const getAllAppointments = useAppointmentStore(
     (state) => state.getAllAppointments
   );
+
+  useEffect(() => {
+    /* Object.keys(citizenData).length !== 0 &&
+            cause &&
+            selectedDate &&
+            selectedTime !== ""
+              ? "opacity-100"
+              : "opacity-0" */
+
+    if (Object.keys(citizenData).length !== 0 && cause && selectedDate && selectedTime !== "") {
+      setIsValid(true)
+    } else {
+      setIsValid(false)
+    }
+  }, [cause, citizenData, selectedDate, selectedTime])
 
   const getTimesOptions = () => {
     return ALL_TIMES.map((time) => {
@@ -35,6 +52,7 @@ function AppointmentForm({ citizenData }) {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true)
     if (Object.keys(citizenData).length !== 0) {
       if (cause) {
         if (selectedDate && selectedTime) {
@@ -49,6 +67,7 @@ function AppointmentForm({ citizenData }) {
           };
           await createAppointment(data);
           await getAllAppointments();
+          
           navigate("/appointments");
         } else {
           alert("Debes ingresar la fecha de la audiencia");
@@ -123,7 +142,7 @@ function AppointmentForm({ citizenData }) {
       </div>
       <div className="flex ml-auto mt-5 gap-2 w-96">
         <Button href="/appointments">Volver</Button>
-        <Button color="secondary" type="submit">
+        <Button disabled={!isValid || isLoading} color="secondary" type="submit">
           Crear audiencia
         </Button>
       </div>
