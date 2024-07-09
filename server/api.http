@@ -1,1 +1,1 @@
-GET http://localhost:3000/api/citizens?page=3&pageSize=2
+GET http://localhost:3000/api/users?page=1&pageSize=10

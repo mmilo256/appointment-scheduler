@@ -4,9 +4,19 @@ import { HTTP_STATUS } from '../../config/config.js'
 
 // Petición para obtener a todos los usuarios
 export const getAllUsers = async (req, res) => {
+  const page = parseInt(req.query.page)
+  const pageSize = parseInt(req.query.pageSize)
+  // Calculate the start and end indexes for the requested page
+  const startIndex = (page - 1) * pageSize
+  const endIndex = page * pageSize
   try {
     const users = await User.findAll()
-    res.json(users)
+    // Slice the products array based on the indexes
+    const paginatedUsers = users.slice(startIndex, endIndex)
+    // Calculate the total number of pages
+    const totalPages = Math.ceil(users.length / pageSize)
+    // Send the paginated products and total pages as the API response
+    res.json({ users: paginatedUsers, totalPages })
   } catch (error) {
     console.log('Error al realizar la consulta.', error)
   }

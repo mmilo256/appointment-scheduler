@@ -3,7 +3,7 @@ import { createCitizen, deleteCitizen, getAllCitizens, getCitizenById, updateCit
 
 export const useCitizenStore = create(set => ({
     citizens: [],
-    currentPage: 0,
+    currentPage: 1,
     totalPages: 0,
     selectedCitizen: {
         id: "",

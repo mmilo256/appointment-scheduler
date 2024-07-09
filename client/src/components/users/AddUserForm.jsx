@@ -49,6 +49,23 @@ function AddUserForm() {
   }, [email, lastName, name, password, role, username]);
 
   return (
+    <>
+    <div className="bg-blue-200 p-2 rounded mb-5">
+        <p className="font-bold text-lg">Permisos de usuario</p>
+        <p>
+          <span className="font-semibold">1 - Administrador:</span> Puede
+          realizar todas las operaciones
+        </p>
+        <p>
+          <span className="font-semibold">2 - Gestor:</span> Puede realizar
+          todas las operaciones menos crear usuarios
+        </p>
+        <p>
+          <span className="font-semibold">3 - Operador:</span> Puede realizar
+          todas las operaciones menos crear usuarios, agregar propuestas a las
+          audiencias, derivar audiencias ni editar derivaciones
+        </p>
+      </div>
     <form onSubmit={onSubmit}>
       <div className="grid grid-cols-2 gap-5">
         <Input
@@ -105,6 +122,7 @@ function AddUserForm() {
         </Button>
       </div>
     </form>
+    </>
   );
 }
 
