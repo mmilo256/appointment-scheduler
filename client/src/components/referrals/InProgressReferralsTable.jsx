@@ -9,10 +9,7 @@ function InProgressReferralsTable() {
   const role = useAuthStore((state) => state.role);
 
   const formatData = () => {
-    const filteredData = referrals.filter(
-      (ref) => ref.ref_status === "en proceso"
-    );
-    const formattedData = filteredData.map((ref) => {
+    const formattedData = referrals.inProgress.map((ref) => {
       // Formato de cada ciudadano con sus respectivos campos
 
       const refData = {

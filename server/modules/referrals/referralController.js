@@ -19,6 +19,51 @@ export const getAllReferrals = async (req, res) => {
     console.log('Error al realizar la consulta.', error)
   }
 }
+export const getAllPendingReferrals = async (req, res) => {
+  try {
+    // Obtener las derivaciones y los nombres de sus departamentos y los ciudadanos de sus derivacións correspondientes
+    const referrals = await Referral.findAll({
+      where: { ref_status: 'pendiente' },
+      include: [
+        { model: Department, attributes: ['dep_name'], as: 'department' },
+        { model: Citizen, attributes: ['id', 'first_name', 'last_name'], as: 'citizen' },
+        { model: Appointment, attributes: ['cause', 'response'], as: 'appointment' }]
+    })
+    res.json(referrals)
+  } catch (error) {
+    console.log('Error al realizar la consulta.', error)
+  }
+}
+export const getAllInProgressReferrals = async (req, res) => {
+  try {
+    // Obtener las derivaciones y los nombres de sus departamentos y los ciudadanos de sus derivacións correspondientes
+    const referrals = await Referral.findAll({
+      where: { ref_status: 'en proceso' },
+      include: [
+        { model: Department, attributes: ['dep_name'], as: 'department' },
+        { model: Citizen, attributes: ['id', 'first_name', 'last_name'], as: 'citizen' },
+        { model: Appointment, attributes: ['cause', 'response'], as: 'appointment' }]
+    })
+    res.json(referrals)
+  } catch (error) {
+    console.log('Error al realizar la consulta.', error)
+  }
+}
+export const getAllFinishedReferrals = async (req, res) => {
+  try {
+    // Obtener las derivaciones y los nombres de sus departamentos y los ciudadanos de sus derivacións correspondientes
+    const referrals = await Referral.findAll({
+      where: { ref_status: 'finalizada' },
+      include: [
+        { model: Department, attributes: ['dep_name'], as: 'department' },
+        { model: Citizen, attributes: ['id', 'first_name', 'last_name'], as: 'citizen' },
+        { model: Appointment, attributes: ['cause', 'response'], as: 'appointment' }]
+    })
+    res.json(referrals)
+  } catch (error) {
+    console.log('Error al realizar la consulta.', error)
+  }
+}
 
 // Obtener derivación por id
 export const getReferralById = async (req, res) => {

@@ -33,10 +33,30 @@ const httpRequest = async (url, options) => {
 };
 
 // Función asincrónica para obtener todos los audiencias
-export const getAllReferrals = async () => {
+export const getAllPendingReferrals = async () => {
     try {
         // Llamada a la función httpRequest para obtener todos los audiencias
-        const data = await httpRequest(API_URL, { method: 'GET' });
+        const data = await httpRequest(`${API_URL}/pendings`, { method: 'GET' });
+        return data;
+    } catch (error) {
+        console.error("Error al obtener los audiencias.", error);
+        throw error;
+    }
+};
+export const getAllInProgressReferrals = async () => {
+    try {
+        // Llamada a la función httpRequest para obtener todos los audiencias
+        const data = await httpRequest(`${API_URL}/in-progress`, { method: 'GET' });
+        return data;
+    } catch (error) {
+        console.error("Error al obtener los audiencias.", error);
+        throw error;
+    }
+};
+export const getAllFinishedReferrals = async () => {
+    try {
+        // Llamada a la función httpRequest para obtener todos los audiencias
+        const data = await httpRequest(`${API_URL}/finished`, { method: 'GET' });
         return data;
     } catch (error) {
         console.error("Error al obtener los audiencias.", error);

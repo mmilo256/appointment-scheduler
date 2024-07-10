@@ -2,14 +2,15 @@ import { create } from "zustand";
 import {
   createReferral,
   deleteReferral,
-  getAllReferrals,
+  getAllFinishedReferrals,
+  getAllInProgressReferrals,
+  getAllPendingReferrals,
   getReferralById,
   updateReferral,
 } from "../services/referralService";
-import { checkToken } from "../utils/helpers";
 
 export const useReferralStore = create((set) => ({
-  referrals: [],
+  referrals: {pendings: [], inProgress: [], finished: []},
   selectedReferral: {
     id: "",
     department_id: "",
@@ -39,9 +40,11 @@ export const useReferralStore = create((set) => ({
   }, */
   getAllReferrals: async () => {
     try {
-      const data = await getAllReferrals();
+      const pendings = await getAllPendingReferrals();
+      const inProgress = await getAllInProgressReferrals();
+      const finished = await getAllFinishedReferrals();
       // Actualización del estado con la lista de audiencias obtenida
-      set({ referrals: data });
+      set({ referrals: {pendings, inProgress, finished} });
     } catch (error) {
       console.log("Error al obtener las audiencias.", error);
     }

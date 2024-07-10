@@ -10,10 +10,7 @@ function CompletedReferralsTable() {
   const role = useAuthStore((state) => state.role);
 
   const formatData = () => {
-    const filteredData = referrals.filter(
-      (ref) => ref.ref_status === "finalizada"
-    );
-    const formattedData = filteredData.map((ref) => {
+    const formattedData = referrals.finished.map((ref) => {
       // Formato de cada ciudadano con sus respectivos campos
 
       const refData = {

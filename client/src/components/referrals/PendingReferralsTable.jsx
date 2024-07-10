@@ -9,10 +9,7 @@ function PendingReferralsTable() {
   const role = useAuthStore((state) => state.role);
 
   const formatData = () => {
-    const filteredData = referrals.filter(
-      (ref) => ref.ref_status === "pendiente"
-    );
-    const formattedData = filteredData.map((ref) => {
+    const formattedData = referrals.pendings.map((ref) => {
       // Formato de cada ciudadano con sus respectivos campos
 
       const refData = {
