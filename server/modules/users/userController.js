@@ -16,7 +16,7 @@ export const getAllUsers = async (req, res) => {
     // Calculate the total number of pages
     const totalPages = Math.ceil(users.length / pageSize)
     // Send the paginated products and total pages as the API response
-    res.json({ users: paginatedUsers, totalPages })
+    res.json({ users: paginatedUsers, totalPages: totalPages === 0 ? 1 : totalPages })
   } catch (error) {
     console.log('Error al realizar la consulta.', error)
   }

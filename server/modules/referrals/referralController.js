@@ -39,7 +39,7 @@ export const getAllPendingReferrals = async (req, res) => {
     // Calculate the total number of pages
     const totalPages = Math.ceil(referrals.length / pageSize)
     // Send the paginated products and total pages as the API response
-    res.json({ referrals: paginatedReferrals, totalPages })
+    res.json({ referrals: paginatedReferrals, totalPages: totalPages === 0 ? 1 : totalPages })
   } catch (error) {
     console.log('Error al realizar la consulta.', error)
   }
@@ -64,7 +64,7 @@ export const getAllInProgressReferrals = async (req, res) => {
     // Calculate the total number of pages
     const totalPages = Math.ceil(referrals.length / pageSize)
     // Send the paginated products and total pages as the API response
-    res.json({ referrals: paginatedReferrals, totalPages })
+    res.json({ referrals: paginatedReferrals, totalPages: totalPages === 0 ? 1 : totalPages })
   } catch (error) {
     console.log('Error al realizar la consulta.', error)
   }
@@ -89,7 +89,7 @@ export const getAllFinishedReferrals = async (req, res) => {
     // Calculate the total number of pages
     const totalPages = Math.ceil(referrals.length / pageSize)
     // Send the paginated products and total pages as the API response
-    res.json({ referrals: paginatedReferrals, totalPages })
+    res.json({ referrals: paginatedReferrals, totalPages: totalPages === 0 ? 1 : totalPages })
   } catch (error) {
     console.log('Error al realizar la consulta.', error)
   }

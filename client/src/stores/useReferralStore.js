@@ -14,9 +14,9 @@ export const useReferralStore = create((set) => ({
   inProgressReferrals: [],
   finishedReferrals: [],
   currentPage: 1,
-  pendingTotalPages: 0,
-  inProgressTotalPages: 0,
-  finishedTotalPages: 0,
+  pendingTotalPages: 1,
+  inProgressTotalPages: 1,
+  finishedTotalPages: 1,
   selectedReferral: {
     id: "",
     department_id: "",
