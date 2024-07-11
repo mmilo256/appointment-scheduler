@@ -20,6 +20,11 @@ export const getAllReferrals = async (req, res) => {
   }
 }
 export const getAllPendingReferrals = async (req, res) => {
+  const page = parseInt(req.query.page)
+  const pageSize = parseInt(req.query.pageSize)
+  // Calculate the start and end indexes for the requested page
+  const startIndex = (page - 1) * pageSize
+  const endIndex = page * pageSize
   try {
     // Obtener las derivaciones y los nombres de sus departamentos y los ciudadanos de sus derivacións correspondientes
     const referrals = await Referral.findAll({
@@ -29,12 +34,22 @@ export const getAllPendingReferrals = async (req, res) => {
         { model: Citizen, attributes: ['id', 'first_name', 'last_name'], as: 'citizen' },
         { model: Appointment, attributes: ['cause', 'response'], as: 'appointment' }]
     })
-    res.json(referrals)
+    // Slice the products array based on the indexes
+    const paginatedReferrals = referrals.slice(startIndex, endIndex)
+    // Calculate the total number of pages
+    const totalPages = Math.ceil(referrals.length / pageSize)
+    // Send the paginated products and total pages as the API response
+    res.json({ referrals: paginatedReferrals, totalPages })
   } catch (error) {
     console.log('Error al realizar la consulta.', error)
   }
 }
 export const getAllInProgressReferrals = async (req, res) => {
+  const page = parseInt(req.query.page)
+  const pageSize = parseInt(req.query.pageSize)
+  // Calculate the start and end indexes for the requested page
+  const startIndex = (page - 1) * pageSize
+  const endIndex = page * pageSize
   try {
     // Obtener las derivaciones y los nombres de sus departamentos y los ciudadanos de sus derivacións correspondientes
     const referrals = await Referral.findAll({
@@ -44,12 +59,22 @@ export const getAllInProgressReferrals = async (req, res) => {
         { model: Citizen, attributes: ['id', 'first_name', 'last_name'], as: 'citizen' },
         { model: Appointment, attributes: ['cause', 'response'], as: 'appointment' }]
     })
-    res.json(referrals)
+    // Slice the products array based on the indexes
+    const paginatedReferrals = referrals.slice(startIndex, endIndex)
+    // Calculate the total number of pages
+    const totalPages = Math.ceil(referrals.length / pageSize)
+    // Send the paginated products and total pages as the API response
+    res.json({ referrals: paginatedReferrals, totalPages })
   } catch (error) {
     console.log('Error al realizar la consulta.', error)
   }
 }
 export const getAllFinishedReferrals = async (req, res) => {
+  const page = parseInt(req.query.page)
+  const pageSize = parseInt(req.query.pageSize)
+  // Calculate the start and end indexes for the requested page
+  const startIndex = (page - 1) * pageSize
+  const endIndex = page * pageSize
   try {
     // Obtener las derivaciones y los nombres de sus departamentos y los ciudadanos de sus derivacións correspondientes
     const referrals = await Referral.findAll({
@@ -59,7 +84,12 @@ export const getAllFinishedReferrals = async (req, res) => {
         { model: Citizen, attributes: ['id', 'first_name', 'last_name'], as: 'citizen' },
         { model: Appointment, attributes: ['cause', 'response'], as: 'appointment' }]
     })
-    res.json(referrals)
+    // Slice the products array based on the indexes
+    const paginatedReferrals = referrals.slice(startIndex, endIndex)
+    // Calculate the total number of pages
+    const totalPages = Math.ceil(referrals.length / pageSize)
+    // Send the paginated products and total pages as the API response
+    res.json({ referrals: paginatedReferrals, totalPages })
   } catch (error) {
     console.log('Error al realizar la consulta.', error)
   }

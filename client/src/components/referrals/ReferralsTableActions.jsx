@@ -15,7 +15,8 @@ function ReferralsTableActions({ data }) {
 
   const onDeleteReferral = async () => {
     await deleteReferral(data.id);
-    await getAllReferrals();
+    await getAllReferrals(1);
+    setDeleteModal(false)
   };
 
   const onEditReferral = async () => {

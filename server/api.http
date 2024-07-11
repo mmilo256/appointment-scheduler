@@ -1,1 +1,1 @@
-GET http://localhost:3000/api/referrals/finished
+GET http://localhost:3000/api/referrals/finished?page=1&pageSize=10

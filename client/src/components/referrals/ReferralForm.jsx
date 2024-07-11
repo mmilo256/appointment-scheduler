@@ -87,7 +87,6 @@ function ReferralForm() {
   };
 
   const sendReferralEmail = async (department, appointmentData) => {
-    console.log(appointmentData);
     const dep = getDepById(Number(department));
     const depName = dep.dep_name;
     const depDirector = dep.director_name;

@@ -33,30 +33,30 @@ const httpRequest = async (url, options) => {
 };
 
 // Función asincrónica para obtener todos los audiencias
-export const getAllPendingReferrals = async () => {
+export const getAllPendingReferrals = async (page = 1) => {
     try {
         // Llamada a la función httpRequest para obtener todos los audiencias
-        const data = await httpRequest(`${API_URL}/pendings`, { method: 'GET' });
+        const data = await httpRequest(`${API_URL}/pendings?page=${page}&pageSize=10`, { method: 'GET' });
         return data;
     } catch (error) {
         console.error("Error al obtener los audiencias.", error);
         throw error;
     }
 };
-export const getAllInProgressReferrals = async () => {
+export const getAllInProgressReferrals = async (page = 1) => {
     try {
         // Llamada a la función httpRequest para obtener todos los audiencias
-        const data = await httpRequest(`${API_URL}/in-progress`, { method: 'GET' });
+        const data = await httpRequest(`${API_URL}/in-progress?page=${page}&pageSize=10`, { method: 'GET' });
         return data;
     } catch (error) {
         console.error("Error al obtener los audiencias.", error);
         throw error;
     }
 };
-export const getAllFinishedReferrals = async () => {
+export const getAllFinishedReferrals = async (page = 1) => {
     try {
         // Llamada a la función httpRequest para obtener todos los audiencias
-        const data = await httpRequest(`${API_URL}/finished`, { method: 'GET' });
+        const data = await httpRequest(`${API_URL}/finished?page=${page}&pageSize=10`, { method: 'GET' });
         return data;
     } catch (error) {
         console.error("Error al obtener los audiencias.", error);

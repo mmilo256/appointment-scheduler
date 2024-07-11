@@ -2,14 +2,19 @@ import BaseTable from "../ui/BaseTable";
 import { useReferralStore } from "../../stores/useReferralStore";
 import ReferralsTableActions from "./ReferralsTableActions";
 import { useAuthStore } from "../../stores/useAuthStore";
+import Pagination from "../ui/Pagination";
 
 function PendingReferralsTable() {
   // Estado local para almacenar la lista de ciudadanos
-  const referrals = useReferralStore((state) => state.referrals);
+  const referrals = useReferralStore((state) => state.pendingReferrals);
+  const getAllPendingReferrals = useReferralStore(state => state.getAllPendingReferrals)
+  const currentPage = useReferralStore(state => state.currentPage)
+  const totalPages = useReferralStore(state => state.pendingTotalPages)
   const role = useAuthStore((state) => state.role);
 
+
   const formatData = () => {
-    const formattedData = referrals.pendings.map((ref) => {
+    const formattedData = referrals.map((ref) => {
       // Formato de cada ciudadano con sus respectivos campos
 
       const refData = {
@@ -37,7 +42,12 @@ function PendingReferralsTable() {
   };
 
   // Renderizado de la tabla con los datos configurados
-  return <BaseTable table={table} />;
+  return <>
+  <BaseTable table={table} />
+  <div className="flex justify-center py-4">
+    <Pagination getItems={getAllPendingReferrals} currentPage={currentPage} totalPages={totalPages} />
+  </div>
+  </>;
 }
 
 export default PendingReferralsTable;
