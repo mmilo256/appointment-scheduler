@@ -101,8 +101,8 @@ function AppointmentForm({ citizenData }) {
         value={cause}
         onChange={onChangeCause}
       />
-      <div className="grid grid-cols-3 gap-2">
-        <div className="col-span-2">
+      <div className="md:grid md:grid-cols-3 gap-2">
+        <div className="md:col-span-2">
           <DatePickerInput
             selectedtDate={selectedDate}
             setSelectedDate={setSelectedDate}
@@ -140,7 +140,7 @@ function AppointmentForm({ citizenData }) {
           a las {selectedTime && selectedTime}
         </p>
       </div>
-      <div className="flex ml-auto mt-5 gap-2 w-96">
+      <div className="flex ml-auto mt-5 gap-2 w-60 md:w-96">
         <Button href="/appointments">Volver</Button>
         <Button disabled={!isValid || isLoading} color="secondary" type="submit">
           Crear audiencia
