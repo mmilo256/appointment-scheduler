@@ -43,7 +43,7 @@ function App() {
   }, [logout])
 
   return (
-    <div className="min-h-dvh bg-gray-200">
+    <div className="min-h-svh bg-gray-200">
       {/* Definición de las rutas utilizando el componente Routes */}
       <Routes>
         {/* Ruta para la página de inicio de sesión */}
