@@ -9,6 +9,7 @@ export const getAllReferrals = async (req, res) => {
   try {
     // Obtener las derivaciones y los nombres de sus departamentos y los ciudadanos de sus derivacións correspondientes
     const referrals = await Referral.findAll({
+      where: { is_deleted: false },
       include: [
         { model: Department, attributes: ['dep_name'], as: 'department' },
         { model: Citizen, attributes: ['id', 'first_name', 'last_name'], as: 'citizen' },
@@ -28,7 +29,7 @@ export const getAllPendingReferrals = async (req, res) => {
   try {
     // Obtener las derivaciones y los nombres de sus departamentos y los ciudadanos de sus derivacións correspondientes
     const referrals = await Referral.findAll({
-      where: { ref_status: 'pendiente' },
+      where: { ref_status: 'pendiente', is_deleted: false },
       include: [
         { model: Department, attributes: ['dep_name'], as: 'department' },
         { model: Citizen, attributes: ['id', 'first_name', 'last_name'], as: 'citizen' },
@@ -53,7 +54,7 @@ export const getAllInProgressReferrals = async (req, res) => {
   try {
     // Obtener las derivaciones y los nombres de sus departamentos y los ciudadanos de sus derivacións correspondientes
     const referrals = await Referral.findAll({
-      where: { ref_status: 'en proceso' },
+      where: { ref_status: 'en proceso', is_deleted: false },
       include: [
         { model: Department, attributes: ['dep_name'], as: 'department' },
         { model: Citizen, attributes: ['id', 'first_name', 'last_name'], as: 'citizen' },
@@ -78,7 +79,7 @@ export const getAllFinishedReferrals = async (req, res) => {
   try {
     // Obtener las derivaciones y los nombres de sus departamentos y los ciudadanos de sus derivacións correspondientes
     const referrals = await Referral.findAll({
-      where: { ref_status: 'finalizada' },
+      where: { ref_status: 'finalizada', is_deleted: false },
       include: [
         { model: Department, attributes: ['dep_name'], as: 'department' },
         { model: Citizen, attributes: ['id', 'first_name', 'last_name'], as: 'citizen' },
@@ -105,7 +106,7 @@ export const getReferralById = async (req, res) => {
         { model: Appointment, attributes: ['date', 'time', 'cause', 'response'], as: 'appointment' },
         { model: Citizen, attributes: ['id', 'first_name', 'last_name'], as: 'citizen' }
       ],
-      where: { id }
+      where: { id, is_deleted: false }
     })
     res.json(referral)
   } catch (error) {
@@ -165,9 +166,10 @@ export const updateReferral = async (req, res) => {
       appointment_id: appointment,
       citizen_id: citizen,
       solution,
-      solution_date: solutionDate
+      solution_date: solutionDate,
+      is_deleted: isDeleted
     } = req.body
-    const referral = await Referral.findOne({ where: { id } })
+    const referral = await Referral.findOne({ where: { id, is_deleted: false } })
     if (!referral) {
       return res.status(HTTP_STATUS.NOT_FOUND).json({ message: 'No se encontró la derivación' })
     }
@@ -180,6 +182,7 @@ export const updateReferral = async (req, res) => {
     if (citizen) updates.citizen_id = citizen
     if (solution) updates.solution = solution
     if (solutionDate) updates.solution_date = solutionDate
+    if (isDeleted) updates.is_deleted = isDeleted
     // Modificar derivación
     await Referral.update(updates, { where: { id } })
     res.json({

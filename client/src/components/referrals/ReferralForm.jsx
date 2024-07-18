@@ -20,6 +20,9 @@ function ReferralForm() {
   const [status, setStatus] = useState("pendiente");
   const [isLoading, setIsLoading] = useState(false)
   const { logout } = useContext(AuthContext);
+
+  const deleteAppointment = useAppointmentStore(state => state.deleteAppointment)
+
   const navigate = useNavigate();
 
   const depOptions = departments.map((dep) => ({
@@ -59,6 +62,7 @@ function ReferralForm() {
     // Llamada a la función getAllDepartments del servicio para obtener los departamentos
     await createReferral(data);
     await updateAppointment(selectedAppointment.id, { is_referred: true });
+    await deleteAppointment(selectedAppointment.id);
     // Actualización del estado con la lista de departamentos obtenida
     if (status === "pendiente") {
       navigate("/referrals/pending");
@@ -156,19 +160,16 @@ function ReferralForm() {
             <p>Le informamos que se ha derivado una nueva audiencia a <span class="highlight">${depName}</span>.</p>
             <p>A continuación, se detallan los datos de la audiencia derivada:</p>
             <ul>
-                <li><strong>Nombre del Solicitante:</strong> ${
-                  appointmentData.citizen.first_name
-                } ${appointmentData.citizen.last_name}</li>
-                <li><strong>Motivo de la Audiencia:</strong> ${
-                  appointmentData.cause
-                }</li>
+                <li><strong>Nombre del Solicitante:</strong> ${appointmentData.citizen.first_name
+        } ${appointmentData.citizen.last_name}</li>
+                <li><strong>Motivo de la Audiencia:</strong> ${appointmentData.cause
+        }</li>
                 <li><strong>Fecha de Solicitud:</strong> ${formatDate(
-                  appointmentData.date,
-                  1
-                )}</li>
-                <li><strong>Propuesta del Alcalde:</strong> ${
-                  appointmentData.response
-                }</li>
+          appointmentData.date,
+          1
+        )}</li>
+                <li><strong>Propuesta del Alcalde:</strong> ${appointmentData.response
+        }</li>
             </ul>
             <p>Por favor, tome las medidas necesarias para atender esta audiencia y proporcione una solución a la brevedad posible.</p>
             <p>Puede acceder al sistema de gestión de audiencias haciendo <a href='https://appointment-scheduler-brown.vercel.app/'>click aquí</a> para más detalles y para registrar la solución correspondiente.</p>
