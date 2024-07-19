@@ -15,7 +15,7 @@ function UserTableActions({ data }) {
 
   const onDeleteUser = async () => {
     await deleteUser(data.id);
-    await getAllUsers();
+    await getAllUsers(1);
     setDeleteModal(false);
   };
 

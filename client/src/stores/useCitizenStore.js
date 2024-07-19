@@ -3,6 +3,8 @@ import { createCitizen, deleteCitizen, getAllCitizens, getCitizenById, updateCit
 
 export const useCitizenStore = create(set => ({
     citizens: [],
+    currentPage: 1,
+    totalPages: 0,
     selectedCitizen: {
         id: "",
         rut: "",
@@ -20,9 +22,9 @@ export const useCitizenStore = create(set => ({
             id
         }})
     },
-    getAllCitizens: async () => {
-        const data = await getAllCitizens()
-        set({citizens: data})
+    getAllCitizens: async (page) => {
+        const data = await getAllCitizens(page)
+        set({citizens: data.citizens, totalPages: data.totalPages, currentPage: page})
     },
     createCitizen: async (data) => {
         await createCitizen(data)

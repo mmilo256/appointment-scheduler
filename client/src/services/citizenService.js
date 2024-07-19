@@ -33,10 +33,10 @@ const httpRequest = async (url, options) => {
 };
 
 // Función asincrónica para obtener todos los ciudadanos
-export const getAllCitizens = async () => {
+export const getAllCitizens = async (page = 1) => {
     try {
         // Llamada a la función httpRequest para obtener todos los ciudadanos
-        const data = await httpRequest(API_URL, { method: 'GET' });
+        const data = await httpRequest(`${API_URL}?page=${page}&pageSize=10`, { method: 'GET' });
         return data;
     } catch (error) {
         console.error("Error al obtener los ciudadanos.", error);
@@ -85,10 +85,14 @@ export const createCitizen = async (citizenData) => {
 // Función asincrónica para eliminar un ciudadano
 export const deleteCitizen = async (id) => {
     try {
-        // Llamada a la función httpRequest para eliminar un ciudadano por su ID
-        await httpRequest(`${API_URL}/${id}`, { method: 'DELETE' });
+        // Llamada a la función httpRequest para actualizar un ciudadano por su ID
+        const data = await httpRequest(`${API_URL}/${id}`, {
+            method: 'PATCH',
+            body: JSON.stringify({ is_deleted: 1 })
+        });
+        return data;
     } catch (error) {
-        console.error("Error al eliminar el ciudadano.", error);
+        console.error("Error al editar el ciudadano.", error);
         throw error;
     }
 };

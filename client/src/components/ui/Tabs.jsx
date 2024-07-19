@@ -6,7 +6,7 @@ function Tabs({ links }) {
   return (
     <nav className="py-2 my-5 bg-slate-300 flex">
       <Container>
-        <ul className="flex">
+        <ul className="flex flex-col md:flex-row">
           {links.map((link) => (
             <li key={link.label}>
               <NavLink

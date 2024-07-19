@@ -7,6 +7,7 @@ export const getAllAppointments = async (req, res) => {
   try {
     // Obtener las audiencias y los nombres de sus usuarios, ciudadanos y departamentos correspondientes
     const appointments = await Appointment.findAll({
+      where: { is_deleted: false },
       include: [
         { model: Citizen, attributes: ['first_name', 'last_name'], as: 'citizen' }
       ],
@@ -29,7 +30,7 @@ export const getAppointmentById = async (req, res) => {
       include: [
         { model: Citizen, attributes: ['id', 'first_name', 'last_name'], as: 'citizen' }
       ],
-      where: { id }
+      where: { id, is_deleted: false }
     })
     res.json(appointment)
   } catch (error) {
@@ -48,7 +49,7 @@ export const getAvailableSchedules = async (req, res) => {
   try {
     const { reqDate } = req.params
     // Obtener las audiencias que coincidan con la fecha seleccionada
-    const appointments = await Appointment.findAll({ attributes: ['date', 'time'] })
+    const appointments = await Appointment.findAll({ attributes: ['date', 'time'], where: { is_deleted: false } })
 
     // Filtrar las fechas segun la fecha proporcionada
     const filteredDates = appointments.filter(app => (
@@ -126,7 +127,8 @@ export const updateAppointment = async (req, res) => {
       time,
       response,
       citizen_id: citizenId,
-      is_referred: isReferred
+      is_referred: isReferred,
+      is_deleted: isDeleted
     } = req.body
     const appointment = await Appointment.findOne({ where: { id } })
     if (!appointment) {
@@ -147,7 +149,7 @@ export const updateAppointment = async (req, res) => {
     if (cause) updates.cause = cause
     if (date) updates.date = date
     if (time) updates.time = time
-
+    if (isDeleted) updates.is_deleted = isDeleted
     if (citizenId) updates.citizen_id = citizenId
     if (isReferred) updates.is_referred = isReferred
     // Modificar audiencia

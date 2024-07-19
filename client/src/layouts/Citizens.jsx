@@ -4,13 +4,16 @@ import Button from "../components/ui/Button";
 import CitizensTable from "../components/citizens/CitizensTable";
 import { useCitizenStore } from "../stores/useCitizenStore";
 import { useEffect } from "react";
+import Pagination from "../components/ui/Pagination";
 
 function Citizens() {
   const getAllCitizens = useCitizenStore((state) => state.getAllCitizens);
+  const totalPages = useCitizenStore(state => state.totalPages)
+  const currentPage = useCitizenStore(state => state.currentPage)
 
   useEffect(() => {
     (async () => {
-      await getAllCitizens();
+      await getAllCitizens(1);
     })();
   }, [getAllCitizens]);
 
@@ -21,6 +24,9 @@ function Citizens() {
         <Button href="/citizens/create">Nuevo ciudadano</Button>
       </div>
       <CitizensTable />
+      <div className="flex justify-center py-4">
+      <Pagination getItems={getAllCitizens} currentPage={currentPage} totalPages={totalPages} />
+      </div>
     </Container>
   );
 }

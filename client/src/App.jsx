@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Home from "./layouts/Home";
 import Login from "./layouts/Login";
 import Appointments from "./layouts/Appointments";
@@ -15,12 +15,35 @@ import EditCitizen from "./layouts/EditCitizen";
 import Referrals from "./layouts/Referrals";
 import CreateReferral from "./layouts/CreateReferral";
 import EditReferral from "./layouts/EditReferral";
+import { useContext, useEffect } from "react";
+import { jwtDecode } from 'jwt-decode'
+import { AuthContext } from "./context/AuthContext";
 
 function App() {
   // Componente principal de la aplicación que define las rutas de navegación
 
+  const {logout} = useContext(AuthContext)
+
+  useEffect(() => {
+    const token = localStorage.getItem("jwt")
+    if (!token) {
+      logout()
+    } else {
+      try {
+        const decoded = jwtDecode(token)
+        const currentTime = Date.now() / 1000
+        if (decoded.exp < currentTime) {
+          logout()
+        }
+      } catch(e) {
+        console.log(e)
+        logout()
+      }
+    }
+  }, [logout])
+
   return (
-    <div className="min-h-dvh bg-gray-200">
+    <div className="min-h-svh bg-gray-200">
       {/* Definición de las rutas utilizando el componente Routes */}
       <Routes>
         {/* Ruta para la página de inicio de sesión */}

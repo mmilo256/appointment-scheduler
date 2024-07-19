@@ -34,7 +34,7 @@ function Home() {
 
   return (
     <>
-      {unresolvedAppointments && (
+      {unresolvedAppointments ? (
         <div className="bg-amber-100 shadow">
           <Container>
             <div className="flex justify-between items-center">
@@ -52,7 +52,7 @@ function Home() {
             </div>
           </Container>
         </div>
-      )}
+      ) : ""}
       <Container>
         <div className="mt-20">
           <HomeGrid />

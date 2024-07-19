@@ -2,17 +2,18 @@ import BaseTable from "../ui/BaseTable";
 import { useReferralStore } from "../../stores/useReferralStore";
 import ReferralsTableActions from "./ReferralsTableActions";
 import { useAuthStore } from "../../stores/useAuthStore";
+import Pagination from "../ui/Pagination";
 
 function InProgressReferralsTable() {
   // Estado local para almacenar la lista de ciudadanos
-  const referrals = useReferralStore((state) => state.referrals);
+  const referrals = useReferralStore((state) => state.inProgressReferrals);
+  const getAllInProgressReferrals = useReferralStore(state => state.getAllInProgressReferrals)
+  const currentPage = useReferralStore(state => state.currentPage)
+  const totalPages = useReferralStore(state => state.inProgressTotalPages)
   const role = useAuthStore((state) => state.role);
 
   const formatData = () => {
-    const filteredData = referrals.filter(
-      (ref) => ref.ref_status === "en proceso"
-    );
-    const formattedData = filteredData.map((ref) => {
+    const formattedData = referrals.map((ref) => {
       // Formato de cada ciudadano con sus respectivos campos
 
       const refData = {
@@ -40,7 +41,12 @@ function InProgressReferralsTable() {
   };
 
   // Renderizado de la tabla con los datos configurados
-  return <BaseTable table={table} />;
+  return <>
+  <BaseTable table={table} />
+  <div className="flex justify-center py-4">
+    <Pagination getItems={getAllInProgressReferrals} currentPage={currentPage} totalPages={totalPages} />
+  </div>
+  </>;
 }
 
 export default InProgressReferralsTable;

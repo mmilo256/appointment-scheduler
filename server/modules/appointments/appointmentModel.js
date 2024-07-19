@@ -36,9 +36,11 @@ export const Appointment = sequelize.define('appointments', {
       model: 'citizens',
       key: 'id'
     }
+  },
+  is_deleted: {
+    type: DataTypes.BOOLEAN
   }
-},
-{
+}, {
   // Opción para que no cree los atributos createdAt y updatedAt
   timestamps: false
 })

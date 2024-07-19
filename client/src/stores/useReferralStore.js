@@ -2,14 +2,21 @@ import { create } from "zustand";
 import {
   createReferral,
   deleteReferral,
-  getAllReferrals,
+  getAllFinishedReferrals,
+  getAllInProgressReferrals,
+  getAllPendingReferrals,
   getReferralById,
   updateReferral,
 } from "../services/referralService";
-import { checkToken } from "../utils/helpers";
 
 export const useReferralStore = create((set) => ({
-  referrals: [],
+  pendingReferrals: [],
+  inProgressReferrals: [],
+  finishedReferrals: [],
+  currentPage: 1,
+  pendingTotalPages: 1,
+  inProgressTotalPages: 1,
+  finishedTotalPages: 1,
   selectedReferral: {
     id: "",
     department_id: "",
@@ -37,14 +44,36 @@ export const useReferralStore = create((set) => ({
       },
     });
   }, */
-  getAllReferrals: async () => {
+  getAllReferrals: async (page) => {
     try {
-      const data = await getAllReferrals();
+      const pendings = await getAllPendingReferrals(page);
+      const inProgress = await getAllInProgressReferrals(page);
+      const finished = await getAllFinishedReferrals(page);
       // Actualización del estado con la lista de audiencias obtenida
-      set({ referrals: data });
+      set({ 
+        pendingReferrals: pendings.referrals, 
+        inProgressReferrals: inProgress.referrals, 
+        finishedReferrals: finished.referrals,
+        pendingTotalPages: pendings.totalPages,
+        inProgressTotalPages: inProgress.totalPages,
+        finishedTotalPages: finished.totalPages,
+        currentPage: 1
+      });
     } catch (error) {
       console.log("Error al obtener las audiencias.", error);
     }
+  },
+  getAllPendingReferrals: async (page) => {
+    const data = await getAllPendingReferrals(page)
+    set({pendingReferrals: data.referrals, totalPages: data.totalPages, currentPage: page})
+  },
+  getAllInProgressReferrals: async (page) => {
+    const data = await getAllInProgressReferrals(page)
+    set({inProgressReferrals: data.referrals, totalPages: data.totalPages, currentPage: page})
+  },
+  getAllFinishedReferrals: async (page) => {
+    const data = await getAllFinishedReferrals(page)
+    set({finishedReferrals: data.referrals, totalPages: data.totalPages, currentPage: page})
   },
   selectReferral: async (id) => {
     const referral = await getReferralById(id);

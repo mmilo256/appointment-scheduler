@@ -3,6 +3,8 @@ import { createUser, deleteUser, getAllUsers, getUserById, updateUser } from '..
 
 export const useUserStore = create(set => ({
     users: [],
+    currentPage: 1,
+    totalPages: 0,
     selectedUser: {
         id: "",
         first_name: "",
@@ -17,9 +19,9 @@ export const useUserStore = create(set => ({
             id
         }})
     },
-    getAllUsers: async () => {
-        const data = await getAllUsers()
-        set({users: data})
+    getAllUsers: async (page) => {
+        const data = await getAllUsers(page)
+        set({users: data.users, totalPages: data.totalPages, currentPage: page})
     },
     createUser: async (data) => {
         await createUser(data)

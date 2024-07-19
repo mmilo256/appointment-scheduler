@@ -10,11 +10,11 @@ function CreateAppointment() {
   return (
     <Container>
       <Heading className="text-center">Crear audiencia</Heading>
-      <div className="grid grid-cols-12 gap-10">
-        <div className="col-span-5">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
+        <div className="md:col-span-5">
           <CitizenDetails data={citizen} />
         </div>
-        <div className="col-span-7">
+        <div className="md:col-span-7">
           <CitizenByRutForm setCitizen={setCitizen} />
           <AppointmentForm citizenData={citizen} />
         </div>

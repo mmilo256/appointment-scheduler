@@ -42,9 +42,11 @@ export const Referral = sequelize.define('referrals', {
   },
   solution_date: {
     type: DataTypes.STRING
+  },
+  is_deleted: {
+    type: DataTypes.BOOLEAN
   }
-},
-{
+}, {
   // Opción para que no cree los atributos createdAt y updatedAt
   timestamps: false
 })

@@ -31,11 +31,11 @@ function EditReferral() {
   return (
     <Container>
       <Heading className="text-center">Editar derivación</Heading>
-      <div className="grid grid-cols-12 gap-10">
-        <div className="col-span-5">
+      <div className="grid md:grid-cols-12 gap-5 md:gap-10">
+        <div className="md:col-span-5">
           <AppointmentDetails data={appointmentData} />
         </div>
-        <div className="col-span-7">
+        <div className="md:col-span-7">
           <EditReferralForm data={selectedReferral} />
         </div>
       </div>

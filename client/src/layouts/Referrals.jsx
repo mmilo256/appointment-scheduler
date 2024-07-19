@@ -13,7 +13,7 @@ function Referrals() {
 
   useEffect(() => {
     (async () => {
-      await getAllReferrals();
+      await getAllReferrals(1);
     })();
   }, [getAllReferrals]);
 

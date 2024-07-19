@@ -33,6 +33,9 @@ const Citizen = sequelize.define('citizens', {
   },
   phone_2: {
     type: DataTypes.STRING
+  },
+  is_deleted: {
+    type: DataTypes.BOOLEAN
   }
 },
 {

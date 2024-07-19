@@ -15,7 +15,7 @@ function CitizenTableActions({ data }) {
 
   const onDeleteCitizen = async () => {
     await deleteCitizen(data.id);
-    await getAllCitizens();
+    await getAllCitizens(1);
     setDeleteModal(false);
   };
 

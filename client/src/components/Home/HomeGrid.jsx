@@ -19,7 +19,7 @@ const navigation = [
 
 function HomeGrid() {
   return (
-    <div className="grid grid-cols-3 grid-rows-2 h-[20rem] gap-6">
+    <div className="grid grd-cols-1 md:grid-cols-3 grid-rows-6 md:grid-rows-2 h-[20rem] gap-4">
       {navigation.map((pannel) => (
         <HomePannel
           key={pannel.label}

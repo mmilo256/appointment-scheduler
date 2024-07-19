@@ -86,10 +86,14 @@ export const createAppointment = async (appointmentData) => {
 // Función asincrónica para eliminar un audiencia
 export const deleteAppointment = async (id) => {
     try {
-        // Llamada a la función httpRequest para eliminar un audiencia por su ID
-        await httpRequest(`${API_URL}/${id}`, { method: 'DELETE' });
+        // Llamada a la función httpRequest para actualizar un audiencia por su ID
+        const data = await httpRequest(`${API_URL}/${id}`, {
+            method: 'PATCH',
+            body: JSON.stringify({ is_deleted: true })
+        });
+        return data;
     } catch (error) {
-        console.error("Error al eliminar el audiencia.", error);
+        console.error("Error al editar el audiencia.", error);
         throw error;
     }
 };

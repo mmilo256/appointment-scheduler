@@ -20,13 +20,22 @@ function EditAppointmentForm() {
     (state) => state.getAllAppointments
   );
 
-  const [date, setDate] = useState(selectedAppointment.date ?? "");
+  const [date, setDate] = useState("");
   const [cause, setCause] = useState(selectedAppointment.cause ?? "");
-  const [time, setTime] = useState(selectedAppointment.time ?? "");
+  const [time, setTime] = useState("");
   const [response, setResponse] = useState(selectedAppointment.response ?? "");
+  const [isValid, setIsValid] = useState(false)
   const navigate = useNavigate();
 
   const availableTimes = useAppointmentStore((state) => state.availableTimes);
+
+  useEffect(() => {
+    if (cause && date && time !== "") {
+      setIsValid(true)
+    } else {
+      setIsValid(false)
+    }
+  }, [cause, date, time])
 
   const getTimesOptions = () => {
     return ALL_TIMES.map((time) => {
@@ -40,9 +49,8 @@ function EditAppointmentForm() {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const appDate = `${new Date(date).getFullYear()}-${
-      new Date(date).getMonth() + 1
-    }-${new Date(date).getDate()}`;
+    const appDate = `${new Date(date).getFullYear()}-${new Date(date).getMonth() + 1
+      }-${new Date(date).getDate()}`;
     const dataToEdit = { response };
     if (cause) dataToEdit.cause = cause;
     if (date) dataToEdit.date = formatDate(appDate, 2);
@@ -103,7 +111,7 @@ function EditAppointmentForm() {
       </div>
       <div className="flex ml-auto mt-5 gap-2 w-96">
         <Button href="/appointments">Volver</Button>
-        <Button color="secondary" type="submit">
+        <Button disabled={!isValid} color="secondary" type="submit">
           Editar audiencia
         </Button>
       </div>
