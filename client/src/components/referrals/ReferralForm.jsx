@@ -16,9 +16,10 @@ function ReferralForm() {
 
   // Estado local para almacenar la lista de departamentos
   const [departments, setDepartments] = useState([]);
-  const [department, setDepartment] = useState(1);
-  const [status, setStatus] = useState("pendiente");
+  const [department, setDepartment] = useState();
+  const [status, setStatus] = useState();
   const [isLoading, setIsLoading] = useState(false)
+  const [isValid, setIsValid] = useState(false)
   const { logout } = useContext(AuthContext);
 
   const deleteAppointment = useAppointmentStore(state => state.deleteAppointment)
@@ -71,6 +72,14 @@ function ReferralForm() {
     }
     setIsLoading(false)
   };
+
+  useEffect(() => {
+    if (status && department) {
+      setIsValid(true)
+    } else {
+      setIsValid(false)
+    }
+  }, [department, status])
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -209,7 +218,7 @@ function ReferralForm() {
         <Button href="/appointments" type="button" color="primary">
           Volver
         </Button>
-        <Button disabled={isLoading} type="submit" color="secondary">
+        <Button disabled={!isValid || isLoading} type="submit" color="secondary">
           Derivar
         </Button>
       </div>
