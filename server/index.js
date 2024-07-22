@@ -11,7 +11,13 @@ import { verifyToken } from './auth/authMiddleware.js'
 const app = e()
 
 // Habilitar CORS
-app.use(cors())
+const corsOptions = {
+  origin: 'https://appointment-scheduler-brown.vercel.app',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}
+
+app.use(cors(corsOptions))
 
 // Quita la marca de express del header
 app.disable('x-powered-by')
