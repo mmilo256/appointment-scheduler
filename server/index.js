@@ -29,6 +29,6 @@ app.use('/api/referrals', verifyToken, referralRouter)
 app.use('/api/email', emailRoutes)
 
 // Arrancar el servidor
-app.listen(10000, () => {
-  console.log('listening...')
+app.listen(process.env.PORT || 3000, () => {
+  console.log('El servidor está levantado')
 })
