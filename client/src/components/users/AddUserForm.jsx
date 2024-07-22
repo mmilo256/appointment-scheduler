@@ -73,14 +73,14 @@ function AddUserForm() {
             onChange={(e) => {
               setName(e.target.value);
             }}
-            label="Nombres"
+            label="Nombre"
           />
           <Input
             value={lastName}
             onChange={(e) => {
               setLastName(e.target.value);
             }}
-            label="Apellidos"
+            label="Apellido"
           />
         </div>
         <Input
