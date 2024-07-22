@@ -11,13 +11,8 @@ import { verifyToken } from './auth/authMiddleware.js'
 const app = e()
 
 // Habilitar CORS
-const corsOptions = {
-  origin: 'https://appointment-scheduler-brown.vercel.app',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}
 
-app.use(cors(corsOptions))
+app.use(cors())
 
 // Quita la marca de express del header
 app.disable('x-powered-by')
@@ -29,7 +24,7 @@ app.use(e.json())
 app.use('/api/auth', authRouter)
 app.use('/api/users', verifyToken, userRouter)
 app.use('/api/departments', verifyToken, departmentRouter)
-app.use('/api/citizens', citizenRouter)
+app.use('/api/citizens', verifyToken, citizenRouter)
 app.use('/api/appointments', verifyToken, appointmentRouter)
 app.use('/api/referrals', verifyToken, referralRouter)
 app.use('/api/email', emailRoutes)

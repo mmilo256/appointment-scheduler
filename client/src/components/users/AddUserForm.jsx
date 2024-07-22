@@ -50,7 +50,7 @@ function AddUserForm() {
 
   return (
     <>
-    <div className="bg-blue-200 p-2 rounded mb-5">
+      <div className="bg-blue-200 p-2 rounded mb-5">
         <p className="font-bold text-lg">Permisos de usuario</p>
         <p>
           <span className="font-semibold">1 - Administrador:</span> Puede
@@ -66,62 +66,62 @@ function AddUserForm() {
           audiencias, derivar audiencias ni editar derivaciones
         </p>
       </div>
-    <form onSubmit={onSubmit}>
-      <div className="grid grid-cols-2 gap-5">
+      <form onSubmit={onSubmit}>
+        <div className="grid grid-cols-2 gap-5">
+          <Input
+            value={name}
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+            label="Nombres"
+          />
+          <Input
+            value={lastName}
+            onChange={(e) => {
+              setLastName(e.target.value);
+            }}
+            label="Apellidos"
+          />
+        </div>
         <Input
-          value={name}
+          value={email}
           onChange={(e) => {
-            setName(e.target.value);
+            setEmail(e.target.value);
           }}
-          label="Nombres"
+          type="email"
+          label="Correo electrónico"
         />
         <Input
-          value={lastName}
+          value={username}
           onChange={(e) => {
-            setLastName(e.target.value);
+            setUsername(e.target.value);
           }}
-          label="Apellidos"
+          label="Nombre de usuario"
         />
-      </div>
-      <Input
-        value={email}
-        onChange={(e) => {
-          setEmail(e.target.value);
-        }}
-        type="email"
-        label="Correo electrónico"
-      />
-      <Input
-        value={username}
-        onChange={(e) => {
-          setUsername(e.target.value);
-        }}
-        label="Nombre de usuario"
-      />
-      <Input
-        value={password}
-        onChange={(e) => {
-          setPassword(e.target.value);
-        }}
-        type="password"
-        label="Contraseña"
-      />
-      <Input
-        value={role}
-        options={roleOptions}
-        onChange={(e) => {
-          setRole(e.target.value);
-        }}
-        type="select"
-        label="Permisos"
-      />
-      <div className="flex w-72 gap-4 ml-auto my-5">
-        <Button href="/users">Volver</Button>
-        <Button disabled={!isValid} type="submit" color="secondary">
-          Crear usuario
-        </Button>
-      </div>
-    </form>
+        <Input
+          value={password}
+          onChange={(e) => {
+            setPassword(e.target.value);
+          }}
+          label="Contraseña"
+          type="password"
+        />
+        <Input
+          value={role}
+          options={roleOptions}
+          onChange={(e) => {
+            setRole(e.target.value);
+          }}
+          type="select"
+          label="Permisos"
+        />
+        <div className="flex w-72 gap-4 ml-auto my-5">
+          <Button href="/users">Volver</Button>
+          <Button disabled={!isValid} type="submit" color="secondary">
+            Crear usuario
+          </Button>
+        </div>
+      </form>
     </>
   );
 }

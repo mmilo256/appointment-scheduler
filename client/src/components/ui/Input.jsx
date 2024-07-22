@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 function Input({
   label,
@@ -12,17 +12,22 @@ function Input({
   max,
   optional,
   onChange,
-  value,
+  value
 }) {
+  const [isPassInputVisible, setIsPassInputVisible] = useState(false)
+
+  const togglePassInputVisibility = () => {
+    setIsPassInputVisible(!isPassInputVisible)
+  }
+
   const renderInputField = () => {
     switch (type) {
       case "textarea":
         return (
           <textarea
             {...register}
-            className={`px-2 py-1 w-full rounded border border-primary-100 resize-none ${
-              important && "bg-yellow-100"
-            }`}
+            className={`px-2 py-1 w-full rounded border border-primary-100 resize-none ${important && "bg-yellow-100"
+              }`}
             placeholder={placeholder}
             value={value}
             onChange={onChange}
@@ -32,9 +37,8 @@ function Input({
         return (
           <select
             {...register}
-            className={`px-2 py-1 w-full rounded border border-primary-100 ${
-              important && "bg-yellow-100"
-            }`}
+            className={`px-2 py-1 w-full rounded border border-primary-100 ${important && "bg-yellow-100"
+              }`}
             defaultValue={defaultValue}
             value={value}
             onChange={onChange}
@@ -52,14 +56,28 @@ function Input({
             ))}
           </select>
         );
-
+      case "password":
+        return (
+          <input
+            {...register}
+            className={`px-2 py-1 w-full rounded border border-primary-100 ${important && "bg-yellow-100"
+              }`}
+            type={isPassInputVisible ? "text" : "password"
+            }
+            onChange={onChange}
+            placeholder={placeholder}
+            value={value}
+            maxLength={max}
+            max={max}
+            defaultValue={defaultValue}
+          />
+        );
       default:
         return (
           <input
             {...register}
-            className={`px-2 py-1 w-full rounded border border-primary-100 ${
-              important && "bg-yellow-100"
-            }`}
+            className={`px-2 py-1 w-full rounded border border-primary-100 ${important && "bg-yellow-100"
+              }`}
             type={type}
             onChange={onChange}
             placeholder={placeholder}
@@ -73,10 +91,11 @@ function Input({
   };
 
   return (
-    <label className={`block mb-2 ${className}`}>
+    <label className={`block relative mb-2 ${className}`}>
       <span className="inline-block font-semibold mb-0.5">{label}</span>{" "}
       <span className="text-gray-600">{optional && "(opcional)"}</span>
       {renderInputField()}
+      {type === "password" && <button type="button" onClick={togglePassInputVisibility} className="absolute right-2 top-8 text-slate-600">{isPassInputVisible ? "Ocultar" : "Mostrar"}</button>}
     </label>
   );
 }
