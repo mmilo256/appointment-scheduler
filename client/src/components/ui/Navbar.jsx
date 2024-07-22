@@ -36,7 +36,7 @@ function Navbar() {
           ))}
         </ul>
         <div className="hidden md:flex items-center gap-4">
-          <p className="font-light italic">{user.username}</p>
+          <p className="font-light italic text-right">{`${user.firstName} ${user.lastName}`}</p>
           <button
             className="bg-secondary-500 hover:bg-secondary-600  px-2 py-1 rounded font-semibold"
             onClick={logout}
@@ -44,23 +44,23 @@ function Navbar() {
             Cerrar sesión
           </button>
         </div>
-        <p className="md:hidden font-light italic">{user.username}</p>
+        <p className="md:hidden font-light italic">{`${user.firstName} ${user.lastName}`}</p>
         <button onClick={onToggleMenu} className="h-12 w-14 my-2 rounded bg-secondary-500 block md:hidden ml-auto">Menú</button>
       </Container>
       {/**Menu para pantallas móviles */}
       {toggleMenu && <ul className="z-10 block md:hidden absolute bg-primary-500 left-0 right-0">
-          {navigation.map(item => (
-            <li key={item.label}>
-              <NavLink onClick={onToggleMenu} className="block hover:bg-secondary-500 py-4 text-xl" to={item.href}>{item.label}</NavLink>
-            </li>
-          ))}
-          <button
-            className="bg-secondary-500 hover:bg-secondary-600 my-4 px-2 py-1 rounded font-semibold"
-            onClick={logout}
-          >
-            Cerrar sesión
-          </button>
-        </ul>}
+        {navigation.map(item => (
+          <li key={item.label}>
+            <NavLink onClick={onToggleMenu} className="block hover:bg-secondary-500 py-4 text-xl" to={item.href}>{item.label}</NavLink>
+          </li>
+        ))}
+        <button
+          className="bg-secondary-500 hover:bg-secondary-600 my-4 px-2 py-1 rounded font-semibold"
+          onClick={logout}
+        >
+          Cerrar sesión
+        </button>
+      </ul>}
     </nav>
   );
 }
