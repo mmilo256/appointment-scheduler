@@ -12,7 +12,8 @@ function Input({
   max,
   optional,
   onChange,
-  value
+  value,
+  disabled
 }) {
   const [isPassInputVisible, setIsPassInputVisible] = useState(false)
 
@@ -42,6 +43,7 @@ function Input({
             defaultValue={defaultValue}
             value={value}
             onChange={onChange}
+            disabled={disabled}
           >
             <option value="">Seleccionar</option>
             {options?.map((option, index) => (
