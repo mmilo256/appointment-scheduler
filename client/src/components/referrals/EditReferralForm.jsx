@@ -103,6 +103,7 @@ function EditReferralForm({ data }) {
     <form onSubmit={handleSubmit}>
       <Input
         value={department}
+        disabled
         onChange={(e) => {
           setDepartment(e.target.value);
         }}
