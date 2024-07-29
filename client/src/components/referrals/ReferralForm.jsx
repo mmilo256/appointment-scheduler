@@ -18,11 +18,13 @@ function ReferralForm() {
   const [departments, setDepartments] = useState([]);
   const [department, setDepartment] = useState();
   const [status, setStatus] = useState();
-  const [isLoading, setIsLoading] = useState(false)
-  const [isValid, setIsValid] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
+  const [isValid, setIsValid] = useState(false);
   const { logout } = useContext(AuthContext);
 
-  const deleteAppointment = useAppointmentStore(state => state.deleteAppointment)
+  const deleteAppointment = useAppointmentStore(
+    (state) => state.deleteAppointment
+  );
 
   const navigate = useNavigate();
 
@@ -70,20 +72,20 @@ function ReferralForm() {
     } else {
       navigate("/referrals/in-progress");
     }
-    setIsLoading(false)
+    setIsLoading(false);
   };
 
   useEffect(() => {
     if (status && department) {
-      setIsValid(true)
+      setIsValid(true);
     } else {
-      setIsValid(false)
+      setIsValid(false);
     }
-  }, [department, status])
+  }, [department, status]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setIsLoading(true)
+    setIsLoading(true);
     const data = {
       department_id: Number(department),
       appointment_id: selectedAppointment.id,
@@ -103,10 +105,7 @@ function ReferralForm() {
     const dep = getDepById(Number(department));
     const depName = dep.dep_name;
     const depDirector = dep.director_name;
-    const depEmail = [
-      "emiliosotoandrade256@gmail.com",
-      "esoto@municipalidadchonchi.cl"
-    ];
+    const depEmail = [dep.email, "esoto@municipalidadchonchi.cl"];
     // const depEmail = dep.email;
     const emailData = {
       to: depEmail,
@@ -169,16 +168,19 @@ function ReferralForm() {
             <p>Le informamos que se ha derivado una nueva audiencia a <span class="highlight">${depName}</span>.</p>
             <p>A continuación, se detallan los datos de la audiencia derivada:</p>
             <ul>
-                <li><strong>Nombre del Solicitante:</strong> ${appointmentData.citizen.first_name
-        } ${appointmentData.citizen.last_name}</li>
-                <li><strong>Motivo de la Audiencia:</strong> ${appointmentData.cause
-        }</li>
+                <li><strong>Nombre del Solicitante:</strong> ${
+                  appointmentData.citizen.first_name
+                } ${appointmentData.citizen.last_name}</li>
+                <li><strong>Motivo de la Audiencia:</strong> ${
+                  appointmentData.cause
+                }</li>
                 <li><strong>Fecha de Solicitud:</strong> ${formatDate(
-          appointmentData.date,
-          1
-        )}</li>
-                <li><strong>Propuesta del Alcalde:</strong> ${appointmentData.response
-        }</li>
+                  appointmentData.date,
+                  1
+                )}</li>
+                <li><strong>Propuesta del Alcalde:</strong> ${
+                  appointmentData.response
+                }</li>
             </ul>
             <p>Por favor, tome las medidas necesarias para atender esta audiencia y proporcione una solución a la brevedad posible.</p>
             <p>Puede acceder al sistema de gestión de audiencias haciendo <a href='https://appointment-scheduler-brown.vercel.app/'>click aquí</a> para más detalles y para registrar la solución correspondiente.</p>
@@ -218,7 +220,11 @@ function ReferralForm() {
         <Button href="/appointments" type="button" color="primary">
           Volver
         </Button>
-        <Button disabled={!isValid || isLoading} type="submit" color="secondary">
+        <Button
+          disabled={!isValid || isLoading}
+          type="submit"
+          color="secondary"
+        >
           Derivar
         </Button>
       </div>
