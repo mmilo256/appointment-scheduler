@@ -33,32 +33,11 @@ function Home() {
   }, [getAllAppointments]);
 
   return (
-    <>
-      {unresolvedAppointments ? (
-        <div className="bg-amber-100 shadow">
-          <Container>
-            <div className="flex justify-between items-center">
-              <p className="py-6 text-lg font-semibold text-amber-700">
-                {" "}
-                Atención: Hay audiencias sin propuesta de solución (
-                {unresolvedAppointments})
-              </p>
-              <Link
-                to="/appointments"
-                className="bg-amber-500 hover:bg-amber-600 px-3 py-2 rounded text-white"
-              >
-                Ver audiencias
-              </Link>
-            </div>
-          </Container>
-        </div>
-      ) : ""}
-      <Container>
-        <div className="mt-20">
-          <HomeGrid />
-        </div>
-      </Container>
-    </>
+    <Container>
+      <div className="mt-20">
+        <HomeGrid />
+      </div>
+    </Container>
   );
 }
 

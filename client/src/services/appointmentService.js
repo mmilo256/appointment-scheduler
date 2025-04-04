@@ -98,6 +98,19 @@ export const deleteAppointment = async (id) => {
     }
 };
 
+// Marcar audiencia como terminada
+export const checkAppointment = async (id) => {
+    try {
+        const data = await httpRequest(`${API_URL}/${id}/check`, {
+            method: 'PATCH'
+        });
+        return data;
+    } catch (error) {
+        console.error("Error al editar el audiencia.", error);
+        throw error;
+    }
+};
+
 // Función asincrónica para actualizar un audiencia
 export const updateAppointment = async (id, appointmentData) => {
     try {

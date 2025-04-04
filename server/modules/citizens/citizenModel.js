@@ -33,14 +33,11 @@ const Citizen = sequelize.define('citizens', {
   },
   phone_2: {
     type: DataTypes.STRING
-  },
-  is_deleted: {
-    type: DataTypes.BOOLEAN
   }
 },
-{
-  // Opción para que no cree los atributos createdAt y updatedAt
-  timestamps: false
-})
+  {
+    // Opción para que no cree los atributos createdAt y updatedAt
+    timestamps: false
+  })
 
 export default Citizen

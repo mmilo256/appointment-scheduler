@@ -1,13 +1,18 @@
 import React, { useContext, useEffect, useState } from "react";
 import Button from "../ui/Button";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { checkToken, formatRut, verifyRut } from "../../utils/helpers";
 import Input from "../ui/Input";
 import { useCitizenStore } from "../../stores/useCitizenStore";
 
 function CreateCitizenForm() {
-  const [rut, setRut] = useState("");
+
+  const location = useLocation()
+  const queryParams = new URLSearchParams(location.search)
+  const rutParam = queryParams.get("rut")
+
+  const [rut, setRut] = useState(rutParam ?? "");
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
   const [address, setAddress] = useState("");

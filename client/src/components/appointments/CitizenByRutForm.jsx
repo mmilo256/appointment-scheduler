@@ -59,6 +59,7 @@ function CitizenByRutForm({ setCitizen }) {
         </button>
       </form>
       <CreateCitizenModal
+        rut={rut}
         modal={modal}
         setModal={setModal}
         title="Ciudadano no encontrado"

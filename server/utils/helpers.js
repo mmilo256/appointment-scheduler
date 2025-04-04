@@ -1,6 +1,6 @@
 import crypto from 'crypto'
 import jwt from 'jsonwebtoken'
-import 'dotenv/config'
+import { JWT_SECRET } from '../config/config.js'
 
 // Encriptar contraseñas usando el algoritmo SHA256
 export const encryptPassword = (password) => {
@@ -14,7 +14,7 @@ export const comparePasswords = (originalPass, passwordToCheck) => {
 
 // Generar JSON Web Token
 export const generateToken = (username, role, firstName, lastName, email) => {
-  return jwt.sign({ username, role, firstName, lastName, email }, process.env.JWT_SECRET, {
+  return jwt.sign({ username, role, firstName, lastName, email }, JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN
   })
 }

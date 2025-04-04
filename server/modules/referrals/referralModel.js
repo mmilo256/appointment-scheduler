@@ -1,8 +1,5 @@
 import { sequelize } from '../../config/db.js'
 import { DataTypes } from 'sequelize'
-import Department from '../departments/departmentModel.js'
-import Appointment from '../appointments/appointmentModel.js'
-import Citizen from '../citizens/citizenModel.js'
 
 // Modelo de audiencias
 export const Referral = sequelize.define('referrals', {
@@ -50,10 +47,5 @@ export const Referral = sequelize.define('referrals', {
   // Opción para que no cree los atributos createdAt y updatedAt
   timestamps: false
 })
-
-// Definición de asociaciones
-Referral.belongsTo(Department, { as: 'department', foreignKey: 'department_id' })
-Referral.belongsTo(Appointment, { as: 'appointment', foreignKey: 'appointment_id' })
-Referral.belongsTo(Citizen, { as: 'citizen', foreignKey: 'citizen_id' })
 
 export default Referral

@@ -7,13 +7,11 @@ export const getAllAppointments = async (req, res) => {
   try {
     // Obtener las audiencias y los nombres de sus usuarios, ciudadanos y departamentos correspondientes
     const appointments = await Appointment.findAll({
-      where: { is_deleted: false },
       include: [
         { model: Citizen, attributes: ['first_name', 'last_name'], as: 'citizen' }
       ],
       order: [
-        ['date', 'ASC'],
-        ['time', 'ASC']
+        ['createdAt', 'ASC']
       ]
     })
     res.json(appointments)
@@ -78,25 +76,13 @@ export const createAppointment = async (req, res) => {
     // Obtener datos del nuevo audiencia desde la request
     const {
       cause,
-      date,
-      time,
       citizen_id: citizenId
     } = req.body
-    // Validación de la audiencia
-    /* const { error } = appointmentSchema.validate({
-      cause,
-      appointment_date: date,
-      citizen_id: citizenId
-    })
-    if (error) {
-      return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: 'Datos no validos' })
-    } */
     // Crear al nuevo audiencia en la base de datos
     const newAppointment = await Appointment.create({
       cause,
-      date,
-      time,
-      citizen_id: citizenId
+      citizen_id: citizenId,
+      status: "pendiente"
     })
     res.status(HTTP_STATUS.CREATED).json({ message: 'Audiencia creado correctamente', newAppointment })
   } catch (error) {
@@ -114,6 +100,22 @@ export const deleteAppointment = async (req, res) => {
     res.status(HTTP_STATUS.NO_CONTENT).json()
   } catch (error) {
     res.status(HTTP_STATUS.BAD_REQUEST).json({ message: 'Error al eliminar audiencia.', error })
+  }
+}
+
+export const checkAppointment = async (req, res) => {
+  try {
+    const { id } = req.params
+    const appointment = await Appointment.findOne({ where: { id } })
+    if (!appointment) {
+      return res.status(HTTP_STATUS.NOT_FOUND).json({ message: 'No se encontró la audiencia' })
+    }
+    await Appointment.update({ status: "terminada" }, { where: { id } })
+    res.json({
+      message: 'Audiencia modificado correctamente'
+    })
+  } catch (error) {
+    res.status(HTTP_STATUS.BAD_REQUEST).json({ message: 'Error al modificar audiencia.', error })
   }
 }
 

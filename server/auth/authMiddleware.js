@@ -1,6 +1,5 @@
-import { HTTP_STATUS } from '../config/config.js'
+import { HTTP_STATUS, JWT_SECRET } from '../config/config.js'
 import jwt from 'jsonwebtoken'
-import 'dotenv/config'
 
 export const verifyToken = (req, res, next) => {
   const header = req.header('Authorization') || ''
@@ -12,7 +11,7 @@ export const verifyToken = (req, res, next) => {
   }
   // Si existe el token, obtener el payload y almacenarlo en la petición
   try {
-    const payload = jwt.verify(token, process.env.JWT_SECRET)
+    const payload = jwt.verify(token, JWT_SECRET)
     req.payload = {
       username: payload.username,
       role: payload.role,

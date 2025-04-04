@@ -1,10 +1,11 @@
 import 'dotenv/config'
 
 // Puerto del servidor
-export const PORT = process.env.PORT
+export const PORT = process.env.PORT || 10000
 
 // Key para el JSON Web Token
-export const JWT_SECRET = process.env.JWT_SECRET
+export const JWT_SECRET = process.env.JWT_SECRET || "dev"
+export const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "8h"
 
 // Configuración de la base de datos
 export const DATABASE = {

@@ -24,14 +24,16 @@ function BaseTable({ table, isLoading }) {
                   key={index}
                   className="odd:bg-gray-50 even:bg-gray-100 hover:bg-gray-200"
                 >
-                  {Object.values(row).map((cell, cellIndex) => (
-                    <td
-                      key={cellIndex}
-                      className="px-2 py-1.5 border-b min-w-sm text-ellipsis border-gray-200 text-sm"
-                    >
-                      {cell}
-                    </td>
-                  ))}
+                  {Object.values(row).map((cell, cellIndex) => {
+                    return (
+                      <td
+                        key={cellIndex}
+                        className="px-2 py-1.5 border-b min-w-sm text-ellipsis border-gray-200 text-sm"
+                      >
+                        {cell}
+                      </td>
+                    )
+                  })}
                 </tr>
               ))}
           </tbody>

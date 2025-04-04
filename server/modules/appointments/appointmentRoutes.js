@@ -1,5 +1,5 @@
 import e from 'express'
-import { createAppointment, deleteAppointment, getAllAppointments, getAppointmentById, getAvailableSchedules, updateAppointment } from './appointmentController.js'
+import { checkAppointment, createAppointment, deleteAppointment, getAllAppointments, getAppointmentById, getAvailableSchedules, updateAppointment } from './appointmentController.js'
 
 const router = e.Router()
 
@@ -10,5 +10,6 @@ router.get('/:id', getAppointmentById)
 router.get('/date/:reqDate', getAvailableSchedules)
 router.delete('/:id', deleteAppointment)
 router.patch('/:id', updateAppointment)
+router.patch('/:id/check', checkAppointment)
 
 export default router

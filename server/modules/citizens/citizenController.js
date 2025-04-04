@@ -3,13 +3,13 @@ import { HTTP_STATUS } from '../../config/config.js'
 
 // Petición para obtener a todos los ciudadanos
 export const getAllCitizens = async (req, res) => {
-  const page = parseInt(req.query.page)
-  const pageSize = parseInt(req.query.pageSize)
+  const page = parseInt(req.query.page) || 1
+  const pageSize = parseInt(req.query.pageSize) || 10
   // Calculate the start and end indexes for the requested page
   const startIndex = (page - 1) * pageSize
   const endIndex = page * pageSize
   try {
-    const citizens = await Citizen.findAll({ where: { is_deleted: false } })
+    const citizens = await Citizen.findAll()
     // Slice the products array based on the indexes
     const paginatedCitizens = citizens.slice(startIndex, endIndex)
     // Calculate the total number of pages
@@ -25,7 +25,7 @@ export const getAllCitizens = async (req, res) => {
 export const getCitizenById = async (req, res) => {
   try {
     const { id } = req.params
-    const citizen = await Citizen.findOne({ where: { id, is_deleted: false } })
+    const citizen = await Citizen.findOne({ where: { id } })
     res.json(citizen)
   } catch (error) {
     console.log('Error al obtener ciudadano.', error)
@@ -36,8 +36,7 @@ export const getCitizenById = async (req, res) => {
 export const getCitizenByRUT = async (req, res) => {
   try {
     const { rut } = req.params
-    console.log(rut)
-    const citizen = await Citizen.findOne({ where: { rut, is_deleted: false } })
+    const citizen = await Citizen.findOne({ where: { rut } })
     res.json(citizen)
   } catch (error) {
     console.log('Error al obtener ciudadano.', error)
@@ -50,7 +49,7 @@ export const createCitizen = async (req, res) => {
     // Obtener datos del nuevo ciudadano desde la request y encriptar la contraseña
     const { rut, first_name: firstName, last_name: lastName, address, email, phone, phone_2: phone2 } = req.body
     // Verifica si el ciudadano ya existe
-    const existingCitizen = await Citizen.findOne({ rut, where: { rut, is_deleted: false } })
+    const existingCitizen = await Citizen.findOne({ rut, where: { rut } })
     if (existingCitizen) {
       return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: 'El ciudadano ya existe' })
     }
@@ -81,7 +80,7 @@ export const updateCitizen = async (req, res) => {
     // id del ciudadano a editar
     const { id } = req.params
     // obtener el body de la petición
-    const { rut, first_name: firstName, last_name: lastName, address, email, phone, phone_2: phone2, is_deleted: isDeleted } = req.body
+    const { rut, first_name: firstName, last_name: lastName, address, email, phone, phone_2: phone2 } = req.body
     const citizen = await Citizen.findOne({ where: { id } })
     if (!citizen) {
       return res.status(HTTP_STATUS.NOT_FOUND).json({ message: 'No se encontró al ciudadano' })
@@ -96,7 +95,6 @@ export const updateCitizen = async (req, res) => {
     if (email) updates.email = email
     if (phone) updates.phone = phone
     if (phone2) updates.phone_2 = phone2
-    if (isDeleted) updates.is_deleted = isDeleted
     // Modificar ciudadano
     await Citizen.update(updates, { where: { id } })
     res.json({

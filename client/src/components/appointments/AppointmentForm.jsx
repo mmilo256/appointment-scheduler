@@ -53,30 +53,19 @@ function AppointmentForm({ citizenData }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true)
-    if (Object.keys(citizenData).length !== 0) {
-      if (cause) {
-        if (selectedDate && selectedTime) {
-          const appDate = `${new Date(selectedDate).getFullYear()}-${
-            new Date(selectedDate).getMonth() + 1
-          }-${new Date(selectedDate).getDate()}`;
-          const data = {
-            cause,
-            date: formatDate(appDate, 2),
-            time: selectedTime,
-            citizen_id: citizenData.id,
-          };
-          await createAppointment(data);
-          await getAllAppointments();
-          setIsLoading(false)
-          navigate("/appointments");
-        } else {
-          alert("Debes ingresar la fecha de la audiencia");
-        }
-      } else {
-        alert("Debes ingresar la materia de la audiencia");
-      }
-    } else {
-      alert("Debes ingresar el RUT de un ciudadano para realizar la solicitud");
+    const data = {
+      cause,
+      citizen_id: citizenData.id
+    };
+    try {
+      await createAppointment(data);
+      await getAllAppointments();
+      navigate("/appointments");
+    } catch (error) {
+      console.log(error)
+      alert("No se pudo crear la audiencia")
+    } finally {
+      setIsLoading(false)
     }
   };
 
@@ -101,7 +90,7 @@ function AppointmentForm({ citizenData }) {
         value={cause}
         onChange={onChangeCause}
       />
-      <div className="md:grid md:grid-cols-3 gap-2">
+      {/* <div className="md:grid md:grid-cols-3 gap-2">
         <div className="md:col-span-2">
           <DatePickerInput
             selectedtDate={selectedDate}
@@ -139,10 +128,10 @@ function AppointmentForm({ citizenData }) {
             format(selectedDate, "dd 'de' MMMM 'de' yyyy", { locale: es })}{" "}
           a las {selectedTime && selectedTime}
         </p>
-      </div>
+      </div> */}
       <div className="flex ml-auto mt-5 gap-2 w-60 md:w-96">
         <Button href="/appointments">Volver</Button>
-        <Button disabled={!isValid || isLoading} color="secondary" type="submit">
+        <Button disabled={isLoading} color="secondary" type="submit">
           Crear audiencia
         </Button>
       </div>

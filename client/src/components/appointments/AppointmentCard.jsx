@@ -1,128 +1,55 @@
-import { useNavigate } from "react-router-dom";
-import { useAppointmentStore } from "../../stores/useAppointmentStore";
-import { useState } from "react";
-import AddSolutionModal from "./AddSolutionModal";
-import { useAuthStore } from "../../stores/useAuthStore";
-import ConfirmationModal from "../ui/ConfirmationModal";
+import { checkAppointment, getAllAppointments } from "../../services/appointmentService";
+import { formatDate } from "../../utils/helpers";
 
-function AppointmentCard({ data }) {
-  const [modal, setModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
-  const role = useAuthStore((state) => state.role);
+function AppointmentCard({ data, setRefresh }) {
 
-  const navigate = useNavigate();
-
-  const selectAppointment = useAppointmentStore(
-    (state) => state.selectAppointment
-  );
-
-  const deleteAppointment = useAppointmentStore(
-    (state) => state.deleteAppointment
-  );
-
-  const getAllAppointments = useAppointmentStore(
-    (state) => state.getAllAppointments
-  );
-
-  const onOpenConfirmDelete = () => {
-    setDeleteModal(true);
+  const onCheck = async () => {
+    try {
+      await checkAppointment(data.id)
+      setRefresh(prev => !prev)
+    } catch (error) {
+      console.log("No se pudo")
+    }
   };
 
-  const onDeleteAppointment = async () => {
-    await deleteAppointment(data.id);
-    await getAllAppointments();
-    setDeleteModal(false);
-  };
-
-  const onEditAppointment = async () => {
-    await selectAppointment(data.id);
-    navigate(`edit?id=${data.id}&citizen=${data.citizenId}`);
-  };
-
-  const onAddSolution = () => {
+  const onReferral = () => {
     setModal(true);
-  };
-
-  const onReferAppointment = async () => {
-    await selectAppointment(data.id);
-    navigate(`/referrals/create?appointmentId=${data.id}`);
   };
 
   const buttonStyles = "text-white text-sm px-2 py-1 rounded";
 
-  if (data.isReferred) return null;
-
   return (
     <div
-      className={`${
-        data.response ? "bg-green-50" : "bg-slate-50"
-      } p-3 rounded shadow`}
+      className={`${data.status === "pendiente" ? "bg-white" : "bg-green-50"} p-3 rounded shadow`}
     >
       {/* Información de la cita */}
       <div className="flex flex-col gap-1">
-        <p className="text-xl font-bold">Motivo: {data.cause}</p>
-        <p className="text-lg">
-          {" "}
-          <span className="font-semibold">Ciudadano:</span> {data.citizen}
+        <p className="text-lg font-bold">Motivo: {data.cause}</p>
+        <p>
+          <span className="font-semibold">Ciudadano:</span> {`${data.citizen.first_name} ${data.citizen.last_name}`}
         </p>
-        <p className="text-lg">
-          {" "}
-          <span className="font-semibold">Hora:</span> {data.time}
+        <p>
+          <span className="font-semibold">Fecha:</span> {`${formatDate(data.createdAt, 1)}`}
         </p>
-        {data.response && (
-          <p className="bg-green-100 rounded shadow p-2 mb-4">
-            {" "}
-            <span className="font-semibold">Propuesta:</span> {data.response}
-          </p>
-        )}
+        <p>
+          <span className="font-semibold">Hora de llegada:</span> {`${formatDate(data.createdAt, 2)}`}
+        </p>
       </div>
 
       <div className="flex justify-end gap-2">
-        {role <= 2 && (
-          <div>
-            {data.response ? (
-              <button
-                onClick={onReferAppointment}
-                className={`bg-green-500 hover:bg-green-600 ${buttonStyles}`}
-              >
-                Derivar
-              </button>
-            ) : (
-              <button
-                onClick={onAddSolution}
-                className={`bg-amber-500 hover:bg-amber-600 ${buttonStyles}`}
-              >
-                Agregar propuesta
-              </button>
-            )}
-          </div>
-        )}
-        <button
-          onClick={onEditAppointment}
-          className={`bg-blue-500 hover:bg-blue-600 ${buttonStyles}`}
+        {data.status === "pendiente" && <button
+          onClick={onCheck}
+          className={`bg-green-500 hover:bg-green-600 ${buttonStyles}`}
         >
-          Editar
-        </button>
-        <button
-          onClick={onOpenConfirmDelete}
-          className={`bg-red-500 hover:bg-red-600 ${buttonStyles}`}
+          Marcar como terminada
+        </button>}
+        {/* <button
+          onClick={onReferral}
+          className={`bg-amber-500 hover:bg-amber-600 ${buttonStyles}`}
         >
-          Eliminar
-        </button>
+          Derivar
+        </button> */}
       </div>
-      <AddSolutionModal
-        id={data.id}
-        modal={modal}
-        setModal={setModal}
-        title={data.cause}
-      />
-      <ConfirmationModal
-        modal={deleteModal}
-        setModal={setDeleteModal}
-        title="Borrar audiencia"
-        onConfirm={onDeleteAppointment}
-        message={`¿Seguro que desea borrar la audiencia ${data.cause}?`}
-      />
     </div>
   );
 }

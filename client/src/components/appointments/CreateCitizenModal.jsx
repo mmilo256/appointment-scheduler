@@ -2,7 +2,7 @@ import React from "react";
 import BaseModal from "../ui/BaseModal";
 import Button from "../ui/Button";
 
-function CreateCitizenModal({ modal, setModal, title }) {
+function CreateCitizenModal({ modal, setModal, title, rut }) {
   return (
     <BaseModal
       isOpen={modal}
@@ -22,7 +22,7 @@ function CreateCitizenModal({ modal, setModal, title }) {
         >
           Cerrar
         </Button>
-        <Button href="/citizens/create" color="secondary">
+        <Button href={`/citizens/create?rut=${rut}`} color="secondary">
           Agregar ciudadano
         </Button>
       </div>

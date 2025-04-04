@@ -1,5 +1,8 @@
-import { format } from "date-fns-tz";
 import { jwtDecode } from "jwt-decode";
+import dayjs from 'dayjs'
+import 'dayjs/locale/es'
+
+dayjs.locale("es")
 
 export const checkToken = (token) => {
   if (!token) {
@@ -26,38 +29,19 @@ export const splitDateHour = (fulldate) => {
 };
 
 export const formatDate = (date, format = 1) => {
-  const monthsList = [
-    "enero",
-    "febrero",
-    "marzo",
-    "abril",
-    "mayo",
-    "junio",
-    "julio",
-    "agosto",
-    "septiembre",
-    "octubre",
-    "noviembre",
-    "diciembre",
-  ];
-  const splittedDate = date.split("-");
-  const year = splittedDate[0];
-  const monthNum =
-    splittedDate[1] > 9 ? splittedDate[1] : "0" + splittedDate[1];
-  const month = Number(splittedDate[1]);
-  const day =
-    String(splittedDate[2]).length > 1
-      ? splittedDate[2]
-      : "0" + splittedDate[2];
 
   let dateString;
-  if (format === 1) {
-    // dateString = `${day} de ${month} de ${year}`;
-    dateString = `${day} de ${monthsList[month - 1]} de ${year}`;
-  } else if (format === 2) {
-    dateString = `${year}-${monthNum}-${day}`;
+
+  switch (format) {
+    case 1:
+      dateString = dayjs(date).format("DD [de] MMMM [de] YYYY")
+      break;
+    case 2:
+      dateString = dayjs(date).format("HH:mm")
+      break;
   }
-  return dateString;
+
+  return dateString
 };
 
 // Formatear rut
