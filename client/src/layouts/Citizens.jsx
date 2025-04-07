@@ -13,7 +13,8 @@ function Citizens() {
 
   useEffect(() => {
     (async () => {
-      await getAllCitizens(1);
+      const data = await getAllCitizens(1)
+      console.log(data)
     })();
   }, [getAllCitizens]);
 
@@ -25,7 +26,7 @@ function Citizens() {
       </div>
       <CitizensTable />
       <div className="flex justify-center py-4">
-      <Pagination getItems={getAllCitizens} currentPage={currentPage} totalPages={totalPages} />
+        <Pagination getItems={getAllCitizens} currentPage={currentPage} totalPages={totalPages} />
       </div>
     </Container>
   );

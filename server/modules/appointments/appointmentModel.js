@@ -2,32 +2,26 @@ import { sequelize } from '../../config/db.js'
 import { DataTypes } from 'sequelize'
 
 // Modelo de audiencias
-export const Appointment = sequelize.define('appointments', {
+export const Appointment = sequelize.define('audiencias', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
-  cause: {
-    type: DataTypes.STRING,
-    allowNull: false
+  materia: {
+    type: DataTypes.STRING
   },
-  is_referred: {
+  derivada: {
     type: DataTypes.BOOLEAN,
     defaultValue: false
   },
-  response: {
+  respuesta: {
     type: DataTypes.STRING
   },
-  citizen_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'citizens',
-      key: 'id'
-    }
+  ciudadano_id: {
+    type: DataTypes.INTEGER
   },
-  status: {
+  estado: {
     type: DataTypes.STRING
   }
 })

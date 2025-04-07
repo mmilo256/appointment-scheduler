@@ -21,6 +21,6 @@ export const login = async (req, res) => {
     return
   }
   // Si el usuario y la contraseña coinciden, generar token
-  const token = generateToken(user.username, user.role, user.first_name, user.last_name, user.email)
+  const token = generateToken(user.username, user.nombres, user.apellidos, user.email)
   res.json({ message: 'Has iniciado sesión', token })
 }

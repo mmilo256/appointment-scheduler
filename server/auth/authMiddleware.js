@@ -14,10 +14,9 @@ export const verifyToken = (req, res, next) => {
     const payload = jwt.verify(token, JWT_SECRET)
     req.payload = {
       username: payload.username,
-      role: payload.role,
       email: payload.email,
-      first_name: payload.first_name,
-      last_name: payload.last_name
+      nombres: payload.nombres,
+      apellidos: payload.apellidos
     }
     next()
   } catch (error) {
