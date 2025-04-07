@@ -1,9 +1,8 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getAllDepartments } from "../../services/departmentService";
 import { checkToken, formatDate } from "../../utils/helpers";
 import Input from "../ui/Input";
 import Button from "../ui/Button";
-import { AuthContext } from "../../context/AuthContext";
 import { updateAppointment } from "../../services/appointmentService";
 import { createReferral } from "../../services/referralService";
 import { useNavigate } from "react-router-dom";
@@ -20,7 +19,6 @@ function ReferralForm() {
   const [status, setStatus] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [isValid, setIsValid] = useState(false);
-  const { logout } = useContext(AuthContext);
 
   const deleteAppointment = useAppointmentStore(
     (state) => state.deleteAppointment
@@ -59,7 +57,7 @@ function ReferralForm() {
     };
     // Llamada a la función para obtener los departamentos al montar el componente
     getDepartments();
-  }, [logout]);
+  }, []);
 
   const referralAppointment = async (data) => {
     // Llamada a la función getAllDepartments del servicio para obtener los departamentos
@@ -168,19 +166,16 @@ function ReferralForm() {
             <p>Le informamos que se ha derivado una nueva audiencia a <span class="highlight">${depName}</span>.</p>
             <p>A continuación, se detallan los datos de la audiencia derivada:</p>
             <ul>
-                <li><strong>Nombre del Solicitante:</strong> ${
-                  appointmentData.citizen.first_name
-                } ${appointmentData.citizen.last_name}</li>
-                <li><strong>Motivo de la Audiencia:</strong> ${
-                  appointmentData.cause
-                }</li>
+                <li><strong>Nombre del Solicitante:</strong> ${appointmentData.citizen.first_name
+        } ${appointmentData.citizen.last_name}</li>
+                <li><strong>Motivo de la Audiencia:</strong> ${appointmentData.cause
+        }</li>
                 <li><strong>Fecha de Solicitud:</strong> ${formatDate(
-                  appointmentData.date,
-                  1
-                )}</li>
-                <li><strong>Propuesta del Alcalde:</strong> ${
-                  appointmentData.response
-                }</li>
+          appointmentData.date,
+          1
+        )}</li>
+                <li><strong>Propuesta del Alcalde:</strong> ${appointmentData.response
+        }</li>
             </ul>
             <p>Por favor, tome las medidas necesarias para atender esta audiencia y proporcione una solución a la brevedad posible.</p>
             <p>Puede acceder al sistema de gestión de audiencias haciendo <a href='https://appointment-scheduler-brown.vercel.app/'>click aquí</a> para más detalles y para registrar la solución correspondiente.</p>

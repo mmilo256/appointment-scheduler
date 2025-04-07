@@ -1,7 +1,6 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import Container from "./Container";
-import { AuthContext } from "../../context/AuthContext";
 
 const navigation = [
   { label: "Inicio", href: "/" },
@@ -13,7 +12,6 @@ const navigation = [
 ];
 
 function Navbar() {
-  const { logout, user } = useContext(AuthContext);
   const [toggleMenu, setToggleMenu] = useState(false)
 
   const onToggleMenu = () => {
@@ -36,15 +34,14 @@ function Navbar() {
           ))}
         </ul>
         <div className="hidden md:flex items-center gap-4">
-          <p className="font-light italic text-right">{`${user.firstName} ${user.lastName}`}</p>
+          {/* <p className="font-light italic text-right">{`${user.firstName} ${user.lastName}`}</p> */}
           <button
             className="bg-secondary-500 hover:bg-secondary-600  px-2 py-1 rounded font-semibold"
-            onClick={logout}
           >
             Cerrar sesión
           </button>
         </div>
-        <p className="md:hidden font-light italic">{`${user.firstName} ${user.lastName}`}</p>
+        {/* <p className="md:hidden font-light italic">{`${user.firstName} ${user.lastName}`}</p> */}
         <button onClick={onToggleMenu} className="h-12 w-14 my-2 rounded bg-secondary-500 block md:hidden ml-auto">Menú</button>
       </Container>
       {/**Menu para pantallas móviles */}

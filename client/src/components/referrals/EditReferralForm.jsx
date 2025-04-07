@@ -1,9 +1,8 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getAllDepartments } from "../../services/departmentService";
 import { checkToken } from "../../utils/helpers";
 import Input from "../ui/Input";
 import Button from "../ui/Button";
-import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useReferralStore } from "../../stores/useReferralStore";
 function EditReferralForm({ data }) {
@@ -15,7 +14,6 @@ function EditReferralForm({ data }) {
   const [solution, setSolution] = useState(data.solution ?? "");
   const [solutionDate, setSolutionDate] = useState(data.solution_date ?? "");
   const [isValid, setIsValid] = useState(false);
-  const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -55,7 +53,9 @@ function EditReferralForm({ data }) {
     };
     // Llamada a la función para obtener los departamentos al montar el componente
     getDepartments();
-  }, [logout]);
+  }, []);
+
+
   useEffect(() => {
     const validateForm = () => {
       if (department && status) {

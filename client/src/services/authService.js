@@ -2,7 +2,7 @@ import { DEV_API_URL } from "../constants";
 
 const API_URL = `${DEV_API_URL}/auth`;
 
-const login = async (username, password) => {
+export const login = async (username, password) => {
     try {
         const response = await fetch(API_URL, {
             method: "POST",
@@ -20,8 +20,4 @@ const login = async (username, password) => {
     } catch (error) {
         console.log("Error al iniciar sesión"); // Muestra un mensaje de error si ocurre un problema durante la solicitud
     }
-};
-
-export const authService = {
-    login
 };

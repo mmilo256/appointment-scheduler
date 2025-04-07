@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../ui/Button";
-import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { AuthContext } from "../../context/AuthContext";
+import { useLocation, useNavigate } from "react-router-dom";
 import { checkToken, formatRut, verifyRut } from "../../utils/helpers";
 import Input from "../ui/Input";
 import { useCitizenStore } from "../../stores/useCitizenStore";
+import { createCitizen } from "../../services/citizenService";
 
 function CreateCitizenForm() {
 
@@ -23,9 +23,6 @@ function CreateCitizenForm() {
   const [isLoading, setIsLoading] = useState(false)
   // Hook para la navegación
   const navigate = useNavigate();
-  const { logout } = useContext(AuthContext);
-
-  const createCitizen = useCitizenStore((state) => state.createCitizen);
 
   // Función para manejar la creación de un nuevo ciudadano
   const onCreateCitizen = async (e) => {
@@ -33,28 +30,24 @@ function CreateCitizenForm() {
     setIsLoading(true)
     const data = {
       rut,
-      first_name: name,
-      last_name: lastName,
-      address,
-      phone,
+      nombres: name,
+      apellidos: lastName,
+      direccion: address,
+      telefono: phone,
     };
     if (phone2) {
-      data.phone_2 = phone2;
+      data.telefono_2 = phone2;
     }
     if (email) {
       data.email = email;
     }
     if (verifyRut(rut)) {
-      const isTokenExpired = checkToken(localStorage.getItem("jwt"));
       try {
-        if (!isTokenExpired) {
-          await createCitizen(data);
-          navigate("/citizens");
-        } else {
-          logout("expired");
-        }
+        await createCitizen(data);
+        navigate("/citizens");
       } catch (error) {
-        console.log("No se pudo crear el ciudadano", error);
+        alert(error.message)
+        console.log(error.message);
       }
     } else {
       alert("El RUT no es válido");

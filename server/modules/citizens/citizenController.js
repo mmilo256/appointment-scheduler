@@ -51,7 +51,7 @@ export const createCitizen = async (req, res) => {
     // Verifica si el ciudadano ya existe
     const existingCitizen = await Citizen.findOne({ rut, where: { rut } })
     if (existingCitizen) {
-      return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: 'El ciudadano ya existe' })
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: 'Ya existe un ciudadano con este RUT' })
     }
     // Crear al nuevo ciudadano en la base de datos
     const newCitizen = await Citizen.create({ rut, nombres, apellidos, direccion, email, telefono, telefono_2 })

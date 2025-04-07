@@ -1,7 +1,6 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import Button from "../ui/Button";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { AuthContext } from "../../context/AuthContext";
 import { checkToken, formatRut, verifyRut } from "../../utils/helpers";
 import Input from "../ui/Input";
 import { useCitizenStore } from "../../stores/useCitizenStore";
@@ -22,7 +21,6 @@ function EditCitizenForm() {
   const [phone2, setPhone2] = useState(selectedCitizen.phone_2 ?? "");
   // Hook para la navegación
   const navigate = useNavigate();
-  const { logout } = useContext(AuthContext);
 
   // Función para manejar la creación de un nuevo ciudadano
   const onEditCitizen = async (e) => {

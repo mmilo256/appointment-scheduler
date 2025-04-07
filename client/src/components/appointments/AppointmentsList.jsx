@@ -18,8 +18,6 @@ function AppointmentsList() {
     })()
   }, [refresh])
 
-  console.log(finishedAppointments)
-
   return (
     <div>
       <div className="flex flex-col gap-4 mb-6">

@@ -2,21 +2,42 @@ import Container from "../components/ui/Container";
 import Heading from "../components/ui/Heading";
 import Button from "../components/ui/Button";
 import CitizensTable from "../components/citizens/CitizensTable";
-import { useCitizenStore } from "../stores/useCitizenStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Pagination from "../components/ui/Pagination";
+import { getAllCitizens } from "../services/citizenService";
+import BaseTable from "../components/ui/BaseTable";
+import CitizenTableActions from "../components/citizens/CitizenTableActions";
 
 function Citizens() {
-  const getAllCitizens = useCitizenStore((state) => state.getAllCitizens);
-  const totalPages = useCitizenStore(state => state.totalPages)
-  const currentPage = useCitizenStore(state => state.currentPage)
+
+  const [citizens, setCitizens] = useState([])
+  const [refresh, setRefresh] = useState(false)
 
   useEffect(() => {
     (async () => {
-      const data = await getAllCitizens(1)
-      console.log(data)
+      const data = await getAllCitizens()
+      const formattedData = data.citizens.map((citizen) => ({
+        rut: citizen.rut,
+        fullName: `${citizen.nombres} ${citizen.apellidos}`,
+        address: citizen.direccion,
+        email: citizen.email ?? "(Sin correo)",
+        phone: citizen.telefono,
+        phone2: citizen.telefono_2 ?? "(Sin número)",
+        actions: <CitizenTableActions setRefresh={setRefresh} data={citizen} />
+      }))
+      setCitizens(formattedData)
     })();
-  }, [getAllCitizens]);
+  }, [refresh]);
+
+  const columns = [
+    { label: "RUT" },
+    { label: "NOMBRE COMPLETO" },
+    { label: "DIRECCIÓN" },
+    { label: "CORREO ELECTRÓNICO" },
+    { label: "TELEFONO" },
+    { label: "TELÉFONO 2" },
+    { label: "ACCIONES" },
+  ]
 
   return (
     <Container>
@@ -24,9 +45,9 @@ function Citizens() {
       <div className="max-w-40 mb-5">
         <Button href="/citizens/create">Nuevo ciudadano</Button>
       </div>
-      <CitizensTable />
+      <BaseTable data={citizens} columns={columns} />
       <div className="flex justify-center py-4">
-        <Pagination getItems={getAllCitizens} currentPage={currentPage} totalPages={totalPages} />
+        {/* <Pagination getItems={citizens} currentPage={currentPage} totalPages={totalPages} /> */}
       </div>
     </Container>
   );

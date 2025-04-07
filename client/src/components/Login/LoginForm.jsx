@@ -1,12 +1,11 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import Button from "../ui/Button";
 import { useForm } from "react-hook-form";
-import { AuthContext } from "../../context/AuthContext";
+import { login } from "../../services/authService";
 
 const inputStyles = "border rounded-md p-2 w-full"; // Define los estilos comunes para los inputs
 
 function LoginForm() {
-  const { login } = useContext(AuthContext); // Obtiene login y isLoading del contexto de autenticación
   const {
     register, // Función para registrar los inputs en el formulario
     handleSubmit, // Función para manejar el envío del formulario
@@ -19,7 +18,9 @@ function LoginForm() {
   const onSubmit = async (data) => {
     try {
       setLoading(true);
-      await login(data.username, data.password); // Intenta iniciar sesión con los datos del formulario
+      const token = await login(data.username, data.password); // Intenta iniciar sesión con los datos del formulario
+      localStorage.setItem("jwt", token)
+      window.location.href = "/"
     } catch (error) {
       console.log(error.message); // Imprime cualquier error que ocurra en el proceso de inicio de sesión
     } finally {
