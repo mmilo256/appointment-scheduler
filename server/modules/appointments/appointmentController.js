@@ -4,11 +4,16 @@ import { HTTP_STATUS } from '../../config/config.js'
 
 // Petición para obtener a todos los audiencias
 export const getAllAppointments = async (req, res) => {
+  const { estado } = req.query
+  if (!estado) {
+    return res.status(400).json({ message: "Faltan parámetros" })
+  }
   try {
     // Obtener las audiencias y los nombres de sus usuarios, ciudadanos y departamentos correspondientes
     const appointments = await Appointment.findAll({
+      where: { estado },
       include: [
-        { model: Citizen, attributes: ['nombres', 'apellidos'], as: 'ciudadano' }
+        { model: Citizen, attributes: ['nombres', 'apellidos'], as: "ciudadano" }
       ],
       order: [
         ['createdAt', 'ASC']
@@ -127,17 +132,18 @@ export const updateAppointment = async (req, res) => {
       materia,
       respuesta,
       ciudadano_id,
-      derivada
+      estado
     } = req.body
     const appointment = await Appointment.findOne({ where: { id } })
     if (!appointment) {
       return res.status(HTTP_STATUS.NOT_FOUND).json({ message: 'No se encontró la audiencia' })
     }
     // Guardar en un objeto los datos nuevos
-    const updates = { response }
+    const updates = {}
     if (materia) updates.materia = materia
     if (ciudadano_id) updates.ciudadano_id = ciudadano_id
-    if (derivada) updates.derivada = derivada
+    if (estado) updates.estado = estado
+    if (respuesta) updates.respuesta = respuesta
     // Modificar audiencia
     await Appointment.update(updates, { where: { id } })
     res.json({

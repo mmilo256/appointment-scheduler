@@ -7,8 +7,8 @@ const navigation = [
   { label: "Crear audiencia", href: "appointments/create" },
   { label: "Audiencias", href: "appointments" },
   { label: "Ciudadanos", href: "citizens" },
-  /* { label: "Derivaciones", href: "referrals/pending" }, */
-  { label: "Usuarios", href: "users" },
+  { label: "Historial", href: "history" },
+  { label: "Usuarios", href: "users" }
 ];
 
 function Navbar() {

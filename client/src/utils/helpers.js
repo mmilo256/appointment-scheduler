@@ -39,6 +39,9 @@ export const formatDate = (date, format = 1) => {
     case 2:
       dateString = dayjs(date).format("HH:mm")
       break;
+    default:
+      dateString = dayjs(date).format(format)
+      break
   }
 
   return dateString

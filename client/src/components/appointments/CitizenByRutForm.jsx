@@ -1,25 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Input from "../ui/Input";
 import { checkToken, formatRut, verifyRut } from "../../utils/helpers";
 import { getCitizenByRUT } from "../../services/citizenService";
 import CreateCitizenModal from "./CreateCitizenModal";
+import { useLocation } from "react-router-dom";
 
 function CitizenByRutForm({ setCitizen }) {
+
+  // Obtener rut desde la URL
+  const location = useLocation()
+  const params = new URLSearchParams(location.search)
+  const citizenRut = params.get("rut")
+
+
+  // Si hay un RUT en la URL, realizar la consulta automáticamente
+  useEffect(() => {
+    (async () => {
+      if (citizenRut) {
+        try {
+          const data = await getCitizenByRUT(citizenRut);
+          setCitizen(data)
+        } catch (error) {
+          console.log("Error al obtener los ciudadanos.", error);
+        }
+      }
+    })()
+  })
+
   const [rut, setRut] = useState("");
   const [modal, setModal] = useState(false);
 
   const onSubmit = async () => {
-    const isTokenExpired = checkToken(localStorage.getItem("jwt"));
     try {
-      if (!isTokenExpired) {
-        const data = await getCitizenByRUT(rut);
-        if (data) {
-          setCitizen(data);
-        } else {
-          setModal(true);
-        }
+      const data = await getCitizenByRUT(rut);
+      if (data) {
+        setCitizen(data);
       } else {
-        logout("expired");
+        setModal(true);
       }
     } catch (error) {
       console.log("Error al obtener los ciudadanos.", error);

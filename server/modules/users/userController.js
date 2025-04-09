@@ -4,8 +4,8 @@ import { HTTP_STATUS } from '../../config/config.js'
 
 // Petición para obtener a todos los usuarios
 export const getAllUsers = async (req, res) => {
-  const page = parseInt(req.query.page)
-  const pageSize = parseInt(req.query.pageSize)
+  const page = parseInt(req.query.page) || 1
+  const pageSize = parseInt(req.query.pageSize) || 10
   // Calculate the start and end indexes for the requested page
   const startIndex = (page - 1) * pageSize
   const endIndex = page * pageSize

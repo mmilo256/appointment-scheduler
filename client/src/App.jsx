@@ -15,6 +15,7 @@ import EditCitizen from "./layouts/EditCitizen";
 import Referrals from "./layouts/Referrals";
 import CreateReferral from "./layouts/CreateReferral";
 import EditReferral from "./layouts/EditReferral";
+import History from "./layouts/History";
 
 function App() {
   // Componente principal de la aplicación que define las rutas de navegación
@@ -46,6 +47,8 @@ function App() {
             <Route path="/citizens" element={<Citizens />} />
             <Route path="/citizens/create" element={<CreateCitizen />} />
             <Route path="/citizens/edit" element={<EditCitizen />} />
+            {/* Rutas para gestionar historial */}
+            <Route path="/history" element={<History />} />
             {/* Rutas para gestionar usuarios */}
             <Route path="/users" element={<Users />} />
             <Route path="/users/create" element={<CreateUser />} />

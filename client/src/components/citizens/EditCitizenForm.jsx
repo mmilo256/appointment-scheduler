@@ -1,48 +1,61 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../ui/Button";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { checkToken, formatRut, verifyRut } from "../../utils/helpers";
+import { useNavigate } from "react-router-dom";
+import { formatRut, verifyRut } from "../../utils/helpers";
 import Input from "../ui/Input";
-import { useCitizenStore } from "../../stores/useCitizenStore";
+import { updateCitizen } from "../../services/citizenService";
 
-function EditCitizenForm() {
-  const selectedCitizen = useCitizenStore((state) => state.selectedCitizen);
-  const editCitizen = useCitizenStore((state) => state.editCitizen);
+function EditCitizenForm({ data }) {
 
-  const [searchParams] = useSearchParams();
-  const id = Number(searchParams.get("id"));
+  const [rut, setRut] = useState("");
+  const [name, setName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [address, setAddress] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [phone2, setPhone2] = useState("");
 
-  const [rut, setRut] = useState(selectedCitizen.rut ?? "");
-  const [name, setName] = useState(selectedCitizen.first_name ?? "");
-  const [lastName, setLastName] = useState(selectedCitizen.last_name ?? "");
-  const [address, setAddress] = useState(selectedCitizen.address ?? "");
-  const [email, setEmail] = useState(selectedCitizen.email ?? "");
-  const [phone, setPhone] = useState(selectedCitizen.phone ?? "");
-  const [phone2, setPhone2] = useState(selectedCitizen.phone_2 ?? "");
+  const [isValid, setIsValid] = useState(false)
+
+  useEffect(() => {
+    setRut(data.rut || "")
+    setName(data.nombres || "")
+    setLastName(data.apellidos || "")
+    setAddress(data.direccion || "")
+    setEmail(data.email || "")
+    setPhone(data.telefono || "")
+    setPhone2(data.telefono_2 || "")
+  }, [data])
+
+  useEffect(() => {
+    if (rut && name && lastName && address && phone) {
+      setIsValid(true)
+    } else {
+      setIsValid(false)
+    }
+  }, [address, lastName, name, phone, rut])
+
   // Hook para la navegación
   const navigate = useNavigate();
 
   // Función para manejar la creación de un nuevo ciudadano
   const onEditCitizen = async (e) => {
     e.preventDefault();
-    const dataToEdit = {};
-    if (rut) dataToEdit.rut = rut;
-    if (name) dataToEdit.first_name = name;
-    if (lastName) dataToEdit.last_name = lastName;
-    if (address) dataToEdit.address = address;
-    if (email) dataToEdit.email = email;
-    if (phone) dataToEdit.phone = phone;
-    if (phone2) dataToEdit.phone_2 = phone2;
+    const dataToEdit = {
+      rut,
+      nombres: name,
+      apellidos: lastName,
+      direccion: address,
+      email,
+      telefono: phone,
+      telefono_2: phone2
+    };
 
-    const isTokenExpired = checkToken(localStorage.getItem("jwt"));
     try {
       if (verifyRut(rut)) {
-        if (!isTokenExpired) {
-          await editCitizen(selectedCitizen.id, dataToEdit);
-          navigate("/citizens");
-        } else {
-          logout("expired");
-        }
+        console.log(dataToEdit)
+        await updateCitizen(data.id, dataToEdit);
+        navigate("/citizens");
       } else {
         alert("El RUT es inválido");
       }
@@ -124,7 +137,7 @@ function EditCitizenForm() {
       </div>
       <div className="flex gap-2 max-w-80 my-4 ml-auto">
         <Button href="/citizens">Volver</Button>
-        <Button type="submit">Editar ciudadano</Button>
+        <Button disabled={!isValid} type="submit">Editar ciudadano</Button>
       </div>
     </form>
   );

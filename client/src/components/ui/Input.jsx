@@ -45,7 +45,7 @@ function Input({
             onChange={onChange}
             disabled={disabled}
           >
-            <option value="">Seleccionar</option>
+            <option disabled value="">Seleccionar</option>
             {options?.map((option, index) => (
               <option
                 className={option.disabled ? "bg-gray-300" : ""}

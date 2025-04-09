@@ -1,22 +1,36 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Container from "../components/ui/Container";
 import Heading from "../components/ui/Heading";
 import UsersTable from "../components/users/UsersTable";
-import { useUserStore } from "../stores/useUserStore";
 import Button from "../components/ui/Button";
-import { useAuthStore } from "../stores/useAuthStore";
 import Pagination from "../components/ui/Pagination";
+import { getAllUsers } from "../services/userService";
+import BaseTable from "../components/ui/BaseTable";
 
 function Users() {
-  const getAllUsers = useUserStore((state) => state.getAllUsers);
-  const currentPage = useUserStore(state => state.currentPage)
-  const totalPages = useUserStore(state => state.totalPages)
-  const role = useAuthStore(state => state.role)
+
+  const [users, setUsers] = useState([])
 
   // Efecto de lado para obtener la lista de usuarios al cargar el componente
   useEffect(() => {
-    getAllUsers(1)
-  }, [getAllUsers]);
+    (async () => {
+      const data = await getAllUsers()
+      const formattedData = data.users.map(user => ({
+        username: user.username,
+        fullName: `${user.nombres} ${user.apellidos}`,
+        email: user.email
+      }))
+      setUsers(formattedData)
+    })()
+  }, []);
+
+  const columns = [
+    { label: "Nombre funcionario" },
+    { label: "Nombre de usuario" },
+    { label: "Correo electrónico" }
+  ]
+
+
 
   return (
     <Container>
@@ -38,15 +52,7 @@ function Users() {
           audiencias, derivar audiencias ni editar derivaciones
         </p>
       </div>
-      {role === 1 && <div className="w-52 my-5">
-        <Button color="secondary" href="/users/create">
-          Crear usuario
-        </Button>
-      </div>}
-      <UsersTable />
-      <div className="flex justify-center py-4">
-      <Pagination getItems={getAllUsers} currentPage={currentPage} totalPages={totalPages} />
-      </div>
+      <BaseTable data={users} columns={columns} />
     </Container>
   );
 }

@@ -2,20 +2,28 @@ import Container from "../components/ui/Container";
 import Heading from "../components/ui/Heading";
 import Button from "../components/ui/Button";
 import AppointmentsList from "../components/appointments/AppointmentsList";
-import { useAppointmentStore } from "../stores/useAppointmentStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { getAllAppointments } from "../services/appointmentService";
+import { getAllDepartments } from "../services/departmentService";
 
 function Appointments() {
-  const getAllAppointments = useAppointmentStore(
-    (state) => state.getAllAppointments
-  );
-  const appointments = useAppointmentStore(state => state.appointments)
+
+  const [appointments, setAppointments] = useState([])
+  const [departments, setDepartments] = useState([])
+  const [refresh, setRefresh] = useState(false)
 
   useEffect(() => {
     (async () => {
-      await getAllAppointments();
+      const data = await getAllAppointments();
+      const departments = await getAllDepartments()
+      const departmentsList = departments.map(dep => ({
+        label: dep.direccion,
+        value: dep.id
+      }))
+      setDepartments(departmentsList)
+      setAppointments(data)
     })();
-  }, [getAllAppointments]);
+  }, [refresh]);
 
   return (
     <Container>
@@ -26,7 +34,7 @@ function Appointments() {
         </Button>
       </div>
       {appointments.length === 0 && <p className="text-2xl text-slate-600">No hay audiencias pendientes</p>}
-      <AppointmentsList />
+      <AppointmentsList data={appointments} departments={departments} setRefresh={setRefresh} />
     </Container>
   );
 }

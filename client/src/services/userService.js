@@ -33,10 +33,10 @@ const httpRequest = async (url, options) => {
 };
 
 // Función asincrónica para obtener todos los usuarios
-export const getAllUsers = async (page = 1) => {
+export const getAllUsers = async (page = 1, pageSize = 10) => {
     try {
         // Llamada a la función httpRequest para obtener todos los usuarios
-        const data = await httpRequest(`${API_URL}?page=${page}&pageSize=10`, { method: 'GET' });
+        const data = await httpRequest(`${API_URL}?page=${page}&pageSize=${pageSize}`, { method: 'GET' });
         return data;
     } catch (error) {
         console.error("Error al obtener los usuarios.", error);

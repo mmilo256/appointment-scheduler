@@ -22,6 +22,7 @@ function LoginForm() {
       localStorage.setItem("jwt", token)
       window.location.href = "/"
     } catch (error) {
+      alert(error.message)
       console.log(error.message); // Imprime cualquier error que ocurra en el proceso de inicio de sesión
     } finally {
       setLoading(false);

@@ -5,6 +5,7 @@ import CitizenDetails from "../components/appointments/CitizenDetails";
 import { useState } from "react";
 import CitizenByRutForm from "../components/appointments/CitizenByRutForm";
 function CreateAppointment() {
+
   const [citizen, setCitizen] = useState({});
 
   return (

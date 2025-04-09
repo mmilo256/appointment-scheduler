@@ -11,10 +11,6 @@ export const Appointment = sequelize.define('audiencias', {
   materia: {
     type: DataTypes.STRING
   },
-  derivada: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false
-  },
   respuesta: {
     type: DataTypes.STRING
   },

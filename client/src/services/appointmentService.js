@@ -6,6 +6,7 @@ const API_URL = `${DEV_API_URL}/appointments`; // URL de la API para obtener los
 const getToken = () => localStorage.getItem('jwt');
 
 // Función auxiliar para realizar solicitudes HTTP
+// Función auxiliar para realizar solicitudes HTTP
 const httpRequest = async (url, options) => {
     // Obtener el token de autenticación
     const token = getToken();
@@ -18,10 +19,10 @@ const httpRequest = async (url, options) => {
 
     // Realizar la solicitud HTTP con fetch
     const response = await fetch(url, options);
-
     // Verificar si la respuesta es exitosa
     if (!response.ok) {
-        throw new Error("Error en la solicitud");
+        const errorData = await response.json()
+        throw new Error(errorData.message || "Error en la solicitud")
     }
 
     // Si el método es DELETE, devolver solo la respuesta
@@ -33,10 +34,10 @@ const httpRequest = async (url, options) => {
 };
 
 // Función asincrónica para obtener todos los audiencias
-export const getAllAppointments = async () => {
+export const getAllAppointments = async (estado = "pendiente") => {
     try {
         // Llamada a la función httpRequest para obtener todos los audiencias
-        const data = await httpRequest(API_URL, { method: 'GET' });
+        const data = await httpRequest(`${API_URL}?estado=${estado}`, { method: 'GET' });
         return data;
     } catch (error) {
         console.error("Error al obtener los audiencias.", error);

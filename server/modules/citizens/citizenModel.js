@@ -29,10 +29,6 @@ const Citizen = sequelize.define('ciudadanos', {
   telefono_2: {
     type: DataTypes.STRING
   }
-},
-  {
-    // Opción para que no cree los atributos createdAt y updatedAt
-    timestamps: false
-  })
+})
 
 export default Citizen

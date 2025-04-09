@@ -9,7 +9,9 @@ export const getAllCitizens = async (req, res) => {
   const startIndex = (page - 1) * pageSize
   const endIndex = page * pageSize
   try {
-    const citizens = await Citizen.findAll()
+    const citizens = await Citizen.findAll({
+      order: [['createdAt', 'DESC']]
+    })
     // Slice the products array based on the indexes
     const paginatedCitizens = citizens.slice(startIndex, endIndex)
     // Calculate the total number of pages
@@ -87,14 +89,16 @@ export const updateCitizen = async (req, res) => {
     }
 
     // Guardar en un objeto los datos a modificar
-    const updates = {}
-    if (rut) updates.rut = rut
-    if (nombres) updates.nombres = nombres
-    if (apellidos) updates.apellidos = apellidos
-    if (direccion) updates.direccion = direccion
-    if (email) updates.email = email
-    if (telefono) updates.telefono = telefono
-    if (telefono_2) updates.telefono_2 = telefono_2
+    const updates = {
+      rut,
+      nombres,
+      apellidos,
+      direccion,
+      email,
+      telefono,
+      telefono_2
+    }
+
     // Modificar ciudadano
     await Citizen.update(updates, { where: { id } })
     res.json({

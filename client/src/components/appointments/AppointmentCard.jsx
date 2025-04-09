@@ -1,55 +1,101 @@
-import { checkAppointment, getAllAppointments } from "../../services/appointmentService";
+import { useState } from "react";
+import { checkAppointment, getAllAppointments, updateAppointment } from "../../services/appointmentService";
 import { formatDate } from "../../utils/helpers";
+import BaseModal from "../ui/BaseModal";
+import Button from "../ui/Button";
+import Input from "../ui/Input";
 
-function AppointmentCard({ data, setRefresh }) {
+function AppointmentCard({ data, departments, setRefresh }) {
 
-  const onCheck = async () => {
-    try {
-      await checkAppointment(data.id)
-      setRefresh(prev => !prev)
-    } catch (error) {
-      console.log("No se pudo")
-    }
-  };
-
-  const onReferral = () => {
-    setModal(true);
-  };
+  const [finishModal, setFinishModal] = useState(false)
+  const [referModal, setReferModal] = useState(false)
+  const [selectedDepartment, setSelectedDepartment] = useState("")
+  const [response, setResponse] = useState("")
 
   const buttonStyles = "text-white text-sm px-2 py-1 rounded";
 
+  // Función para cerrar el modal de derivación y resetear el input de dirección seleccionada
+  const onCloseReferModal = () => {
+    setReferModal(false)
+    setSelectedDepartment("")
+  }
+
+  const finishAppointment = async () => {
+    const dataToEdit = {
+      respuesta: response,
+      estado: "terminada"
+    }
+    try {
+      const response = await updateAppointment(data.id, dataToEdit)
+      setRefresh(prev => !prev)
+      alert("Se ha marcado la audiencia como terminada")
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
   return (
-    <div
-      className={`${data.status === "pendiente" ? "bg-white" : "bg-green-50"} p-3 rounded shadow`}
-    >
+    <div className="bg-white p-2 rounded">
       {/* Información de la cita */}
       <div className="flex flex-col gap-1">
-        <p className="text-lg font-bold">Motivo: {data.cause}</p>
+        <p className="text-lg font-bold">Motivo: {data.materia}</p>
         <p>
-          <span className="font-semibold">Ciudadano:</span> {`${data.citizen.first_name} ${data.citizen.last_name}`}
+          <span className="font-semibold">Ciudadano:</span> {`${data.ciudadano.nombres} ${data.ciudadano.apellidos}`}
         </p>
         <p>
-          <span className="font-semibold">Fecha:</span> {`${formatDate(data.createdAt, 1)}`}
         </p>
         <p>
           <span className="font-semibold">Hora de llegada:</span> {`${formatDate(data.createdAt, 2)}`}
         </p>
       </div>
-
       <div className="flex justify-end gap-2">
-        {data.status === "pendiente" && <button
-          onClick={onCheck}
+        <button
           className={`bg-green-500 hover:bg-green-600 ${buttonStyles}`}
+          onClick={() => { setFinishModal(true) }}
         >
           Marcar como terminada
-        </button>}
-        {/* <button
-          onClick={onReferral}
-          className={`bg-amber-500 hover:bg-amber-600 ${buttonStyles}`}
+        </button>
+        <button
+          className={`bg-sky-500 hover:bg-sky-600 ${buttonStyles}`}
+          onClick={() => { setReferModal(true) }}
         >
           Derivar
-        </button> */}
+        </button>
       </div>
+      {/* Modal de confirmación de audiencia terminada */}
+      <BaseModal isOpen={finishModal} onClose={() => { setFinishModal(false) }} title="Marcar audiencia como terminada" >
+        <p className="mb-2">¿Desea marcar la siguiente audiencia como terminada?</p>
+        <ul>
+          <li><strong>Motivo:</strong> {data.materia}</li>
+          <li><strong>Ciudadano:</strong> {`${data.ciudadano.nombres} ${data.ciudadano.apellidos}`}</li>
+        </ul>
+        <Input type="textarea" placeholder="Respuesta (opcional)" value={response} onChange={(e) => setResponse(e.target.value)} />
+        <div className="flex gap-5 mt-5">
+          <Button onClick={() => setFinishModal(false)} color="primary" type="button">
+            Cerrar
+          </Button>
+          <Button color="secondary" onClick={finishAppointment}>
+            Marcar como terminada
+          </Button>
+        </div>
+      </BaseModal>
+      {/* Modal para derivar la audiencia a una dirección municipal */}
+      <BaseModal isOpen={referModal} onClose={onCloseReferModal} title="Derivar audiencia" >
+        <p className="mb-2">Seleccione la dirección a la que desea derivar la audiencia</p>
+        <ul>
+          <li><strong>Motivo:</strong> {data.materia}</li>
+          <li><strong>Ciudadano:</strong> {`${data.ciudadano.nombres} ${data.ciudadano.apellidos}`}</li>
+        </ul>
+        <Input type="select" options={departments} value={selectedDepartment} onChange={(e) => { setSelectedDepartment(e.target.value) }} />
+        <div className="flex gap-5 mt-5">
+          <Button onClick={onCloseReferModal} color="primary" type="button">
+            Cerrar
+          </Button>
+          <Button disabled={!selectedDepartment} color="secondary">
+            Derivar audiencia
+          </Button>
+        </div>
+      </BaseModal>
     </div>
   );
 }

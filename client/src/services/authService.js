@@ -9,15 +9,20 @@ export const login = async (username, password) => {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ username, password }) // Envía el nombre de usuario y la contraseña en el cuerpo de la solicitud
+            body: JSON.stringify({ username, password })
         });
+
+        // Si la respuesta no es exitosa, lanzar el error con el mensaje del servidor
         if (!response.ok) {
-            console.log("Error al iniciar sesión"); // Muestra un mensaje de error si la respuesta no es satisfactoria
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Error al iniciar sesión");
         }
-        const data = await response.json(); // Convierte la respuesta en un objeto JSON
-        const token = data.token; // Extrae el token de los datos recibidos
-        return token; // Devuelve el token
+
+        const data = await response.json();
+        return data.token; // Devuelve directamente el token si todo sale bien
+
     } catch (error) {
-        console.log("Error al iniciar sesión"); // Muestra un mensaje de error si ocurre un problema durante la solicitud
+        console.error("Login error:", error.message);
+        throw error; // Re-lanza el error para que el componente que llame a esta función pueda manejarlo
     }
 };
