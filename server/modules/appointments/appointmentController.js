@@ -13,7 +13,7 @@ export const getAllAppointments = async (req, res) => {
     const appointments = await Appointment.findAll({
       where: { estado },
       include: [
-        { model: Citizen, attributes: ['nombres', 'apellidos'], as: "ciudadano" }
+        { model: Citizen, attributes: ['nombres', 'apellidos', 'rut', 'direccion', 'email', 'telefono', 'telefono_2'], as: "ciudadano" }
       ],
       order: [
         ['createdAt', 'ASC']

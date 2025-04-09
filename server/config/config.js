@@ -7,6 +7,10 @@ export const PORT = process.env.PORT || 10000
 export const JWT_SECRET = process.env.JWT_SECRET || "dev"
 export const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "8h"
 
+// Correo electrónico no-reply
+export const EMAIL = process.env.EMAIL
+export const EMAIL_PASS = process.env.EMAIL_PASS
+
 // Configuración de la base de datos
 export const DATABASE = {
   name: process.env.DB_NAME,

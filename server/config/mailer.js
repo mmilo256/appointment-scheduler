@@ -1,20 +1,20 @@
 import nodemailer from 'nodemailer'
-import 'dotenv/config'
+import { EMAIL, EMAIL_PASS } from './config.js'
 
 const transporter = nodemailer.createTransport({
   host: 'mail.municipalidadchonchi.cl',
   port: 465,
   secure: true,
   auth: {
-    user: process.env.EMAIL,
-    pass: process.env.EMAIL_PASS
+    user: EMAIL,
+    pass: EMAIL_PASS
   }
 })
 
 // Función para enviar correo
 export const sendMail = (to, subject, text, html) => {
   const mailOptions = {
-    from: process.env.EMAIL, // tu email
+    from: EMAIL, // tu email
     to,
     subject,
     text,

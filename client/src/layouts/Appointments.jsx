@@ -14,13 +14,9 @@ function Appointments() {
 
   useEffect(() => {
     (async () => {
-      const data = await getAllAppointments();
+      const data = await getAllAppointments()
       const departments = await getAllDepartments()
-      const departmentsList = departments.map(dep => ({
-        label: dep.direccion,
-        value: dep.id
-      }))
-      setDepartments(departmentsList)
+      setDepartments(departments)
       setAppointments(data)
     })();
   }, [refresh]);

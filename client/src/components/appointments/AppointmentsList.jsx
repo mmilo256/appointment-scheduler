@@ -7,7 +7,6 @@ function AppointmentsList({ data, departments, setRefresh }) {
   return (
     <div>
       <div className="flex flex-col gap-4 mb-6">
-        <h2 className="text-xl font-bold">Audiencias pendientes</h2>
         {data?.map((appointment, index) => (
           <AppointmentCard key={index} data={appointment} departments={departments} setRefresh={setRefresh} />
         ))}

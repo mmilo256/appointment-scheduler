@@ -4,6 +4,8 @@ import { formatDate } from "../../utils/helpers";
 import BaseModal from "../ui/BaseModal";
 import Button from "../ui/Button";
 import Input from "../ui/Input";
+import { sendEmail } from "../../services/emailService";
+import emailTemplate from "../../templates/referralEmailTemplate";
 
 function AppointmentCard({ data, departments, setRefresh }) {
 
@@ -11,6 +13,11 @@ function AppointmentCard({ data, departments, setRefresh }) {
   const [referModal, setReferModal] = useState(false)
   const [selectedDepartment, setSelectedDepartment] = useState("")
   const [response, setResponse] = useState("")
+
+  const departmentsList = departments.map(dep => ({
+    label: dep.direccion,
+    value: dep.id
+  }))
 
   const buttonStyles = "text-white text-sm px-2 py-1 rounded";
 
@@ -20,13 +27,32 @@ function AppointmentCard({ data, departments, setRefresh }) {
     setSelectedDepartment("")
   }
 
+  // Función para derivar una audiencia
+  const referAppointment = async () => {
+    const dataToEdit = {
+      estado: "derivada"
+    }
+    const email = "esoto@municipalidadchonchi.cl"
+    const depData = departments.find(dep => dep.id === Number(selectedDepartment))
+    try {
+      await updateAppointment(data.id, dataToEdit)
+      await sendEmail(email, "DERIVACIÓN DE AUDIENCIA", emailTemplate(data))
+      setRefresh(prev => !prev)
+      onCloseReferModal()
+      alert("Audiencia derivada con éxito")
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
+  // Función para marcar una audiencia como terminada
   const finishAppointment = async () => {
     const dataToEdit = {
       respuesta: response,
       estado: "terminada"
     }
     try {
-      const response = await updateAppointment(data.id, dataToEdit)
+      await updateAppointment(data.id, dataToEdit)
       setRefresh(prev => !prev)
       alert("Se ha marcado la audiencia como terminada")
     } catch (error) {
@@ -86,12 +112,12 @@ function AppointmentCard({ data, departments, setRefresh }) {
           <li><strong>Motivo:</strong> {data.materia}</li>
           <li><strong>Ciudadano:</strong> {`${data.ciudadano.nombres} ${data.ciudadano.apellidos}`}</li>
         </ul>
-        <Input type="select" options={departments} value={selectedDepartment} onChange={(e) => { setSelectedDepartment(e.target.value) }} />
+        <Input type="select" options={departmentsList} value={selectedDepartment} onChange={(e) => { setSelectedDepartment(e.target.value) }} />
         <div className="flex gap-5 mt-5">
           <Button onClick={onCloseReferModal} color="primary" type="button">
             Cerrar
           </Button>
-          <Button disabled={!selectedDepartment} color="secondary">
+          <Button onClick={referAppointment} disabled={!selectedDepartment} color="secondary">
             Derivar audiencia
           </Button>
         </div>
