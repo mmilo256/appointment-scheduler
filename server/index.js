@@ -5,7 +5,6 @@ import departmentRouter from './modules/departments/departmentRoutes.js'
 import authRouter from './auth/authRoutes.js'
 import citizenRouter from './modules/citizens/citizenRoutes.js'
 import appointmentRouter from './modules/appointments/appointmentRoutes.js'
-import referralRouter from './modules/referrals/referralRoutes.js'
 import emailRoutes from './modules/email/emailRoutes.js'
 import { verifyToken } from './auth/authMiddleware.js'
 import { PORT } from './config/config.js'
@@ -30,7 +29,6 @@ app.use('/api/users', userRouter)
 app.use('/api/departments', departmentRouter)
 app.use('/api/citizens', citizenRouter)
 app.use('/api/appointments', appointmentRouter)
-app.use('/api/referrals', referralRouter)
 app.use('/api/email', emailRoutes)
 
 // Arrancar el servidor

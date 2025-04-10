@@ -1,5 +1,5 @@
 import e from 'express'
-import { createUser, deleteUser, getAllUsers, getUserById, updateUser } from './userController.js'
+import { createUser, getAllUsers, getUserById } from './userController.js'
 
 const router = e.Router()
 
@@ -7,7 +7,5 @@ const router = e.Router()
 router.get('/', getAllUsers)
 router.post('/', createUser)
 router.get('/:id', getUserById)
-router.delete('/:id', deleteUser)
-router.patch('/:id', updateUser)
 
 export default router

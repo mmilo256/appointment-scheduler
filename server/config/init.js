@@ -6,7 +6,7 @@ const initializeDB = async () => {
     await defineAssociations()
 
     // Sincroniza los modelos con la base de datos, creando tablas si es necesario
-    await sequelize.sync()
+    await sequelize.sync({ alter: true })
 }
 
 export default initializeDB

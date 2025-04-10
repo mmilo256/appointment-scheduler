@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Input from "../ui/Input";
-import { checkToken, formatRut, verifyRut } from "../../utils/helpers";
+import { formatRut, verifyRut } from "../../utils/helpers";
 import { getCitizenByRUT } from "../../services/citizenService";
 import CreateCitizenModal from "./CreateCitizenModal";
 import { useLocation } from "react-router-dom";

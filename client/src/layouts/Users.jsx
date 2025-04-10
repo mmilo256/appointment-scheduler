@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import Container from "../components/ui/Container";
 import Heading from "../components/ui/Heading";
-import UsersTable from "../components/users/UsersTable";
-import Button from "../components/ui/Button";
 import Pagination from "../components/ui/Pagination";
 import { getAllUsers } from "../services/userService";
 import BaseTable from "../components/ui/BaseTable";
@@ -16,8 +14,8 @@ function Users() {
     (async () => {
       const data = await getAllUsers()
       const formattedData = data.users.map(user => ({
-        username: user.username,
         fullName: `${user.nombres} ${user.apellidos}`,
+        username: user.username,
         email: user.email
       }))
       setUsers(formattedData)
@@ -29,8 +27,6 @@ function Users() {
     { label: "Nombre de usuario" },
     { label: "Correo electrónico" }
   ]
-
-
 
   return (
     <Container>

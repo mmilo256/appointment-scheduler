@@ -3,7 +3,7 @@ import Container from "../components/ui/Container";
 import EditCitizenForm from "../components/citizens/EditCitizenForm";
 import { useEffect, useState } from "react";
 import { getCitizenById } from "../services/citizenService";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 function CreateCitizen() {
 

@@ -29,11 +29,12 @@ function AppointmentCard({ data, departments, setRefresh }) {
 
   // Función para derivar una audiencia
   const referAppointment = async () => {
-    const dataToEdit = {
-      estado: "derivada"
-    }
     const email = "esoto@municipalidadchonchi.cl"
     const depData = departments.find(dep => dep.id === Number(selectedDepartment))
+    const dataToEdit = {
+      estado: "derivada",
+      direccion_id: depData.id
+    }
     try {
       await updateAppointment(data.id, dataToEdit)
       await sendEmail(email, "DERIVACIÓN DE AUDIENCIA", emailTemplate(data))

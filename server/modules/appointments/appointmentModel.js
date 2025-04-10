@@ -14,11 +14,14 @@ export const Appointment = sequelize.define('audiencias', {
   respuesta: {
     type: DataTypes.STRING
   },
+  estado: {
+    type: DataTypes.STRING
+  },
   ciudadano_id: {
     type: DataTypes.INTEGER
   },
-  estado: {
-    type: DataTypes.STRING
+  direccion_id: {
+    type: DataTypes.INTEGER
   }
 })
 

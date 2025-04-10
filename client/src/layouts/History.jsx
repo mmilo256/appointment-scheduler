@@ -61,9 +61,10 @@ const History = () => {
                 <ul className='pl-4'>
                     <li><strong>Materia: </strong>{selectedAppointment?.materia}</li>
                     <li><strong>Respuesta: </strong>{selectedAppointment?.respuesta}</li>
-                    <li><strong>Fecha creación: </strong>{formatDate(selectedAppointment?.createdAt, "DD MMM YYYY, HH:mm")}</li>
-                    <li><strong>Fecha término: </strong>{formatDate(selectedAppointment?.updatedAt, "DD MMM YYYY, HH:mm")}</li>
+                    <li><strong>Fecha de creación: </strong>{formatDate(selectedAppointment?.createdAt, "DD MMM YYYY, HH:mm")}</li>
+                    <li><strong>Fecha de {selectedAppointment?.estado === "terminada" ? "término:" : "derivación:"} </strong>{formatDate(selectedAppointment?.updatedAt, "DD MMM YYYY, HH:mm")}</li>
                     <li><strong>Estado: </strong> <StatusTag status={selectedAppointment?.estado} /> </li>
+                    {selectedAppointment?.estado === "derivada" && <li><strong>Derivado a: </strong>{selectedAppointment.direccion?.direccion}</li>}
                 </ul>
             </BaseModal>
         </>

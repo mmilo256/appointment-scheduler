@@ -25,7 +25,7 @@ const emailTemplate = (data) => {
               <p style="margin:4px 0;"><strong>RUT:</strong> ${data.ciudadano?.rut}</p>
               ${data.ciudadano?.email ? `<p style="margin:4px 0;"><strong>Email:</strong> ${data.ciudadano?.email}</p>` : ""}
               <p style="margin:4px 0;"><strong>Teléfono:</strong> ${data.ciudadano?.telefono}</p>
-              ${data.ciudadano?.telefono_2 ? `<p style="margin:4px 0;"><strong>Teléfono:</strong> ${data.ciudadano?.telefono}</p>` : ""}
+              ${data.ciudadano?.telefono_2 ? `<p style="margin:4px 0;"><strong>Teléfono:</strong> ${data.ciudadano?.telefono_2}</p>` : ""}
 
               <h2 style="font-size:18px; color:#333333; margin-top:20px; margin-bottom:10px;">Información de la Audiencia</h2>
               <p style="margin:4px 0;"><strong>Materia:</strong> ${data.materia}</p>

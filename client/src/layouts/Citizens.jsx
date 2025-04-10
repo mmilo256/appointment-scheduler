@@ -1,7 +1,6 @@
 import Container from "../components/ui/Container";
 import Heading from "../components/ui/Heading";
 import Button from "../components/ui/Button";
-import CitizensTable from "../components/citizens/CitizensTable";
 import { useEffect, useState } from "react";
 import Pagination from "../components/ui/Pagination";
 import { getAllCitizens } from "../services/citizenService";

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Button from "../ui/Button";
 import { useLocation, useNavigate } from "react-router-dom";
-import { checkToken, formatRut, verifyRut } from "../../utils/helpers";
+import { formatRut, verifyRut } from "../../utils/helpers";
 import Input from "../ui/Input";
-import { useCitizenStore } from "../../stores/useCitizenStore";
 import { createCitizen } from "../../services/citizenService";
 
 function CreateCitizenForm() {

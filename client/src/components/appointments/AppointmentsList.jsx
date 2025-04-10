@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from "react";
 import AppointmentCard from "./AppointmentCard";
-import { getAllAppointments } from "../../services/appointmentService";
 
 function AppointmentsList({ data, departments, setRefresh }) {
 
