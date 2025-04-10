@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { checkAppointment, getAllAppointments, updateAppointment } from "../../services/appointmentService";
+import { updateAppointment } from "../../services/appointmentService";
 import { formatDate } from "../../utils/helpers";
 import BaseModal from "../ui/BaseModal";
 import Button from "../ui/Button";
 import Input from "../ui/Input";
 import { sendEmail } from "../../services/emailService";
 import emailTemplate from "../../templates/referralEmailTemplate";
+import BaseButton from "../ui/BaseButton";
+import BaseInput from "../ui/BaseInput";
 
 function AppointmentCard({ data, departments, setRefresh }) {
 
@@ -13,6 +15,7 @@ function AppointmentCard({ data, departments, setRefresh }) {
   const [referModal, setReferModal] = useState(false)
   const [selectedDepartment, setSelectedDepartment] = useState("")
   const [response, setResponse] = useState("")
+  const [loading, setLoading] = useState(false)
 
   const departmentsList = departments.map(dep => ({
     label: dep.direccion,
@@ -27,8 +30,15 @@ function AppointmentCard({ data, departments, setRefresh }) {
     setSelectedDepartment("")
   }
 
+  // Función para cerrar el modal de terminar audiencia y resetear el textarea
+  const onCloseFinishModal = () => {
+    setFinishModal(false)
+    setResponse("")
+  }
+
   // Función para derivar una audiencia
   const referAppointment = async () => {
+    setLoading(true)
     const email = "esoto@municipalidadchonchi.cl"
     const depData = departments.find(dep => dep.id === Number(selectedDepartment))
     const dataToEdit = {
@@ -43,21 +53,27 @@ function AppointmentCard({ data, departments, setRefresh }) {
       alert("Audiencia derivada con éxito")
     } catch (error) {
       console.log(error.message)
+    } finally {
+      setLoading(false)
     }
   }
 
   // Función para marcar una audiencia como terminada
   const finishAppointment = async () => {
+    setLoading(true)
     const dataToEdit = {
       respuesta: response,
       estado: "terminada"
     }
     try {
       await updateAppointment(data.id, dataToEdit)
+      onCloseFinishModal()
       setRefresh(prev => !prev)
       alert("Se ha marcado la audiencia como terminada")
     } catch (error) {
       console.log(error.message)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -90,37 +106,30 @@ function AppointmentCard({ data, departments, setRefresh }) {
         </button>
       </div>
       {/* Modal de confirmación de audiencia terminada */}
-      <BaseModal isOpen={finishModal} onClose={() => { setFinishModal(false) }} title="Marcar audiencia como terminada" >
+      <BaseModal isOpen={finishModal} onClose={onCloseFinishModal} title="Marcar audiencia como terminada" >
         <p className="mb-2">¿Desea marcar la siguiente audiencia como terminada?</p>
-        <ul>
+        <ul className="mb-4">
           <li><strong>Motivo:</strong> {data.materia}</li>
           <li><strong>Ciudadano:</strong> {`${data.ciudadano.nombres} ${data.ciudadano.apellidos}`}</li>
         </ul>
-        <Input type="textarea" placeholder="Respuesta (opcional)" value={response} onChange={(e) => setResponse(e.target.value)} />
-        <div className="flex gap-5 mt-5">
-          <Button onClick={() => setFinishModal(false)} color="primary" type="button">
-            Cerrar
-          </Button>
-          <Button color="secondary" onClick={finishAppointment}>
-            Marcar como terminada
-          </Button>
+        <BaseInput type="textarea" placeholder="Respuesta (opcional)" value={response} onChange={(e) => setResponse(e.target.value)} />
+        <div className="flex gap-5">
+          <BaseButton text="Cerrar" color="secondary" onClick={onCloseFinishModal} />
+          <BaseButton isLoading={loading} text="Marcar como terminada" onClick={finishAppointment} />
         </div>
       </BaseModal>
       {/* Modal para derivar la audiencia a una dirección municipal */}
       <BaseModal isOpen={referModal} onClose={onCloseReferModal} title="Derivar audiencia" >
         <p className="mb-2">Seleccione la dirección a la que desea derivar la audiencia</p>
-        <ul>
+        <ul className="mb-4">
           <li><strong>Motivo:</strong> {data.materia}</li>
           <li><strong>Ciudadano:</strong> {`${data.ciudadano.nombres} ${data.ciudadano.apellidos}`}</li>
         </ul>
-        <Input type="select" options={departmentsList} value={selectedDepartment} onChange={(e) => { setSelectedDepartment(e.target.value) }} />
-        <div className="flex gap-5 mt-5">
-          <Button onClick={onCloseReferModal} color="primary" type="button">
-            Cerrar
-          </Button>
-          <Button onClick={referAppointment} disabled={!selectedDepartment} color="secondary">
-            Derivar audiencia
-          </Button>
+        {/* <Input type="select" options={departmentsList} value={selectedDepartment} onChange={(e) => { setSelectedDepartment(e.target.value) }} /> */}
+        <BaseInput type="select" options={departmentsList} value={selectedDepartment} onChange={(e) => { setSelectedDepartment(e.target.value) }} />
+        <div className="flex gap-5 mt-2">
+          <BaseButton text="Cerrar" color="secondary" onClick={onCloseReferModal} />
+          <BaseButton isLoading={loading} disabled={!selectedDepartment} text="Derivar audiencia" onClick={referAppointment} />
         </div>
       </BaseModal>
     </div>

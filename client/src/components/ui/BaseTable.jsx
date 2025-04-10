@@ -11,7 +11,7 @@ function BaseTable({ columns, data, isLoading }) {
               {columns.map((col) => (
                 <th
                   key={col.label}
-                  className={`px-2 py-2 whitespace-nowrap font-normal text-sm text-left`}
+                  className={`px-2 py-2 whitespace-nowrap font-semibold text-xs text-left`}
                 >
                   {col.label}
                 </th>

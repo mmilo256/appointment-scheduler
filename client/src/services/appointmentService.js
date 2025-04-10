@@ -45,26 +45,14 @@ export const getAllAppointments = async (estado = "pendiente") => {
     }
 };
 
-// Función asincrónica para obtener a un audiencia por su ID
-export const getAppointmentById = async (id) => {
+// Función asincrónica para obtener todas las audiencias terminadas
+export const getAllFinishedAppointments = async (page = 1, pageSize = 10, searchQuery = "") => {
     try {
-        // Llamada a la función httpRequest para obtener un audiencia por su ID
-        const data = await httpRequest(`${API_URL}/${id}`, { method: 'GET' });
+        // Llamada a la función httpRequest para obtener todos los ciudadanos
+        const data = await httpRequest(`${API_URL}/history?page=${page}&pageSize=${pageSize}&search=${searchQuery}`, { method: 'GET' });
         return data;
     } catch (error) {
-        console.error("Error al obtener el audiencia.", error);
-        throw error;
-    }
-};
-
-// Función asincrónica para obtener a un audiencia por su ID
-export const getAvailableTimes = async (date) => {
-    try {
-        // Llamada a la función httpRequest para obtener un audiencia por su ID
-        const data = await httpRequest(`${API_URL}/date/${date}`, { method: 'GET' });
-        return data;
-    } catch (error) {
-        console.error("Error al obtener el audiencia.", error);
+        console.error("Error al obtener las audiencias.", error);
         throw error;
     }
 };
@@ -80,34 +68,6 @@ export const createAppointment = async (appointmentData) => {
         return data;
     } catch (error) {
         console.error("Error al crear el audiencia.", error);
-        throw error;
-    }
-};
-
-// Función asincrónica para eliminar un audiencia
-export const deleteAppointment = async (id) => {
-    try {
-        // Llamada a la función httpRequest para actualizar un audiencia por su ID
-        const data = await httpRequest(`${API_URL}/${id}`, {
-            method: 'PATCH',
-            body: JSON.stringify({ is_deleted: true })
-        });
-        return data;
-    } catch (error) {
-        console.error("Error al editar el audiencia.", error);
-        throw error;
-    }
-};
-
-// Marcar audiencia como terminada
-export const checkAppointment = async (id) => {
-    try {
-        const data = await httpRequest(`${API_URL}/${id}/check`, {
-            method: 'PATCH'
-        });
-        return data;
-    } catch (error) {
-        console.error("Error al editar el audiencia.", error);
         throw error;
     }
 };

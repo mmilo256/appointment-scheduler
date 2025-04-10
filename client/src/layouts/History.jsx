@@ -2,14 +2,20 @@ import React, { useEffect, useState } from 'react'
 import Container from '../components/ui/Container'
 import Heading from '../components/ui/Heading'
 import BaseTable from '../components/ui/BaseTable'
-import { getAllAppointments } from '../services/appointmentService'
+import { getAllFinishedAppointments } from '../services/appointmentService'
 import { formatDate } from '../utils/helpers'
 import StatusTag from '../components/ui/StatusTag'
 import BaseModal from '../components/ui/BaseModal'
+import Pagination from '../components/ui/Pagination'
+import SearchBar from '../components/ui/SearchBar'
 
 const History = () => {
 
     const [appointments, setAppointments] = useState([])
+    const [currentPage, setCurrentPage] = useState(1)
+    const [totalPages, setTotalPages] = useState(1)
+    const pageSize = 10
+    const [searchQuery, setSearchQuery] = useState("")
     const [detailModal, setDetailModal] = useState(false)
     const [selectedAppointment, setSelectedAppointment] = useState({})
 
@@ -20,8 +26,9 @@ const History = () => {
 
     useEffect(() => {
         (async () => {
-            const data = await getAllAppointments("terminada&estado=derivada")
-            const formattedData = data.map(appointment => ({
+            const data = await getAllFinishedAppointments(currentPage, pageSize, searchQuery)
+            setTotalPages(data.totalPages)
+            const formattedData = data.appointments.map(appointment => ({
                 citizen: `${appointment.ciudadano.nombres} ${appointment.ciudadano.apellidos}`,
                 cause: appointment.materia,
                 createdAt: formatDate(appointment.createdAt, "DD MMM YYYY, HH:mm"),
@@ -30,21 +37,27 @@ const History = () => {
             }))
             setAppointments(formattedData)
         })()
-    }, [])
+    }, [currentPage, searchQuery])
 
     const columns = [
-        { label: "Ciudadano" },
-        { label: "Materia" },
-        { label: "Fecha de creación" },
-        { label: "Estado" },
-        { label: "Acciones" }
+        { label: "CIUDADANO" },
+        { label: "MATERIA" },
+        { label: "FECHA DE CREACIÓN" },
+        { label: "ESTADO" },
+        { label: "ACCIONES" }
     ]
 
     return (
         <>
             <Container>
                 <Heading>Historial de audiencias</Heading>
+                <div className='my-2'>
+                    <SearchBar query={searchQuery} setQuery={setSearchQuery} />
+                </div>
                 <BaseTable data={appointments} columns={columns} />
+                <div className="flex justify-center py-4">
+                    <Pagination setCurrentPage={setCurrentPage} currentPage={currentPage} totalPages={totalPages} />
+                </div>
             </Container>
             <BaseModal isOpen={detailModal} onClose={() => setDetailModal(false)} title="Detalle de la audiencia" >
                 <h3 className='font-bold text-lg mb-1'>Datos ciudadano</h3>

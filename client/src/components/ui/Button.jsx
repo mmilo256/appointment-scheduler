@@ -1,17 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function Button({ children, onClick, className, href, type, color, disabled }) {
+function Button({ children, onClick, className, href, type, color, disabled, isLoading = true }) {
   let colorStyles;
 
   switch (color) {
     case "secondary":
-      colorStyles =
-        "bg-secondary-500 bg-secondary-500 hover:bg-secondary-600 disabled:bg-secondary-200";
+      colorStyles = "bg-secondary-500 bg-secondary-500 hover:bg-secondary-600 disabled:bg-secondary-200";
       break;
     default:
-      colorStyles =
-        "bg-primary-500 bg-primary-500 hover:bg-primary-400 disabled:bg-primary-300";
+      colorStyles = "bg-primary-500 bg-primary-500 hover:bg-primary-400 disabled:bg-primary-300";
       break;
   }
 
@@ -20,7 +18,7 @@ function Button({ children, onClick, className, href, type, color, disabled }) {
       <Link
         to={href}
         onClick={onClick}
-        className={`${colorStyles} flex w-full py-1 px-2 justify-center rounded text-white    ${className}`}
+        className={`${colorStyles} flex w-full py-1 px-2 justify-center rounded text-white ${className}`}
       >
         {children}
       </Link>
@@ -29,8 +27,8 @@ function Button({ children, onClick, className, href, type, color, disabled }) {
 
   return (
     <button
-      className={` ${colorStyles} flex w-full py-1 px-2 justify-center rounded text-white   ${className}`}
-      disabled={disabled}
+      className={` ${colorStyles} flex w-full py-1 px-2 justify-center rounded text-white ${className}`}
+      disabled={disabled || isLoading}
       onClick={onClick}
       type={type === "submit" ? "submit" : "button"}
     >

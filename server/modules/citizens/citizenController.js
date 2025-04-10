@@ -1,25 +1,35 @@
 import Citizen from './citizenModel.js'
 import { HTTP_STATUS } from '../../config/config.js'
+import { Op } from 'sequelize'
 
 // Petición para obtener a todos los ciudadanos
 export const getAllCitizens = async (req, res) => {
   const page = parseInt(req.query.page) || 1
   const pageSize = parseInt(req.query.pageSize) || 10
-  // Calculate the start and end indexes for the requested page
-  const startIndex = (page - 1) * pageSize
-  const endIndex = page * pageSize
+  const offset = (page - 1) * pageSize
+  const search = req.query.search || ""
+
+  console.log(search)
+
   try {
-    const citizens = await Citizen.findAll({
-      order: [['createdAt', 'DESC']]
+    const { count, rows } = await Citizen.findAndCountAll({
+      order: [['createdAt', 'DESC']],
+      limit: pageSize,
+      offset: offset,
+      where: search ? {
+        [Op.or]: [
+          { nombres: { [Op.like]: `%${search}%` } },
+          { apellidos: { [Op.like]: `%${search}%` } },
+          { rut: { [Op.like]: `%${search}%` } }
+        ]
+      } : undefined
     })
-    // Slice the products array based on the indexes
-    const paginatedCitizens = citizens.slice(startIndex, endIndex)
-    // Calculate the total number of pages
-    const totalPages = Math.ceil(citizens.length / pageSize)
-    // Send the paginated products and total pages as the API response
-    res.json({ citizens: paginatedCitizens, totalPages: totalPages === 0 ? 1 : totalPages })
+
+    const totalPages = Math.ceil(count / pageSize)
+    res.json({ citizens: rows, totalPages: totalPages === 0 ? 1 : totalPages })
   } catch (error) {
     console.log('Error al realizar la consulta.', error)
+    res.status(500).json({ error: 'Error al consultar ciudadanos' })
   }
 }
 

@@ -3,6 +3,8 @@ import Button from "../ui/Button";
 import { useNavigate } from "react-router-dom";
 import Input from "../ui/Input";
 import { createAppointment } from "../../services/appointmentService";
+import BaseInput from "../ui/BaseInput";
+import BaseButton from "../ui/BaseButton";
 
 function AppointmentForm({ citizenData }) {
 
@@ -40,17 +42,9 @@ function AppointmentForm({ citizenData }) {
   // Renderización del formulario con los botones y la lógica de envío
   return (
     <form onSubmit={handleSubmit}>
-      <Input
-        type="textarea"
-        label="Materia"
-        value={cause}
-        onChange={(e) => { setCause(e.target.value) }}
-      />
-      <div className="flex ml-auto mt-5 gap-2 w-60 md:w-96">
-        <Button href="/appointments">Volver</Button>
-        <Button disabled={isLoading || !isValid} color="secondary" type="submit">
-          Crear audiencia
-        </Button>
+      <BaseInput value={cause} onChange={(e) => { setCause(e.target.value) }} type="textarea" label={"Materia"} placeholder="Motivo de la audiencia" />
+      <div className="w-44 ml-auto">
+        <BaseButton type="submit" disabled={!isValid} text="Crear audiencia" />
       </div>
     </form>
   );

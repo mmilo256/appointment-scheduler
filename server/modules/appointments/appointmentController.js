@@ -2,20 +2,17 @@ import Appointment from './appointmentModel.js'
 import Citizen from '../citizens/citizenModel.js'
 import { HTTP_STATUS } from '../../config/config.js'
 import Department from '../departments/departmentModel.js'
+import { Op } from 'sequelize'
 
-// Petición para obtener a todos los audiencias
+// Petición para obtener a todas los audiencias pendientes
 export const getAllAppointments = async (req, res) => {
-  const { estado } = req.query
-  if (!estado) {
-    return res.status(400).json({ message: "Faltan parámetros" })
-  }
   try {
     // Obtener las audiencias y los nombres de sus usuarios, ciudadanos y departamentos correspondientes
     const appointments = await Appointment.findAll({
-      where: { estado },
+      where: { estado: "pendiente" },
+      attributes: ["id", "materia", "createdAt"],
       include: [
-        { model: Citizen, attributes: ['nombres', 'apellidos', 'rut', 'direccion', 'email', 'telefono', 'telefono_2'], as: "ciudadano" },
-        { model: Department, attributes: ['direccion', 'email', 'director'], as: 'direccion' }
+        { model: Citizen, attributes: ['nombres', 'apellidos'], as: "ciudadano" }
       ],
       order: [
         ['createdAt', 'ASC']
@@ -24,6 +21,46 @@ export const getAllAppointments = async (req, res) => {
     res.json(appointments)
   } catch (error) {
     console.log('Error al realizar la consulta.', error)
+  }
+}
+
+// Petición para obtener a todas los audiencias terminadas y derivadas
+export const getAllFinishedAppointments = async (req, res) => {
+  const page = parseInt(req.query.page) || 1
+  const pageSize = parseInt(req.query.pageSize) || 10
+  const offset = (page - 1) * pageSize
+  const search = req.query.search || ""
+  try {
+    // Obtener las audiencias y los nombres de sus usuarios, ciudadanos y departamentos correspondientes
+    const { count, rows } = await Appointment.findAndCountAll({
+      where: {
+        estado: { [Op.ne]: 'pendiente' }
+      },
+      include: [
+        {
+          model: Citizen,
+          attributes: ['nombres', 'apellidos', 'rut', 'direccion', 'email', 'telefono', 'telefono_2'],
+          as: "ciudadano",
+          where: search ? {
+            [Op.or]: [
+              { nombres: { [Op.like]: `%${search}%` } },
+              { apellidos: { [Op.like]: `%${search}%` } }
+            ]
+          } : undefined
+        },
+        { model: Department, attributes: ['direccion', 'email', 'director'], as: 'direccion' }
+      ],
+      order: [
+        ['createdAt', 'ASC']
+      ],
+      limit: pageSize,
+      offset
+    })
+    const totalPages = Math.ceil(count / pageSize)
+    res.json({ appointments: rows, totalPages: totalPages === 0 ? 1 : totalPages, search })
+  } catch (error) {
+    console.log('Error al realizar la consulta.', error)
+    res.status(500).json({ error: 'Error al consultar ciudadanos' })
   }
 }
 
