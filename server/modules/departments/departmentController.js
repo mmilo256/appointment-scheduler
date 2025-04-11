@@ -23,3 +23,16 @@ export const createDepartment = async (req, res) => {
     console.log('No se pudo crear el departamento.', error)
   }
 }
+
+// Borrar un departamento de la bd
+export const deleteDepartment = async (req, res) => {
+  try {
+    // ID del departamento a eliminar
+    const { id } = req.params
+    // Elimina el departamento que coincida con el ID
+    await Department.destroy({ where: { id } })
+    res.status(HTTP_STATUS.NO_CONTENT).json()
+  } catch (error) {
+    console.log('Error al eliminar departamento.', error)
+  }
+}

@@ -22,6 +22,20 @@ export const getAllUsers = async (req, res) => {
   }
 }
 
+
+// Borrar un usuario de la bd
+export const deleteUser = async (req, res) => {
+  try {
+    // ID del usuario a eliminar
+    const { id } = req.params
+    // Elimina el usuario que coincida con el ID
+    await User.destroy({ where: { id } })
+    res.status(HTTP_STATUS.NO_CONTENT).json()
+  } catch (error) {
+    console.log('Error al eliminar usuario.', error)
+  }
+}
+
 // Obtener usuario por id
 export const getUserById = async (req, res) => {
   try {
