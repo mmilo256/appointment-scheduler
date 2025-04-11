@@ -1,128 +1,136 @@
-import { useNavigate } from "react-router-dom";
-import { useAppointmentStore } from "../../stores/useAppointmentStore";
 import { useState } from "react";
-import AddSolutionModal from "./AddSolutionModal";
-import { useAuthStore } from "../../stores/useAuthStore";
-import ConfirmationModal from "../ui/ConfirmationModal";
+import { updateAppointment } from "../../services/appointmentService";
+import { formatDate } from "../../utils/helpers";
+import BaseModal from "../ui/BaseModal";
+import { sendEmail } from "../../services/emailService";
+import emailTemplate from "../../templates/referralEmailTemplate";
+import BaseButton from "../ui/BaseButton";
+import BaseInput from "../ui/BaseInput";
 
-function AppointmentCard({ data }) {
-  const [modal, setModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
-  const role = useAuthStore((state) => state.role);
+function AppointmentCard({ data, departments, setRefresh }) {
 
-  const navigate = useNavigate();
+  const [finishModal, setFinishModal] = useState(false)
+  const [referModal, setReferModal] = useState(false)
+  const [selectedDepartment, setSelectedDepartment] = useState("")
+  const [response, setResponse] = useState("")
+  const [loading, setLoading] = useState(false)
 
-  const selectAppointment = useAppointmentStore(
-    (state) => state.selectAppointment
-  );
-
-  const deleteAppointment = useAppointmentStore(
-    (state) => state.deleteAppointment
-  );
-
-  const getAllAppointments = useAppointmentStore(
-    (state) => state.getAllAppointments
-  );
-
-  const onOpenConfirmDelete = () => {
-    setDeleteModal(true);
-  };
-
-  const onDeleteAppointment = async () => {
-    await deleteAppointment(data.id);
-    await getAllAppointments();
-    setDeleteModal(false);
-  };
-
-  const onEditAppointment = async () => {
-    await selectAppointment(data.id);
-    navigate(`edit?id=${data.id}&citizen=${data.citizenId}`);
-  };
-
-  const onAddSolution = () => {
-    setModal(true);
-  };
-
-  const onReferAppointment = async () => {
-    await selectAppointment(data.id);
-    navigate(`/referrals/create?appointmentId=${data.id}`);
-  };
+  const departmentsList = departments.map(dep => ({
+    label: dep.direccion,
+    value: dep.id
+  }))
 
   const buttonStyles = "text-white text-sm px-2 py-1 rounded";
 
-  if (data.isReferred) return null;
+  // Función para cerrar el modal de derivación y resetear el input de dirección seleccionada
+  const onCloseReferModal = () => {
+    setReferModal(false)
+    setSelectedDepartment("")
+  }
+
+  // Función para cerrar el modal de terminar audiencia y resetear el textarea
+  const onCloseFinishModal = () => {
+    setFinishModal(false)
+    setResponse("")
+  }
+
+  // Función para derivar una audiencia
+  const referAppointment = async () => {
+    setLoading(true)
+    const email = "esoto@municipalidadchonchi.cl"
+    const depData = departments.find(dep => dep.id === Number(selectedDepartment))
+    const dataToEdit = {
+      estado: "derivada",
+      direccion_id: depData.id
+    }
+    try {
+      console.log(data)
+      await updateAppointment(data.id, dataToEdit)
+      await sendEmail(email, "DERIVACIÓN DE AUDIENCIA", emailTemplate(data))
+      setRefresh(prev => !prev)
+      onCloseReferModal()
+      alert("Audiencia derivada con éxito")
+    } catch (error) {
+      console.log(error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Función para marcar una audiencia como terminada
+  const finishAppointment = async () => {
+    setLoading(true)
+    const dataToEdit = {
+      respuesta: response,
+      estado: "terminada"
+    }
+    try {
+      await updateAppointment(data.id, dataToEdit)
+      onCloseFinishModal()
+      setRefresh(prev => !prev)
+      alert("Se ha marcado la audiencia como terminada")
+    } catch (error) {
+      console.log(error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
-    <div
-      className={`${
-        data.response ? "bg-green-50" : "bg-slate-50"
-      } p-3 rounded shadow`}
-    >
+    <div className="bg-white p-2 rounded">
       {/* Información de la cita */}
       <div className="flex flex-col gap-1">
-        <p className="text-xl font-bold">Motivo: {data.cause}</p>
-        <p className="text-lg">
-          {" "}
-          <span className="font-semibold">Ciudadano:</span> {data.citizen}
+        <p className="text-lg font-bold">Motivo: {data.materia}</p>
+        <p>
+          <span className="font-semibold">Ciudadano:</span> {`${data.ciudadano.nombres} ${data.ciudadano.apellidos}`}
         </p>
-        <p className="text-lg">
-          {" "}
-          <span className="font-semibold">Hora:</span> {data.time}
+        <p>
         </p>
-        {data.response && (
-          <p className="bg-green-100 rounded shadow p-2 mb-4">
-            {" "}
-            <span className="font-semibold">Propuesta:</span> {data.response}
-          </p>
-        )}
+        <p>
+          <span className="font-semibold">Hora de llegada:</span> {`${formatDate(data.createdAt, 2)}`}
+        </p>
       </div>
-
       <div className="flex justify-end gap-2">
-        {role <= 2 && (
-          <div>
-            {data.response ? (
-              <button
-                onClick={onReferAppointment}
-                className={`bg-green-500 hover:bg-green-600 ${buttonStyles}`}
-              >
-                Derivar
-              </button>
-            ) : (
-              <button
-                onClick={onAddSolution}
-                className={`bg-amber-500 hover:bg-amber-600 ${buttonStyles}`}
-              >
-                Agregar propuesta
-              </button>
-            )}
-          </div>
-        )}
         <button
-          onClick={onEditAppointment}
-          className={`bg-blue-500 hover:bg-blue-600 ${buttonStyles}`}
+          className={`bg-green-500 hover:bg-green-600 ${buttonStyles}`}
+          onClick={() => { setFinishModal(true) }}
         >
-          Editar
+          Marcar como terminada
         </button>
         <button
-          onClick={onOpenConfirmDelete}
-          className={`bg-red-500 hover:bg-red-600 ${buttonStyles}`}
+          className={`bg-sky-500 hover:bg-sky-600 ${buttonStyles}`}
+          onClick={() => { setReferModal(true) }}
         >
-          Eliminar
+          Derivar
         </button>
       </div>
-      <AddSolutionModal
-        id={data.id}
-        modal={modal}
-        setModal={setModal}
-        title={data.cause}
-      />
-      <ConfirmationModal
-        modal={deleteModal}
-        setModal={setDeleteModal}
-        title="Borrar audiencia"
-        onConfirm={onDeleteAppointment}
-        message={`¿Seguro que desea borrar la audiencia ${data.cause}?`}
-      />
+      {/* Modal de confirmación de audiencia terminada */}
+      <BaseModal isOpen={finishModal} onClose={onCloseFinishModal} title="Marcar audiencia como terminada" >
+        <p className="mb-2">¿Desea marcar la siguiente audiencia como terminada?</p>
+        <ul className="mb-4">
+          <li><strong>Motivo:</strong> {data.materia}</li>
+          <li><strong>Ciudadano:</strong> {`${data.ciudadano.nombres} ${data.ciudadano.apellidos}`}</li>
+        </ul>
+        <BaseInput type="textarea" placeholder="Respuesta (opcional)" value={response} onChange={(e) => setResponse(e.target.value)} />
+        <div className="flex gap-5">
+          <BaseButton text="Cerrar" color="secondary" onClick={onCloseFinishModal} />
+          <BaseButton isLoading={loading} text="Marcar como terminada" onClick={finishAppointment} />
+        </div>
+      </BaseModal>
+      {/* Modal para derivar la audiencia a una dirección municipal */}
+      <BaseModal isOpen={referModal} onClose={onCloseReferModal} title="Derivar audiencia" >
+        <p className="mb-2">Seleccione la dirección a la que desea derivar la audiencia</p>
+        <ul className="mb-4">
+          <li><strong>Motivo:</strong> {data.materia}</li>
+          <li><strong>Ciudadano:</strong> {`${data.ciudadano.nombres} ${data.ciudadano.apellidos}`}</li>
+        </ul>
+        {/* <Input type="select" options={departmentsList} value={selectedDepartment} onChange={(e) => { setSelectedDepartment(e.target.value) }} /> */}
+        <BaseInput type="select" options={departmentsList} value={selectedDepartment} onChange={(e) => { setSelectedDepartment(e.target.value) }} />
+        <div className="flex gap-5 mt-2">
+          <BaseButton text="Cerrar" color="secondary" onClick={onCloseReferModal} />
+          <BaseButton isLoading={loading} disabled={!selectedDepartment} text="Derivar audiencia" onClick={referAppointment} />
+        </div>
+      </BaseModal>
     </div>
   );
 }

@@ -15,10 +15,10 @@ function CitizenDetails({ data }) {
           </li>
           <li className="font-bold">
             <p>Nombre completo</p>
-            <span className="font-normal">{`${data.first_name} ${data.last_name}`}</span>
+            <span className="font-normal">{`${data.nombres} ${data.apellidos}`}</span>
           </li>
           <li className="font-bold">
-            <p>Dirección</p> <span className="font-normal">{data.address}</span>
+            <p>Dirección</p> <span className="font-normal">{data.direccion}</span>
           </li>
           <li className="font-bold">
             <p>Correo electrónico</p>
@@ -27,12 +27,12 @@ function CitizenDetails({ data }) {
             </span>
           </li>
           <li className="font-bold">
-            <p>Teléfono</p> <span className="font-normal">{data.phone}</span>
+            <p>Teléfono</p> <span className="font-normal">{data.telefono}</span>
           </li>
           <li className="font-bold">
             <p>Teléfono 2</p>{" "}
             <span className="font-normal">
-              {data.phone_2 ? data.phone_2 : "No tiene"}
+              {data.telefono_2 ? data.telefono_2 : "No tiene"}
             </span>
           </li>
         </ul>

@@ -1,11 +1,18 @@
-import React, { useContext, useEffect } from "react";
-import { AuthContext } from "../context/AuthContext";
-import { Navigate, Outlet, useLocation } from "react-router-dom";
+import React from "react";
+import { Navigate, Outlet } from "react-router-dom";
+import { checkToken } from "../utils/helpers";
 
 function PrivateRoute() {
-  const { user, token } = useContext(AuthContext);
-  if (!user || !token) return <Navigate to="/login" />;
-  return <Outlet />;
+
+  const token = localStorage.getItem("jwt")
+  const isValidToken = checkToken(token)
+
+  if (isValidToken) {
+    return <Outlet />;
+  } else {
+    return <Navigate to="/login" />
+  }
+
 }
 
 export default PrivateRoute;

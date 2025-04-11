@@ -8,13 +8,13 @@ const navigation = [
     color: "green",
   },
   {
-    label: "Audiencias",
+    label: "Audiencias pendientes",
     href: "appointments",
     color: "lime",
   },
   { label: "Ciudadanos", href: "citizens", color: "blue" },
-  { label: "Derivaciones", href: "referrals/pending", color: "orange" },
-  { label: "Usuarios", href: "users", color: "purple" },
+  { label: "Historial de audiencias", href: "history", color: "orange" },
+  { label: "Usuarios", href: "users", color: "purple" }
 ];
 
 function HomeGrid() {

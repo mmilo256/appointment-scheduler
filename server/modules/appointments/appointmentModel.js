@@ -1,51 +1,28 @@
 import { sequelize } from '../../config/db.js'
 import { DataTypes } from 'sequelize'
-import Citizen from '../citizens/citizenModel.js'
 
 // Modelo de audiencias
-export const Appointment = sequelize.define('appointments', {
+export const Appointment = sequelize.define('audiencias', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
-  cause: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  created_at: {
-    type: DataTypes.DATE
-  },
-  date: {
+  materia: {
     type: DataTypes.STRING
   },
-  time: {
+  respuesta: {
     type: DataTypes.STRING
   },
-  is_referred: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false
-  },
-  response: {
+  estado: {
     type: DataTypes.STRING
   },
-  citizen_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'citizens',
-      key: 'id'
-    }
+  ciudadano_id: {
+    type: DataTypes.INTEGER
   },
-  is_deleted: {
-    type: DataTypes.BOOLEAN
+  direccion_id: {
+    type: DataTypes.INTEGER
   }
-}, {
-  // Opción para que no cree los atributos createdAt y updatedAt
-  timestamps: false
 })
-
-// Definición de asociaciones
-Appointment.belongsTo(Citizen, { as: 'citizen', foreignKey: 'citizen_id' })
 
 export default Appointment

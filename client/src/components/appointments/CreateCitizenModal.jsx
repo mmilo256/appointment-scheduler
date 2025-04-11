@@ -1,8 +1,9 @@
 import React from "react";
 import BaseModal from "../ui/BaseModal";
 import Button from "../ui/Button";
+import BaseButton from "../ui/BaseButton";
 
-function CreateCitizenModal({ modal, setModal, title }) {
+function CreateCitizenModal({ modal, setModal, title, rut }) {
   return (
     <BaseModal
       isOpen={modal}
@@ -15,16 +16,8 @@ function CreateCitizenModal({ modal, setModal, title }) {
         ¿Desea agregar al ciudadano a la base de datos?
       </p>
       <div className="flex gap-4 mt-5">
-        <Button
-          onClick={() => {
-            setModal(false);
-          }}
-        >
-          Cerrar
-        </Button>
-        <Button href="/citizens/create" color="secondary">
-          Agregar ciudadano
-        </Button>
+        <BaseButton color="secondary" text="Cerrar" onClick={() => { setModal(false) }} />
+        <BaseButton text="Agregar ciudadano" href={`/citizens/create?rut=${rut}`} />
       </div>
     </BaseModal>
   );

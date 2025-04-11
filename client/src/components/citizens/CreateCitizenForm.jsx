@@ -1,13 +1,18 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../ui/Button";
-import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../context/AuthContext";
-import { checkToken, formatRut, verifyRut } from "../../utils/helpers";
+import { useLocation, useNavigate } from "react-router-dom";
+import { formatRut, verifyRut } from "../../utils/helpers";
 import Input from "../ui/Input";
-import { useCitizenStore } from "../../stores/useCitizenStore";
+import { createCitizen } from "../../services/citizenService";
+import BaseButton from "../ui/BaseButton";
 
 function CreateCitizenForm() {
-  const [rut, setRut] = useState("");
+
+  const location = useLocation()
+  const queryParams = new URLSearchParams(location.search)
+  const rutParam = queryParams.get("rut")
+
+  const [rut, setRut] = useState(rutParam ?? "");
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
   const [address, setAddress] = useState("");
@@ -18,9 +23,6 @@ function CreateCitizenForm() {
   const [isLoading, setIsLoading] = useState(false)
   // Hook para la navegación
   const navigate = useNavigate();
-  const { logout } = useContext(AuthContext);
-
-  const createCitizen = useCitizenStore((state) => state.createCitizen);
 
   // Función para manejar la creación de un nuevo ciudadano
   const onCreateCitizen = async (e) => {
@@ -28,28 +30,24 @@ function CreateCitizenForm() {
     setIsLoading(true)
     const data = {
       rut,
-      first_name: name,
-      last_name: lastName,
-      address,
-      phone,
+      nombres: name,
+      apellidos: lastName,
+      direccion: address,
+      telefono: phone,
     };
     if (phone2) {
-      data.phone_2 = phone2;
+      data.telefono_2 = phone2;
     }
     if (email) {
       data.email = email;
     }
     if (verifyRut(rut)) {
-      const isTokenExpired = checkToken(localStorage.getItem("jwt"));
       try {
-        if (!isTokenExpired) {
-          await createCitizen(data);
-          navigate("/citizens");
-        } else {
-          logout("expired");
-        }
+        await createCitizen(data);
+        navigate("/citizens");
       } catch (error) {
-        console.log("No se pudo crear el ciudadano", error);
+        alert(error.message)
+        console.log(error.message);
       }
     } else {
       alert("El RUT no es válido");
@@ -84,7 +82,7 @@ function CreateCitizenForm() {
         value={rut}
         onChange={validateRut}
       />
-      <div className=" grid grid-cols-2 gap-5">
+      <div className=" grid grid-cols-1 md:grid-cols-2 md:gap-5">
         <Input
           label="Nombres"
           type="text"
@@ -102,7 +100,7 @@ function CreateCitizenForm() {
           }}
         />
       </div>
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 md:gap-5">
         <Input
           label="Dirección"
           type="text"
@@ -121,7 +119,7 @@ function CreateCitizenForm() {
           }}
         />
       </div>
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 md:gap-5">
         <Input
           label="Teléfono"
           type="number"
@@ -141,10 +139,8 @@ function CreateCitizenForm() {
         />
       </div>
       <div className="flex gap-2 max-w-80 my-4 ml-auto">
-        <Button href="/citizens">Volver</Button>
-        <Button disabled={!isValid || isLoading} type="submit">
-          Crear ciudadano
-        </Button>
+        <BaseButton color="secondary" href="/citizens" text="Volver" />
+        <BaseButton text="Crear ciudadano" disabled={!isValid} isLoading={isLoading} type="submit" />
       </div>
     </form>
   );

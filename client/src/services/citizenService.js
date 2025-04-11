@@ -1,4 +1,5 @@
 import { DEV_API_URL } from "../constants";
+import { expiredLogout } from "../utils/helpers";
 
 const API_URL = `${DEV_API_URL}/citizens`; // URL de la API para obtener los ciudadanos
 
@@ -18,10 +19,11 @@ const httpRequest = async (url, options) => {
 
     // Realizar la solicitud HTTP con fetch
     const response = await fetch(url, options);
-
     // Verificar si la respuesta es exitosa
     if (!response.ok) {
-        throw new Error("Error en la solicitud");
+        const errorData = await response.json()
+        expiredLogout()
+        throw new Error(errorData.message || "Error en la solicitud")
     }
 
     // Si el método es DELETE, devolver solo la respuesta
@@ -33,10 +35,10 @@ const httpRequest = async (url, options) => {
 };
 
 // Función asincrónica para obtener todos los ciudadanos
-export const getAllCitizens = async (page = 1) => {
+export const getAllCitizens = async (page = 1, pageSize = 10, searchQuery = "") => {
     try {
         // Llamada a la función httpRequest para obtener todos los ciudadanos
-        const data = await httpRequest(`${API_URL}?page=${page}&pageSize=10`, { method: 'GET' });
+        const data = await httpRequest(`${API_URL}?page=${page}&pageSize=${pageSize}&search=${searchQuery}`, { method: 'GET' });
         return data;
     } catch (error) {
         console.error("Error al obtener los ciudadanos.", error);
@@ -87,8 +89,7 @@ export const deleteCitizen = async (id) => {
     try {
         // Llamada a la función httpRequest para actualizar un ciudadano por su ID
         const data = await httpRequest(`${API_URL}/${id}`, {
-            method: 'PATCH',
-            body: JSON.stringify({ is_deleted: 1 })
+            method: 'DELETE'
         });
         return data;
     } catch (error) {

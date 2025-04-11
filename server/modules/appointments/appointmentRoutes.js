@@ -1,14 +1,12 @@
 import e from 'express'
-import { createAppointment, deleteAppointment, getAllAppointments, getAppointmentById, getAvailableSchedules, updateAppointment } from './appointmentController.js'
+import { createAppointment, getAllAppointments, getAllFinishedAppointments, updateAppointment } from './appointmentController.js'
 
 const router = e.Router()
 
 // Rutas
 router.get('/', getAllAppointments)
+router.get('/history', getAllFinishedAppointments)
 router.post('/', createAppointment)
-router.get('/:id', getAppointmentById)
-router.get('/date/:reqDate', getAvailableSchedules)
-router.delete('/:id', deleteAppointment)
 router.patch('/:id', updateAppointment)
 
 export default router

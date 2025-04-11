@@ -2,26 +2,25 @@ import { sequelize } from '../../config/db.js'
 import { DataTypes } from 'sequelize'
 
 // Modelo Usuario
-const Department = sequelize.define('departments', {
+const Department = sequelize.define('direcciones', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
-  dep_name: {
-    type: DataTypes.STRING,
-    allowNull: false
+  direccion: {
+    type: DataTypes.STRING
   },
   email: {
     type: DataTypes.STRING
   },
-  director_name: {
+  director: {
     type: DataTypes.STRING
   }
 },
-{
-  // Opción para que no cree los atributos createdAt y updatedAt
-  timestamps: false
-})
+  {
+    // Opción para que no cree los atributos createdAt y updatedAt
+    timestamps: false
+  })
 
 export default Department

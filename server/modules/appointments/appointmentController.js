@@ -1,19 +1,21 @@
 import Appointment from './appointmentModel.js'
 import Citizen from '../citizens/citizenModel.js'
 import { HTTP_STATUS } from '../../config/config.js'
+import Department from '../departments/departmentModel.js'
+import { Op } from 'sequelize'
 
-// Petición para obtener a todos los audiencias
+// Petición para obtener a todas los audiencias pendientes
 export const getAllAppointments = async (req, res) => {
   try {
     // Obtener las audiencias y los nombres de sus usuarios, ciudadanos y departamentos correspondientes
     const appointments = await Appointment.findAll({
-      where: { is_deleted: false },
+      where: { estado: "pendiente" },
+      attributes: ["id", "materia", "createdAt"],
       include: [
-        { model: Citizen, attributes: ['first_name', 'last_name'], as: 'citizen' }
+        { model: Citizen, attributes: ['nombres', 'apellidos', 'rut', 'telefono', 'telefono_2', 'email'], as: "ciudadano" }
       ],
       order: [
-        ['date', 'ASC'],
-        ['time', 'ASC']
+        ['createdAt', 'ASC']
       ]
     })
     res.json(appointments)
@@ -22,53 +24,43 @@ export const getAllAppointments = async (req, res) => {
   }
 }
 
-// Obtener audiencia por id
-export const getAppointmentById = async (req, res) => {
+// Petición para obtener a todas los audiencias terminadas y derivadas
+export const getAllFinishedAppointments = async (req, res) => {
+  const page = parseInt(req.query.page) || 1
+  const pageSize = parseInt(req.query.pageSize) || 10
+  const offset = (page - 1) * pageSize
+  const search = req.query.search || ""
   try {
-    const { id } = req.params
-    const appointment = await Appointment.findOne({
+    // Obtener las audiencias y los nombres de sus usuarios, ciudadanos y departamentos correspondientes
+    const { count, rows } = await Appointment.findAndCountAll({
+      where: {
+        estado: { [Op.ne]: 'pendiente' }
+      },
       include: [
-        { model: Citizen, attributes: ['id', 'first_name', 'last_name'], as: 'citizen' }
+        {
+          model: Citizen,
+          attributes: ['nombres', 'apellidos', 'rut', 'direccion', 'email', 'telefono', 'telefono_2'],
+          as: "ciudadano",
+          where: search ? {
+            [Op.or]: [
+              { nombres: { [Op.like]: `%${search}%` } },
+              { apellidos: { [Op.like]: `%${search}%` } }
+            ]
+          } : undefined
+        },
+        { model: Department, attributes: ['direccion', 'email', 'director'], as: 'direccion' }
       ],
-      where: { id, is_deleted: false }
+      order: [
+        ['createdAt', 'ASC']
+      ],
+      limit: pageSize,
+      offset
     })
-    res.json(appointment)
+    const totalPages = Math.ceil(count / pageSize)
+    res.json({ appointments: rows, totalPages: totalPages === 0 ? 1 : totalPages, search })
   } catch (error) {
-    console.log('Error al obtener audiencia.', error)
-  }
-}
-
-export const getAvailableSchedules = async (req, res) => {
-  // Define los horarios disponibles
-  /* const allTimes = [
-    '08:30', '08:50', '09:10', '09:30', '09:50',
-    '10:10', '10:30', '10:50', '11:10', '11:30',
-    '11:50', '12:10', '12:30', '12:50'
-  ] */
-
-  try {
-    const { reqDate } = req.params
-    // Obtener las audiencias que coincidan con la fecha seleccionada
-    const appointments = await Appointment.findAll({ attributes: ['date', 'time'], where: { is_deleted: false } })
-
-    // Filtrar las fechas segun la fecha proporcionada
-    const filteredDates = appointments.filter(app => (
-      app.date === reqDate
-    ))
-    // Obtener las horas ocupadas
-    const occupiedTimes = filteredDates.map(app => app.time)
-
-    /*
-    // Devolver fechas disponibles
-    const availableTimes = allTimes.filter(time => (
-      !occupiedTimes.includes(time)
-    )) */
-
-    // Devolver las horas disponibles
-
-    res.json(occupiedTimes)
-  } catch (error) {
-    console.log('Error al obtener audiencia.', error)
+    console.log('Error al realizar la consulta.', error)
+    res.status(500).json({ error: 'Error al consultar ciudadanos' })
   }
 }
 
@@ -77,43 +69,18 @@ export const createAppointment = async (req, res) => {
   try {
     // Obtener datos del nuevo audiencia desde la request
     const {
-      cause,
-      date,
-      time,
-      citizen_id: citizenId
+      materia,
+      ciudadano_id,
     } = req.body
-    // Validación de la audiencia
-    /* const { error } = appointmentSchema.validate({
-      cause,
-      appointment_date: date,
-      citizen_id: citizenId
-    })
-    if (error) {
-      return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: 'Datos no validos' })
-    } */
     // Crear al nuevo audiencia en la base de datos
     const newAppointment = await Appointment.create({
-      cause,
-      date,
-      time,
-      citizen_id: citizenId
+      materia,
+      ciudadano_id,
+      estado: "pendiente"
     })
-    res.status(HTTP_STATUS.CREATED).json({ message: 'Audiencia creado correctamente', newAppointment })
+    res.status(HTTP_STATUS.CREATED).json({ message: 'Audiencia creada correctamente', newAppointment })
   } catch (error) {
     res.status(HTTP_STATUS.BAD_REQUEST).json({ message: 'No se pudo crear el audiencia', error })
-  }
-}
-
-// Borrar un audiencia de la bd
-export const deleteAppointment = async (req, res) => {
-  try {
-    // ID del audiencia a eliminar
-    const { id } = req.params
-    // Elimina el audiencia que coincida con el ID
-    await Appointment.destroy({ where: { id } })
-    res.status(HTTP_STATUS.NO_CONTENT).json()
-  } catch (error) {
-    res.status(HTTP_STATUS.BAD_REQUEST).json({ message: 'Error al eliminar audiencia.', error })
   }
 }
 
@@ -122,36 +89,23 @@ export const updateAppointment = async (req, res) => {
   try {
     const { id } = req.params // ID del audiencia a editar
     const {
-      cause,
-      date,
-      time,
-      response,
-      citizen_id: citizenId,
-      is_referred: isReferred,
-      is_deleted: isDeleted
+      materia,
+      respuesta,
+      estado,
+      ciudadano_id,
+      direccion_id
     } = req.body
     const appointment = await Appointment.findOne({ where: { id } })
     if (!appointment) {
       return res.status(HTTP_STATUS.NOT_FOUND).json({ message: 'No se encontró la audiencia' })
     }
-    // Validación
-    /* const { error } = appointmentSchema.validate({
-      cause,
-      appointment_date: date,
-      citizen_id: citizenId,
-      is_referred: isReferred
-    })
-    if (error) {
-      return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: 'Datos no válidos' })
-    } */
     // Guardar en un objeto los datos nuevos
-    const updates = { response }
-    if (cause) updates.cause = cause
-    if (date) updates.date = date
-    if (time) updates.time = time
-    if (isDeleted) updates.is_deleted = isDeleted
-    if (citizenId) updates.citizen_id = citizenId
-    if (isReferred) updates.is_referred = isReferred
+    const updates = {}
+    if (materia) updates.materia = materia
+    if (ciudadano_id) updates.ciudadano_id = ciudadano_id
+    if (estado) updates.estado = estado
+    if (respuesta) updates.respuesta = respuesta
+    if (direccion_id) updates.direccion_id = direccion_id
     // Modificar audiencia
     await Appointment.update(updates, { where: { id } })
     res.json({

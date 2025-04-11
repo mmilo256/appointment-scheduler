@@ -1,29 +1,59 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Input from "../ui/Input";
-import { checkToken, formatRut, verifyRut } from "../../utils/helpers";
+import { formatRut, verifyRut } from "../../utils/helpers";
 import { getCitizenByRUT } from "../../services/citizenService";
 import CreateCitizenModal from "./CreateCitizenModal";
+import { useLocation } from "react-router-dom";
+import BaseInput from "../ui/BaseInput";
+import BaseButton from "../ui/BaseButton";
 
 function CitizenByRutForm({ setCitizen }) {
+
+  // Obtener rut desde la URL
+  const location = useLocation()
+  const params = new URLSearchParams(location.search)
+  const citizenRut = params.get("rut")
+
+
   const [rut, setRut] = useState("");
   const [modal, setModal] = useState(false);
+  const [loading, setLoading] = useState(false)
 
-  const onSubmit = async () => {
-    const isTokenExpired = checkToken(localStorage.getItem("jwt"));
-    try {
-      if (!isTokenExpired) {
+  // Si hay un RUT en la URL, realizar la consulta automáticamente
+  useEffect(() => {
+    (async () => {
+      if (citizenRut) {
+        try {
+          const data = await getCitizenByRUT(citizenRut);
+          setCitizen(data)
+        } catch (error) {
+          console.log("Error al obtener los ciudadanos.", error);
+        }
+      }
+    })()
+  })
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true)
+    const isValid = verifyRut(rut);
+    if (isValid) {
+      try {
         const data = await getCitizenByRUT(rut);
         if (data) {
           setCitizen(data);
         } else {
           setModal(true);
         }
-      } else {
-        logout("expired");
+      } catch (error) {
+        console.log("Error al obtener los ciudadanos.", error);
+      } finally {
+        setLoading(false)
       }
-    } catch (error) {
-      console.log("Error al obtener los ciudadanos.", error);
+    } else {
+      alert("El RUT no corresponde con el Dígito Verificador");
     }
+
   };
 
   // Formatear y validar RUT
@@ -31,34 +61,19 @@ function CitizenByRutForm({ setCitizen }) {
     setRut(formatRut(e.target.value));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const isValid = verifyRut(rut);
-    isValid
-      ? onSubmit(rut)
-      : alert("El RUT no corresponde con el Dígito Verificador");
-  };
-
   return (
     <>
       <form
-        onSubmit={handleSubmit}
-        className="grid grid-cols-10 gap-4 items-end border"
+        onSubmit={onSubmit}
+        className="flex gap-2 mb-4"
       >
-        <Input
-          important
-          onChange={validateRut}
-          max={12}
-          value={rut}
-          type="text"
-          className="col-span-7"
-          label="RUT del solicitante"
-        />
-        <button className="col-span-3 mb-2 p-1 rounded border bg-secondary-500 hover:bg-secondary-600 text-white">
-          Buscar
-        </button>
+        <BaseInput max={12} placeholder="RUT" value={rut} onChange={validateRut} />
+        <div className="w-40">
+          <BaseButton color="secondary" isLoading={loading} text="Buscar" type="submit" />
+        </div>
       </form>
       <CreateCitizenModal
+        rut={rut}
         modal={modal}
         setModal={setModal}
         title="Ciudadano no encontrado"

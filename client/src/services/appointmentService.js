@@ -1,10 +1,12 @@
 import { DEV_API_URL } from "../constants";
+import { expiredLogout } from "../utils/helpers";
 
 const API_URL = `${DEV_API_URL}/appointments`; // URL de la API para obtener los audiencias
 
 // Función para obtener el token almacenado en localStorage
 const getToken = () => localStorage.getItem('jwt');
 
+// Función auxiliar para realizar solicitudes HTTP
 // Función auxiliar para realizar solicitudes HTTP
 const httpRequest = async (url, options) => {
     // Obtener el token de autenticación
@@ -18,10 +20,11 @@ const httpRequest = async (url, options) => {
 
     // Realizar la solicitud HTTP con fetch
     const response = await fetch(url, options);
-
     // Verificar si la respuesta es exitosa
     if (!response.ok) {
-        throw new Error("Error en la solicitud");
+        const errorData = await response.json()
+        expiredLogout()
+        throw new Error(errorData.message || "Error en la solicitud")
     }
 
     // Si el método es DELETE, devolver solo la respuesta
@@ -33,10 +36,10 @@ const httpRequest = async (url, options) => {
 };
 
 // Función asincrónica para obtener todos los audiencias
-export const getAllAppointments = async () => {
+export const getAllAppointments = async (estado = "pendiente") => {
     try {
         // Llamada a la función httpRequest para obtener todos los audiencias
-        const data = await httpRequest(API_URL, { method: 'GET' });
+        const data = await httpRequest(`${API_URL}?estado=${estado}`, { method: 'GET' });
         return data;
     } catch (error) {
         console.error("Error al obtener los audiencias.", error);
@@ -44,26 +47,14 @@ export const getAllAppointments = async () => {
     }
 };
 
-// Función asincrónica para obtener a un audiencia por su ID
-export const getAppointmentById = async (id) => {
+// Función asincrónica para obtener todas las audiencias terminadas
+export const getAllFinishedAppointments = async (page = 1, pageSize = 10, searchQuery = "") => {
     try {
-        // Llamada a la función httpRequest para obtener un audiencia por su ID
-        const data = await httpRequest(`${API_URL}/${id}`, { method: 'GET' });
+        // Llamada a la función httpRequest para obtener todos los ciudadanos
+        const data = await httpRequest(`${API_URL}/history?page=${page}&pageSize=${pageSize}&search=${searchQuery}`, { method: 'GET' });
         return data;
     } catch (error) {
-        console.error("Error al obtener el audiencia.", error);
-        throw error;
-    }
-};
-
-// Función asincrónica para obtener a un audiencia por su ID
-export const getAvailableTimes = async (date) => {
-    try {
-        // Llamada a la función httpRequest para obtener un audiencia por su ID
-        const data = await httpRequest(`${API_URL}/date/${date}`, { method: 'GET' });
-        return data;
-    } catch (error) {
-        console.error("Error al obtener el audiencia.", error);
+        console.error("Error al obtener las audiencias.", error);
         throw error;
     }
 };
@@ -79,21 +70,6 @@ export const createAppointment = async (appointmentData) => {
         return data;
     } catch (error) {
         console.error("Error al crear el audiencia.", error);
-        throw error;
-    }
-};
-
-// Función asincrónica para eliminar un audiencia
-export const deleteAppointment = async (id) => {
-    try {
-        // Llamada a la función httpRequest para actualizar un audiencia por su ID
-        const data = await httpRequest(`${API_URL}/${id}`, {
-            method: 'PATCH',
-            body: JSON.stringify({ is_deleted: true })
-        });
-        return data;
-    } catch (error) {
-        console.error("Error al editar el audiencia.", error);
         throw error;
     }
 };

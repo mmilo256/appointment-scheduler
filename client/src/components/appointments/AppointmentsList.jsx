@@ -1,20 +1,14 @@
-import React from "react";
-import { groupAppointments } from "../../utils/helpers";
-import AppointmentsCardsGroup from "./AppointmentsCardsGroup";
-import { useAppointmentStore } from "../../stores/useAppointmentStore";
+import AppointmentCard from "./AppointmentCard";
 
-function AppointmentsList() {
-  // Estado local para almacenar la lista de audiencias
-  const appointments = useAppointmentStore((state) => state.appointments);
-
-  // Formatear las audiencias para agruparlas por fecha
-  const groupedAppointments = groupAppointments(appointments);
+function AppointmentsList({ data, departments, setRefresh }) {
 
   return (
-    <div className="grid grid-cols-1 gap-4">
-      {groupedAppointments.map((group, index) => {
-        return <AppointmentsCardsGroup key={index} data={group} />;
-      })}
+    <div>
+      <div className="flex flex-col gap-4 mb-6">
+        {data?.map((appointment, index) => (
+          <AppointmentCard key={index} data={appointment} departments={departments} setRefresh={setRefresh} />
+        ))}
+      </div>
     </div>
   );
 }

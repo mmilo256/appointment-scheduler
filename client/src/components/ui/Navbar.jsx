@@ -1,20 +1,20 @@
-import React, { useContext, useState } from "react";
-import { NavLink } from "react-router-dom";
+import React, { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import Container from "./Container";
-import { AuthContext } from "../../context/AuthContext";
 
 const navigation = [
   { label: "Inicio", href: "/" },
   { label: "Crear audiencia", href: "appointments/create" },
   { label: "Audiencias", href: "appointments" },
   { label: "Ciudadanos", href: "citizens" },
-  { label: "Derivaciones", href: "referrals/pending" },
-  { label: "Usuarios", href: "users" },
+  { label: "Historial", href: "history" },
+  { label: "Usuarios", href: "users" }
 ];
 
 function Navbar() {
-  const { logout, user } = useContext(AuthContext);
   const [toggleMenu, setToggleMenu] = useState(false)
+
+  const navigate = useNavigate()
 
   const onToggleMenu = () => {
     setToggleMenu(!toggleMenu)
@@ -36,15 +36,15 @@ function Navbar() {
           ))}
         </ul>
         <div className="hidden md:flex items-center gap-4">
-          <p className="font-light italic text-right">{`${user.firstName} ${user.lastName}`}</p>
+          {/* <p className="font-light italic text-right">{`${user.firstName} ${user.lastName}`}</p> */}
           <button
+            onClick={() => { navigate("/login") }}
             className="bg-secondary-500 hover:bg-secondary-600  px-2 py-1 rounded font-semibold"
-            onClick={logout}
           >
             Cerrar sesión
           </button>
         </div>
-        <p className="md:hidden font-light italic">{`${user.firstName} ${user.lastName}`}</p>
+        {/* <p className="md:hidden font-light italic">{`${user.firstName} ${user.lastName}`}</p> */}
         <button onClick={onToggleMenu} className="h-12 w-14 my-2 rounded bg-secondary-500 block md:hidden ml-auto">Menú</button>
       </Container>
       {/**Menu para pantallas móviles */}
@@ -55,8 +55,8 @@ function Navbar() {
           </li>
         ))}
         <button
+          onClick={() => { navigate("/login") }}
           className="bg-secondary-500 hover:bg-secondary-600 my-4 px-2 py-1 rounded font-semibold"
-          onClick={logout}
         >
           Cerrar sesión
         </button>

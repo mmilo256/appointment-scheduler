@@ -3,7 +3,7 @@ import { DataTypes } from 'sequelize'
 
 // Modelo Usuario
 const User = sequelize.define(
-  'users',
+  'usuarios',
   {
     id: {
       type: DataTypes.INTEGER,
@@ -11,20 +11,15 @@ const User = sequelize.define(
       autoIncrement: true
     },
     username: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    role: {
-      type: DataTypes.NUMBER
-    },
-    first_name: {
       type: DataTypes.STRING
     },
-    last_name: {
+    password: {
+      type: DataTypes.STRING
+    },
+    nombres: {
+      type: DataTypes.STRING
+    },
+    apellidos: {
       type: DataTypes.STRING
     },
     email: {

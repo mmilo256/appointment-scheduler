@@ -1,26 +1,36 @@
 import { HTTP_STATUS } from '../config/config.js'
 import User from '../modules/users/userModel.js'
-import { comparePasswords, encryptPassword, generateToken } from '../utils/helpers.js'
+import { comparePasswords, generateToken } from '../utils/helpers.js'
 
 export const login = async (req, res) => {
-  const { username, password } = req.body
-  // Primero buscar usuario segun su username
-  const user = await User.findOne({ where: { username } })
+  try {
+    const { username, password } = req.body;
 
-  // Si no se encontró al usuario, devolver mensaje
-  if (!user) {
-    res.status(HTTP_STATUS.NOT_FOUND).json({ message: 'Usuario no encontrado' })
-    return
-  }
+    // Validar que se ingresaron los campos necesarios
+    if (!username || !password) {
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: 'Username y password son obligatorios' });
+    }
 
-  // Si se encontró al usuario, comparar contraseñas
-  const hash = encryptPassword(password)
-  const isCorrect = comparePasswords(user.password, hash)
-  if (!isCorrect) {
-    res.status(HTTP_STATUS.UNAUTHORIZED).json({ message: 'Las contraseñas no coinciden.' })
-    return
+    // Buscar usuario por su username
+    const user = await User.findOne({ where: { username } });
+
+    if (!user) {
+      return res.status(HTTP_STATUS.NOT_FOUND).json({ message: 'Datos incorrectos' });
+    }
+
+    // Comparar contraseñas usando la función segura
+    const isCorrect = comparePasswords(password, user.password);
+    if (!isCorrect) {
+      return res.status(HTTP_STATUS.NOT_FOUND).json({ message: 'Datos incorrectos' });
+    }
+
+    // Generar token JWT u otro mecanismo de autenticación
+    const token = generateToken(user.username, user.nombres, user.apellidos, user.email);
+
+    return res.status(HTTP_STATUS.ACCEPTED).json({ message: 'Has iniciado sesión', token });
+  } catch (error) {
+    console.error('Error en login:', error);
+    return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ message: 'Error interno del servidor' });
   }
-  // Si el usuario y la contraseña coinciden, generar token
-  const token = generateToken(user.username, user.role, user.first_name, user.last_name, user.email)
-  res.json({ message: 'Has iniciado sesión', token })
-}
+};
+

@@ -6,3 +6,15 @@ export const sequelize = new Sequelize(DATABASE.name, DATABASE.user, DATABASE.pa
   host: DATABASE.host,
   dialect: 'mysql'
 })
+
+/* export const sequelize = new Sequelize({
+  dialect: 'sqlite',
+  storage: 'db.sqlite'
+}) */
+
+try {
+  await sequelize.authenticate();
+  console.log('Connection has been established successfully.');
+} catch (error) {
+  console.error('Unable to connect to the database:', error);
+}
