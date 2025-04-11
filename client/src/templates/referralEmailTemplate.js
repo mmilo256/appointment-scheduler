@@ -15,7 +15,7 @@ const emailTemplate = (data) => {
           <tr>
             <td style="background-color:#1e3a8a; color:#ffffff; text-align:center; padding:20px;">
               <h1 style="margin:0; font-size:24px;">Derivación de Audiencia</h1>
-              <p style="margin:5px 0 0; font-size:14px;">Se ha registrado una nueva audiencia para su dirección</p>
+              <p style="margin:5px 0 0; font-size:14px;">Se ha derivado la siguiente audiencia a su dirección</p>
             </td>
           </tr>
           <tr>

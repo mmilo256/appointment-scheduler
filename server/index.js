@@ -26,9 +26,9 @@ app.use(e.json())
 // Rutas
 app.use('/api/auth', authRouter)
 app.use('/api/users', userRouter)
-app.use('/api/departments', departmentRouter)
-app.use('/api/citizens', citizenRouter)
-app.use('/api/appointments', appointmentRouter)
+app.use('/api/departments', verifyToken, departmentRouter)
+app.use('/api/citizens', verifyToken, citizenRouter)
+app.use('/api/appointments', verifyToken, appointmentRouter)
 app.use('/api/email', emailRoutes)
 
 // Arrancar el servidor

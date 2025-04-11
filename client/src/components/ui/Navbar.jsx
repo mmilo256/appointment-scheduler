@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Container from "./Container";
 
 const navigation = [
@@ -13,6 +13,8 @@ const navigation = [
 
 function Navbar() {
   const [toggleMenu, setToggleMenu] = useState(false)
+
+  const navigate = useNavigate()
 
   const onToggleMenu = () => {
     setToggleMenu(!toggleMenu)
@@ -36,6 +38,7 @@ function Navbar() {
         <div className="hidden md:flex items-center gap-4">
           {/* <p className="font-light italic text-right">{`${user.firstName} ${user.lastName}`}</p> */}
           <button
+            onClick={() => { navigate("/login") }}
             className="bg-secondary-500 hover:bg-secondary-600  px-2 py-1 rounded font-semibold"
           >
             Cerrar sesión
@@ -52,8 +55,8 @@ function Navbar() {
           </li>
         ))}
         <button
+          onClick={() => { navigate("/login") }}
           className="bg-secondary-500 hover:bg-secondary-600 my-4 px-2 py-1 rounded font-semibold"
-          onClick={logout}
         >
           Cerrar sesión
         </button>

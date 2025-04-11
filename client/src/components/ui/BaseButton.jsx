@@ -30,7 +30,7 @@ const BaseButton = ({ text, type = "button", color = "primary", onClick, href, i
             type={type}
             onClick={onClickHandler}
             disabled={disabled || isLoading}
-            className={`${colorStyles} ${isLoading && "cursor-wait"} flex w-full p-2 justify-center rounded text-white`}>
+            className={`${colorStyles} ${isLoading && "cursor-wait"} flex w-full p-2 justify-center items-center rounded text-white`}>
             {!isLoading ? text : "Cargando..."}
         </button>
     )

@@ -2,8 +2,6 @@ import { useState } from "react";
 import { updateAppointment } from "../../services/appointmentService";
 import { formatDate } from "../../utils/helpers";
 import BaseModal from "../ui/BaseModal";
-import Button from "../ui/Button";
-import Input from "../ui/Input";
 import { sendEmail } from "../../services/emailService";
 import emailTemplate from "../../templates/referralEmailTemplate";
 import BaseButton from "../ui/BaseButton";
@@ -46,6 +44,7 @@ function AppointmentCard({ data, departments, setRefresh }) {
       direccion_id: depData.id
     }
     try {
+      console.log(data)
       await updateAppointment(data.id, dataToEdit)
       await sendEmail(email, "DERIVACIÓN DE AUDIENCIA", emailTemplate(data))
       setRefresh(prev => !prev)

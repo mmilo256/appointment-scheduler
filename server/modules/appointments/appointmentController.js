@@ -12,7 +12,7 @@ export const getAllAppointments = async (req, res) => {
       where: { estado: "pendiente" },
       attributes: ["id", "materia", "createdAt"],
       include: [
-        { model: Citizen, attributes: ['nombres', 'apellidos'], as: "ciudadano" }
+        { model: Citizen, attributes: ['nombres', 'apellidos', 'rut', 'telefono', 'telefono_2', 'email'], as: "ciudadano" }
       ],
       order: [
         ['createdAt', 'ASC']

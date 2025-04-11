@@ -4,16 +4,21 @@ import 'dayjs/locale/es'
 
 dayjs.locale("es")
 
+export const expiredLogout = () => {
+  window.location.href = "/login"
+  alert("La sesión ha expirado")
+}
+
 export const checkToken = (token) => {
   if (!token) {
-    return true; // Si el token no existe, considerarlo como expirado
+    return false; // Si el token no existe, considerarlo como expirado
   }
 
   const decodedToken = jwtDecode(token);
   const expirationTime = decodedToken.exp * 1000; // La propiedad 'exp' indica el tiempo de expiración del token en segundos
   const currentTime = Date.now(); // Tiempo actual en milisegundos
 
-  return expirationTime < currentTime; // Devuelve true si el token ha expirado, de lo contrario, devuelve false
+  return expirationTime > currentTime; // Devuelve true si el token ha expirado, de lo contrario, devuelve false
 };
 export const splitDateHour = (fulldate) => {
   const splittedFullDate = fulldate.split("T");
