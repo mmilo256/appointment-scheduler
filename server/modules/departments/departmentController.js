@@ -1,3 +1,4 @@
+import { HTTP_STATUS } from '../../config/config.js'
 import Department from './departmentModel.js'
 
 // Petición para obtener a todos los departamentos
