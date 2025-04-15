@@ -21,7 +21,6 @@ const httpRequest = async (url, options) => {
 
     // Verificar si la respuesta es exitosa
     if (!response.ok) {
-        window.location.href = "/login"
         throw new Error("Error en la solicitud");
     }
 

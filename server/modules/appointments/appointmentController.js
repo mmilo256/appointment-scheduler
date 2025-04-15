@@ -43,8 +43,8 @@ export const getAllFinishedAppointments = async (req, res) => {
           as: "ciudadano",
           where: search ? {
             [Op.or]: [
-              { nombres: { [Op.iLike]: `%${search}%` } },
-              { apellidos: { [Op.iLike]: `%${search}%` } }
+              { nombres: { [Op.like]: `%${search}%` } },
+              { apellidos: { [Op.like]: `%${search}%` } }
             ]
           } : undefined
         },

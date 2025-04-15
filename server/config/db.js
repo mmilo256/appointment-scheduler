@@ -6,7 +6,7 @@ import { PostgresDialect } from '@sequelize/postgres'
 export const sequelize = new Sequelize(DATABASE.name, DATABASE.user, DATABASE.password, {
   host: DATABASE.host,
   port: DATABASE.port,
-  dialect: 'postgres'
+  dialect: 'mysql'
 })
 
 /* export const sequelize = new Sequelize({

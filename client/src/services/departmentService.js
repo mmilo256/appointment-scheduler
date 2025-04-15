@@ -22,7 +22,6 @@ const httpRequest = async (url, options) => {
     // Verificar si la respuesta es exitosa
     if (!response.ok) {
         const errorData = await response.json()
-        expiredLogout()
         throw new Error(errorData.message || "Error en la solicitud")
     }
 

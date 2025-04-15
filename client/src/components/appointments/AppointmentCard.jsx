@@ -41,12 +41,13 @@ function AppointmentCard({ data, departments, setRefresh }) {
     const email = depData.email
     const dataToEdit = {
       estado: "derivada",
-      direccion_id: depData.id
+      direccion_id: depData.id,
+      respuesta: response
     }
     try {
       console.log(depData)
       await updateAppointment(data.id, dataToEdit)
-      await sendEmail(email, "DERIVACIÓN DE AUDIENCIA", emailTemplate(data))
+      await sendEmail(email, "DERIVACIÓN DE AUDIENCIA", emailTemplate(data, response))
       setRefresh(prev => !prev)
       onCloseReferModal()
       alert("Audiencia derivada con éxito")
@@ -111,7 +112,7 @@ function AppointmentCard({ data, departments, setRefresh }) {
           <li><strong>Motivo:</strong> {data.materia}</li>
           <li><strong>Ciudadano:</strong> {`${data.ciudadano.nombres} ${data.ciudadano.apellidos}`}</li>
         </ul>
-        <BaseInput type="textarea" placeholder="Respuesta (opcional)" value={response} onChange={(e) => setResponse(e.target.value)} />
+        <BaseInput label="Respuesta" required={false} type="textarea" value={response} onChange={(e) => setResponse(e.target.value)} />
         <div className="flex gap-5">
           <BaseButton text="Cerrar" color="secondary" onClick={onCloseFinishModal} />
           <BaseButton isLoading={loading} text="Marcar como terminada" onClick={finishAppointment} />
@@ -125,7 +126,8 @@ function AppointmentCard({ data, departments, setRefresh }) {
           <li><strong>Ciudadano:</strong> {`${data.ciudadano.nombres} ${data.ciudadano.apellidos}`}</li>
         </ul>
         {/* <Input type="select" options={departmentsList} value={selectedDepartment} onChange={(e) => { setSelectedDepartment(e.target.value) }} /> */}
-        <BaseInput type="select" options={departmentsList} value={selectedDepartment} onChange={(e) => { setSelectedDepartment(e.target.value) }} />
+        <BaseInput label="Dirección Municipal" type="select" options={departmentsList} value={selectedDepartment} onChange={(e) => { setSelectedDepartment(e.target.value) }} />
+        <BaseInput label="Nota" type="textarea" value={response} onChange={(e) => setResponse(e.target.value)} />
         <div className="flex gap-5 mt-2">
           <BaseButton text="Cerrar" color="secondary" onClick={onCloseReferModal} />
           <BaseButton isLoading={loading} disabled={!selectedDepartment} text="Derivar audiencia" onClick={referAppointment} />

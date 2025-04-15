@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { formatRut, verifyRut } from "../../utils/helpers";
 import Input from "../ui/Input";
 import { updateCitizen } from "../../services/citizenService";
+import BaseInput from "../ui/BaseInput";
+import BaseButton from "../ui/BaseButton";
 
 function EditCitizenForm({ data }) {
 
@@ -72,25 +74,21 @@ function EditCitizenForm({ data }) {
   // Renderización del formulario con los botones y la lógica de envío
   return (
     <form onSubmit={onEditCitizen}>
-      <Input
-        label="RUT"
-        max={12}
-        type="text"
+      <BaseInput
         value={rut}
         onChange={validateRut}
-      />
+        max={12}
+        label="RUT" />
       <div className=" grid grid-cols-2 gap-5">
-        <Input
+        <BaseInput
           label="Nombres"
-          type="text"
           value={name}
           onChange={(e) => {
             setName(e.target.value);
           }}
         />
-        <Input
+        <BaseInput
           label="Apellidos"
-          type="text"
           value={lastName}
           onChange={(e) => {
             setLastName(e.target.value);
@@ -98,18 +96,17 @@ function EditCitizenForm({ data }) {
         />
       </div>
       <div className="grid grid-cols-2 gap-5">
-        <Input
+        <BaseInput
           label="Dirección"
-          type="text"
           value={address}
           onChange={(e) => {
             setAddress(e.target.value);
           }}
         />
-        <Input
+        <BaseInput
           label="Correo electrónico"
           type="email"
-          optional
+          required={false}
           value={email}
           onChange={(e) => {
             setEmail(e.target.value);
@@ -117,7 +114,7 @@ function EditCitizenForm({ data }) {
         />
       </div>
       <div className="grid grid-cols-2 gap-5">
-        <Input
+        <BaseInput
           label="Teléfono"
           type="number"
           value={phone}
@@ -125,9 +122,9 @@ function EditCitizenForm({ data }) {
             setPhone(e.target.value);
           }}
         />
-        <Input
+        <BaseInput
           label="Teléfono 2"
-          optional
+          required={false}
           type="number"
           value={phone2}
           onChange={(e) => {
@@ -136,8 +133,8 @@ function EditCitizenForm({ data }) {
         />
       </div>
       <div className="flex gap-2 max-w-80 my-4 ml-auto">
-        <Button href="/citizens">Volver</Button>
-        <Button disabled={!isValid} type="submit">Editar ciudadano</Button>
+        <BaseButton color="secondary" text="Volver" href="/citizens" />
+        <BaseButton disabled={!isValid} type="submit" text="Guardar cambios" />
       </div>
     </form>
   );

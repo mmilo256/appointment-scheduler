@@ -1,6 +1,6 @@
 import { formatDate } from "../utils/helpers";
 
-const emailTemplate = (data) => {
+const emailTemplate = (data, response = "") => {
   return `<!DOCTYPE html>
 <html lang="es">
 <head>
@@ -30,6 +30,7 @@ const emailTemplate = (data) => {
               <h2 style="font-size:18px; color:#333333; margin-top:20px; margin-bottom:10px;">Información de la Audiencia</h2>
               <p style="margin:4px 0;"><strong>Materia:</strong> ${data.materia}</p>
               <p style="margin:4px 0;"><strong>Fecha y hora:</strong> ${formatDate(data.createdAt, "DD MMM YYYY, HH:mm")}</p>
+              <p style="margin:4px 0;"><strong>Nota del alcalde:</strong> ${response}</p>
 
               <p style="margin-top:20px; font-size:12px; color:#777777;">Este correo fue generado automáticamente. No responda a este mensaje.</p>
             </td>

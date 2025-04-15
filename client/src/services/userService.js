@@ -22,7 +22,6 @@ const httpRequest = async (url, options) => {
 
     // Verificar si la respuesta es exitosa
     if (!response.ok) {
-        expiredLogout()
         throw new Error("Error en la solicitud");
     }
 

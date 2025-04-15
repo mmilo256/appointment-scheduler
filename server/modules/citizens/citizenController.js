@@ -18,9 +18,9 @@ export const getAllCitizens = async (req, res) => {
       offset: offset,
       where: search ? {
         [Op.or]: [
-          { nombres: { [Op.iLike]: `%${search}%` } },
-          { apellidos: { [Op.iLike]: `%${search}%` } },
-          { rut: { [Op.iLike]: `%${search}%` } }
+          { nombres: { [Op.like]: `%${search}%` } },
+          { apellidos: { [Op.like]: `%${search}%` } },
+          { rut: { [Op.like]: `%${search}%` } }
         ]
       } : undefined
     })

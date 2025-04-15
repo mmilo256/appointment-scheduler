@@ -47,13 +47,11 @@ function CitizenByRutForm({ setCitizen }) {
         }
       } catch (error) {
         console.log("Error al obtener los ciudadanos.", error);
-      } finally {
-        setLoading(false)
       }
     } else {
       alert("El RUT no corresponde con el Dígito Verificador");
     }
-
+    setLoading(false)
   };
 
   // Formatear y validar RUT

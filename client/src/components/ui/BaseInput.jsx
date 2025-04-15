@@ -3,7 +3,7 @@ import React from 'react'
 const BaseInput = ({ type = "text", label, placeholder, required = true, value, onChange, max, options = [] }) => {
 
     let input;
-    const inputStyles = "border border-slate-400 p-2 w-full rounded outline-none"
+    const inputStyles = "border border-slate-400 p-2 w-full rounded outline-none mb-2"
 
     switch (type) {
         case "textarea":
@@ -29,7 +29,10 @@ const BaseInput = ({ type = "text", label, placeholder, required = true, value, 
 
     return (
         <label className="block w-full">
-            <p className="font-semibold">{label}</p>
+            <div className='flex items-center gap-2'>
+                <span className="font-semibold">{label}</span>
+                {!required && <span className='text-slate-500 text-sm'>(opcional)</span>}
+            </div>
             {input}
         </label>
     )
